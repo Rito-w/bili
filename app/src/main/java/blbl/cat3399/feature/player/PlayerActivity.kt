@@ -292,10 +292,12 @@ class PlayerActivity : BaseActivity() {
     internal var relatedVideosCache: RelatedVideosCache? = null
     internal var relatedVideosFetchJob: kotlinx.coroutines.Job? = null
     internal var relatedVideosFetchToken: Int = 0
+    internal var currentVideoDetail: VideoDetail? = null
     internal var subtitleAvailabilityKnown: Boolean = false
     internal var subtitleAvailable: Boolean = false
     internal var subtitleConfig: MediaItem.SubtitleConfiguration? = null
     internal var subtitleItems: List<SubtitleItem> = emptyList()
+    internal var subtitleLoadJob: Job? = null
     internal var lastAvailableQns: List<Int> = emptyList()
     internal var lastAvailableAudioIds: List<Int> = emptyList()
     private var danmakuSegmentSizeMs: Int = DANMAKU_DEFAULT_SEGMENT_MS
@@ -362,6 +364,7 @@ class PlayerActivity : BaseActivity() {
     internal var currentVideoShot: VideoShot? = null
     internal var videoShotImageCache: VideoShotImageCache? = null
     internal var videoShotFetchJob: Job? = null
+    internal var startupEnhancementJob: Job? = null
     internal var currentVideoContentWidth: Int? = null
     internal var currentVideoContentHeight: Int? = null
 
@@ -1901,12 +1904,17 @@ class PlayerActivity : BaseActivity() {
         seekHintJob?.cancel()
         keyScrubEndJob?.cancel()
         sponsorSubmitUploadJob?.cancel()
+        startupEnhancementJob?.cancel()
+        startupEnhancementJob = null
+        subtitleLoadJob?.cancel()
+        subtitleLoadJob = null
         releaseTouchGestures()
         videoShotFetchJob?.cancel()
         videoShotFetchJob = null
         videoShotImageCache?.clear()
         videoShotImageCache = null
         currentVideoShot = null
+        currentVideoDetail = null
         relatedVideosFetchJob?.cancel()
         commentsFetchJob?.cancel()
         commentThreadFetchJob?.cancel()
@@ -2399,7 +2407,7 @@ class PlayerActivity : BaseActivity() {
 
     internal fun toggleSubtitles(exo: ExoPlayer) {
         if (!subtitleAvailabilityKnown) {
-            AppToast.show(this, "字幕信息加载中")
+            loadAndEnableSubtitlesOnDemand(exo)
             return
         }
         if (!subtitleAvailable) {
@@ -2407,6 +2415,93 @@ class PlayerActivity : BaseActivity() {
             return
         }
         applySubtitleEnabledSetting(!session.subtitleEnabled, exo)
+    }
+
+    internal fun loadAndEnableSubtitlesOnDemand(exo: ExoPlayer) {
+        if (subtitleLoadJob?.isActive == true) {
+            AppToast.show(this, "字幕加载中")
+            return
+        }
+        val detail = currentVideoDetail
+        val bvid = currentBvid.trim()
+        val cid = currentCid
+        if (detail == null || bvid.isBlank() || cid <= 0L) {
+            AppToast.show(this, "字幕信息暂不可用")
+            return
+        }
+        AppToast.show(this, "正在加载字幕")
+        startSubtitleLoad(
+            detail = detail,
+            bvid = bvid,
+            cid = cid,
+            expectedPlaybackToken = autoResumeToken,
+            enableWhenLoaded = true,
+            persistEnable = true,
+            showUnavailableToast = true,
+            reason = "manual",
+            exo = exo,
+        )
+    }
+
+    internal fun startSubtitleLoad(
+        detail: VideoDetail,
+        bvid: String,
+        cid: Long,
+        expectedPlaybackToken: Int,
+        enableWhenLoaded: Boolean,
+        persistEnable: Boolean,
+        showUnavailableToast: Boolean,
+        reason: String,
+        exo: ExoPlayer? = null,
+    ) {
+        if (subtitleLoadJob?.isActive == true) {
+            trace?.log("subtitle:load:skip", "reason=already_running")
+            return
+        }
+        subtitleLoadJob =
+            lifecycleScope.launch {
+                try {
+                    trace?.log("subtitle:load:start", "reason=$reason")
+                    val config =
+                        withContext(Dispatchers.IO) {
+                            prepareSubtitleConfig(detail, bvid, cid, trace)
+                        }
+                    if (expectedPlaybackToken != autoResumeToken || currentBvid != bvid || currentCid != cid) {
+                        trace?.log("subtitle:load:skip", "reason=stale")
+                        return@launch
+                    }
+                    subtitleConfig = config
+                    subtitleAvailabilityKnown = true
+                    subtitleAvailable = config != null
+                    trace?.log("subtitle:load:done", "reason=$reason ok=${config != null}")
+                    updateSubtitleButton()
+                    (binding.recyclerSettings.adapter as? PlayerSettingsAdapter)?.let { refreshSettings(it) }
+                    if (config == null) {
+                        if (showUnavailableToast) AppToast.show(this@PlayerActivity, "该视频暂无字幕")
+                        return@launch
+                    }
+
+                    val activeExo = exo ?: (player as? ExoPlayerEngine)?.exoPlayer
+                    if (activeExo == null) return@launch
+                    if (enableWhenLoaded) {
+                        if (persistEnable) {
+                            applySubtitleEnabledSetting(true, activeExo)
+                        } else {
+                            applySubtitleEnabled(activeExo)
+                            updateSubtitleButton()
+                            (binding.recyclerSettings.adapter as? PlayerSettingsAdapter)?.let { refreshSettings(it) }
+                        }
+                        reloadStream(keepPosition = true)
+                    } else {
+                        applySubtitleEnabled(activeExo)
+                    }
+                } catch (throwable: Throwable) {
+                    if (throwable is CancellationException) throw throwable
+                    trace?.log("subtitle:load:done", "reason=$reason ok=false")
+                    AppLog.w("Player", "load subtitle failed reason=$reason bvid=$bvid cid=$cid", throwable)
+                    if (showUnavailableToast) AppToast.show(this@PlayerActivity, "字幕加载失败")
+                }
+            }
     }
 
     internal fun applySubtitleEnabled(exo: ExoPlayer) {

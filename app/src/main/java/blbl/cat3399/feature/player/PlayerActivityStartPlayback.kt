@@ -25,6 +25,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import blbl.cat3399.core.api.BiliApiException
 import blbl.cat3399.core.prefs.AppPrefs
@@ -32,6 +33,8 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.atomic.AtomicBoolean
 
 private const val RISK_CONTROL_USER_HINT = "当前账号可能被风控,请尽量联系开发者!"
+private const val STARTUP_ENHANCEMENT_FIRST_FRAME_POLL_COUNT = 600
+private const val STARTUP_ENHANCEMENT_FIRST_FRAME_POLL_MS = 50L
 private val riskControlUserHintShown = AtomicBoolean(false)
 
 internal data class VodPageDuration(
@@ -109,12 +112,104 @@ private fun PlayerActivity.showPlaybackTitleHintIfFullscreen(rawTitle: String?):
     return true
 }
 
+private suspend fun PlayerActivity.awaitFirstFrameForStartupEnhancements(
+    engine: BlblPlayerEngine,
+    playbackToken: Int,
+): Boolean {
+    trace?.log("enhance:awaitFirstFrame")
+    repeat(STARTUP_ENHANCEMENT_FIRST_FRAME_POLL_COUNT) {
+        if (playbackToken != autoResumeToken || player !== engine) return false
+        if (traceFirstFrameLogged) return true
+        delay(STARTUP_ENHANCEMENT_FIRST_FRAME_POLL_MS)
+    }
+    trace?.log("enhance:skip", "reason=first_frame_timeout")
+    return false
+}
+
+private fun PlayerActivity.startPostFirstFrameEnhancements(
+    engine: BlblPlayerEngine,
+    playbackToken: Int,
+    detail: VideoDetail,
+    bvid: String,
+    cid: Long,
+) {
+    startupEnhancementJob?.cancel()
+    startupEnhancementJob =
+        lifecycleScope.launch {
+            try {
+                if (!awaitFirstFrameForStartupEnhancements(engine, playbackToken)) return@launch
+                trace?.log("enhance:start")
+                if (engine.capabilities.subtitlesSupported && session.subtitleEnabled) {
+                    startSubtitleLoad(
+                        detail = detail,
+                        bvid = bvid,
+                        cid = cid,
+                        expectedPlaybackToken = playbackToken,
+                        enableWhenLoaded = true,
+                        persistEnable = false,
+                        showUnavailableToast = false,
+                        reason = "post_first_frame",
+                        exo = (engine as? ExoPlayerEngine)?.exoPlayer,
+                    )
+                } else {
+                    val reason = if (engine.capabilities.subtitlesSupported) "disabled" else "unsupported"
+                    trace?.log("subtitle:skip", "reason=$reason")
+                }
+                loadVideoShotAfterFirstFrame(bvid = bvid, cid = cid, playbackToken = playbackToken)
+                trace?.log("enhance:done")
+            } catch (throwable: Throwable) {
+                if (throwable is CancellationException) throw throwable
+                AppLog.w("Player", "startup enhancement failed bvid=$bvid cid=$cid", throwable)
+            }
+        }
+}
+
+private suspend fun PlayerActivity.loadVideoShotAfterFirstFrame(
+    bvid: String,
+    cid: Long,
+    playbackToken: Int,
+) {
+    if (BiliClient.prefs.playerVideoShotPreviewSize == AppPrefs.PLAYER_VIDEOSHOT_PREVIEW_SIZE_OFF) {
+        trace?.log("videoShot:skip", "reason=pref_off")
+        return
+    }
+    trace?.log("videoShot:start")
+    val result =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                BiliApi.videoShot(
+                    bvid = bvid,
+                    cid = cid,
+                    needJsonArrayIndex = true,
+                ).let { VideoShot.fromVideoShot(it) }
+            }.onFailure { t ->
+                AppLog.w("Player", "load videoShot failed bvid=$bvid cid=$cid", t)
+            }.getOrNull()
+        }
+    if (playbackToken != autoResumeToken || currentBvid != bvid || currentCid != cid) {
+        trace?.log("videoShot:skip", "reason=stale")
+        return
+    }
+    currentVideoShot = result
+    videoShotImageCache = if (result != null) VideoShotImageCache() else null
+    trace?.log("videoShot:done", "ok=${result != null}")
+}
+
 internal fun PlayerActivity.resetPlaybackStateForNewMedia(
     engine: BlblPlayerEngine,
     preservePartsList: Boolean,
 ) {
     cancelPlayUrlAutoRefresh(reason = "new_media")
     traceFirstFrameLogged = false
+    startupEnhancementJob?.cancel()
+    startupEnhancementJob = null
+    subtitleLoadJob?.cancel()
+    subtitleLoadJob = null
+    currentVideoDetail = null
+    subtitleAvailabilityKnown = false
+    subtitleAvailable = false
+    subtitleConfig = null
+    subtitleItems = emptyList()
     lastAvailableQns = emptyList()
     lastAvailableAudioIds = emptyList()
     session = session.copy(actualQn = 0)
@@ -345,6 +440,7 @@ internal fun PlayerActivity.startPlayback(
                         }.getOrNull()
                     }
                 val detail = detailJob.await() ?: error("view detail missing")
+                currentVideoDetail = detail
                 trace?.log("view:done")
 
                 val bangumiRedirect = parseBangumiRedirectUrl(detail.redirectUrl.orEmpty())
@@ -436,43 +532,6 @@ internal fun PlayerActivity.startPlayback(
                             .also { trace?.log("danmakuMeta:done", "segTotal=${it.segmentTotal} segMs=${it.segmentSizeMs}") }
                     }.also(startupJobs::add)
 
-                val videoShotJob =
-                    if (BiliClient.prefs.playerVideoShotPreviewSize != AppPrefs.PLAYER_VIDEOSHOT_PREVIEW_SIZE_OFF) {
-                        async(Dispatchers.IO) {
-                            trace?.log("videoShot:start")
-                            runCatching {
-                                BiliApi.videoShot(
-                                    bvid = resolvedBvid,
-                                    cid = cid,
-                                    needJsonArrayIndex = true,
-                                ).let { VideoShot.fromVideoShot(it) }
-                            }.onFailure { t ->
-                                AppLog.w("Player", "load videoShot failed bvid=$resolvedBvid cid=$cid", t)
-                            }.getOrNull().also { result ->
-                                currentVideoShot = result
-                                videoShotImageCache = if (result != null) VideoShotImageCache() else null
-                                trace?.log("videoShot:done", "ok=${result != null}")
-                            }
-                        }
-                            .also(startupJobs::add)
-                    } else {
-                        trace?.log("videoShot:skip", "reason=pref_off")
-                        null
-                    }
-
-                val subtitleSupported = engine.capabilities.subtitlesSupported
-                val subJob =
-                    if (subtitleSupported) {
-                        async(Dispatchers.IO) {
-                            trace?.log("subtitle:start")
-                            prepareSubtitleConfig(detail, resolvedBvid, cid, trace)
-                                .also { trace?.log("subtitle:done", "ok=${it != null}") }
-                        }
-                            .also(startupJobs::add)
-                    } else {
-                        null
-                    }
-
                 trace?.log("playurl:await")
                 val (playStream, playable) = playJob.await().getOrThrow()
                 trace?.log("playurl:awaitDone")
@@ -484,17 +543,6 @@ internal fun PlayerActivity.startPlayback(
                 lastAvailableQns = parseDashVideoQnList(playStream)
                 lastAvailableAudioIds = parseDashAudioIdList(playStream, constraints = playbackConstraints)
                 logPlayUrlTrackSummary(source = "start", stream = playStream, constraints = playbackConstraints)
-                if (subtitleSupported) {
-                    trace?.log("subtitle:await")
-                    subtitleConfig = subJob?.await()
-                    trace?.log("subtitle:awaitDone", "ok=${subtitleConfig != null}")
-                    subtitleAvailabilityKnown = true
-                    subtitleAvailable = subtitleConfig != null
-                } else {
-                    subtitleConfig = null
-                    subtitleAvailabilityKnown = true
-                    subtitleAvailable = false
-                }
                 (binding.recyclerSettings.adapter as? PlayerSettingsAdapter)?.let { refreshSettings(it) }
                 (engine as? ExoPlayerEngine)?.exoPlayer?.let { applySubtitleEnabled(it) }
 
@@ -555,12 +603,18 @@ internal fun PlayerActivity.startPlayback(
                     cid = cid,
                     playbackToken = autoSkipToken,
                 )
+                startPostFirstFrameEnhancements(
+                    engine = engine,
+                    playbackToken = autoResumeToken,
+                    detail = detail,
+                    bvid = resolvedBvid,
+                    cid = cid,
+                )
 
                 trace?.log("danmakuMeta:await")
                 val dmMeta = dmJob.await()
                 trace?.log("danmakuMeta:awaitDone")
                 applyDanmakuMeta(dmMeta)
-                videoShotJob?.await()
                 requestDanmakuSegmentsForPosition(engine.currentPosition.coerceAtLeast(0L), immediate = true)
             } catch (throwable: Throwable) {
                 if (throwable is CancellationException) return@launch
