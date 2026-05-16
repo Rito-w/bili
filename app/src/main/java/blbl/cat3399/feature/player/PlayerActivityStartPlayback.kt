@@ -129,7 +129,6 @@ private suspend fun PlayerActivity.awaitFirstFrameForStartupEnhancements(
 private fun PlayerActivity.startPostFirstFrameEnhancements(
     engine: BlblPlayerEngine,
     playbackToken: Int,
-    detail: VideoDetail,
     bvid: String,
     cid: Long,
 ) {
@@ -139,22 +138,13 @@ private fun PlayerActivity.startPostFirstFrameEnhancements(
             try {
                 if (!awaitFirstFrameForStartupEnhancements(engine, playbackToken)) return@launch
                 trace?.log("enhance:start")
-                if (engine.capabilities.subtitlesSupported && session.subtitleEnabled) {
-                    startSubtitleLoad(
-                        detail = detail,
-                        bvid = bvid,
-                        cid = cid,
-                        expectedPlaybackToken = playbackToken,
-                        enableWhenLoaded = true,
-                        persistEnable = false,
-                        showUnavailableToast = false,
-                        reason = "post_first_frame",
-                        exo = (engine as? ExoPlayerEngine)?.exoPlayer,
-                    )
-                } else {
-                    val reason = if (engine.capabilities.subtitlesSupported) "disabled" else "unsupported"
-                    trace?.log("subtitle:skip", "reason=$reason")
-                }
+                val subtitleSkipReason =
+                    when {
+                        !engine.capabilities.subtitlesSupported -> "unsupported"
+                        subtitleAvailabilityKnown -> "already_known"
+                        else -> "defer_until_requested"
+                    }
+                trace?.log("subtitle:skip", "reason=$subtitleSkipReason")
                 loadVideoShotAfterFirstFrame(bvid = bvid, cid = cid, playbackToken = playbackToken)
                 trace?.log("enhance:done")
             } catch (throwable: Throwable) {
@@ -531,6 +521,18 @@ internal fun PlayerActivity.startPlayback(
                         prepareDanmakuMeta(cid, currentAid ?: aid, trace)
                             .also { trace?.log("danmakuMeta:done", "segTotal=${it.segmentTotal} segMs=${it.segmentSizeMs}") }
                     }.also(startupJobs::add)
+                val subtitleSupported = engine.capabilities.subtitlesSupported
+                val subJob =
+                    if (subtitleSupported && session.subtitleEnabled) {
+                        async(Dispatchers.IO) {
+                            trace?.log("subtitle:start", "reason=start_enabled")
+                            prepareSubtitleConfig(detail, resolvedBvid, cid, trace)
+                                .also { trace?.log("subtitle:done", "reason=start_enabled ok=${it != null}") }
+                        }
+                            .also(startupJobs::add)
+                    } else {
+                        null
+                    }
 
                 trace?.log("playurl:await")
                 val (playStream, playable) = playJob.await().getOrThrow()
@@ -543,6 +545,17 @@ internal fun PlayerActivity.startPlayback(
                 lastAvailableQns = parseDashVideoQnList(playStream)
                 lastAvailableAudioIds = parseDashAudioIdList(playStream, constraints = playbackConstraints)
                 logPlayUrlTrackSummary(source = "start", stream = playStream, constraints = playbackConstraints)
+                if (subtitleSupported && session.subtitleEnabled) {
+                    trace?.log("subtitle:await", "reason=start_enabled")
+                    subtitleConfig = subJob?.await()
+                    trace?.log("subtitle:awaitDone", "reason=start_enabled ok=${subtitleConfig != null}")
+                    subtitleAvailabilityKnown = true
+                    subtitleAvailable = subtitleConfig != null
+                } else if (!subtitleSupported) {
+                    subtitleConfig = null
+                    subtitleAvailabilityKnown = true
+                    subtitleAvailable = false
+                }
                 (binding.recyclerSettings.adapter as? PlayerSettingsAdapter)?.let { refreshSettings(it) }
                 (engine as? ExoPlayerEngine)?.exoPlayer?.let { applySubtitleEnabled(it) }
 
@@ -606,7 +619,6 @@ internal fun PlayerActivity.startPlayback(
                 startPostFirstFrameEnhancements(
                     engine = engine,
                     playbackToken = autoResumeToken,
-                    detail = detail,
                     bvid = resolvedBvid,
                     cid = cid,
                 )

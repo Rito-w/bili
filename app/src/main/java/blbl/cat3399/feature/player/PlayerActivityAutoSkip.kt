@@ -7,6 +7,7 @@ import androidx.media3.common.Player
 import blbl.cat3399.core.api.BiliApi
 import blbl.cat3399.core.api.SponsorBlockApi
 import blbl.cat3399.core.api.video.VideoPlayStream
+import blbl.cat3399.core.api.video.VideoResumeTimeUnit
 import blbl.cat3399.core.log.AppLog
 import blbl.cat3399.core.net.BiliClient
 import blbl.cat3399.feature.player.engine.BlblPlayerEngine
@@ -376,18 +377,24 @@ internal fun PlayerActivity.setAutoSkipSegments(token: Int, segments: List<SkipS
 }
 
 internal fun PlayerActivity.extractResumeCandidateFromPlayStream(playStream: VideoPlayStream): ResumeCandidate? {
-    val time = playStream.resume?.rawTime?.takeIf { it > 0 } ?: return null
+    val resume = playStream.resume ?: return null
+    val time = resume.rawTime.takeIf { it > 0 } ?: return null
     val hint =
-        when {
-            time >= 10_000L -> RawTimeUnitHint.MILLIS_LIKELY
-            else -> RawTimeUnitHint.UNKNOWN
+        when (resume.timeUnit) {
+            VideoResumeTimeUnit.SECONDS -> RawTimeUnitHint.SECONDS_LIKELY
+            VideoResumeTimeUnit.MILLIS -> RawTimeUnitHint.MILLIS_LIKELY
         }
     return ResumeCandidate(rawTime = time, rawTimeUnitHint = hint, source = "playurl")
 }
 
-internal fun PlayerActivity.normalizeResumePositionMs(raw: Long, hint: RawTimeUnitHint, durationMs: Long?): Long? {
+internal fun normalizeResumePositionMs(raw: Long, hint: RawTimeUnitHint, durationMs: Long?): Long? {
     if (raw <= 0) return null
     val dur = durationMs?.takeIf { it > 0 }
+    when (hint) {
+        RawTimeUnitHint.MILLIS_LIKELY -> return raw
+        RawTimeUnitHint.SECONDS_LIKELY -> return raw * 1000
+        RawTimeUnitHint.UNKNOWN -> Unit
+    }
     if (dur != null) {
         return when {
             raw in 1..dur -> raw
@@ -395,11 +402,7 @@ internal fun PlayerActivity.normalizeResumePositionMs(raw: Long, hint: RawTimeUn
             else -> raw
         }
     }
-    return when (hint) {
-        RawTimeUnitHint.MILLIS_LIKELY -> raw
-        RawTimeUnitHint.SECONDS_LIKELY -> raw * 1000
-        RawTimeUnitHint.UNKNOWN -> if (raw >= 10_000L) raw else raw * 1000
-    }
+    return if (raw >= 10_000L) raw else raw * 1000
 }
 
 internal fun PlayerActivity.shouldAutoResumeTo(positionMs: Long, durationMs: Long?): Boolean {

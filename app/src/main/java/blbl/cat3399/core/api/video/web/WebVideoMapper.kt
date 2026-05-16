@@ -23,6 +23,7 @@ import blbl.cat3399.core.api.video.VideoPlayStream
 import blbl.cat3399.core.api.video.VideoPopularRequest
 import blbl.cat3399.core.api.video.VideoProgressiveStream
 import blbl.cat3399.core.api.video.VideoRegionLatestRequest
+import blbl.cat3399.core.api.video.VideoResumeTimeUnit
 import blbl.cat3399.core.api.video.VideoSegmentBase
 import blbl.cat3399.core.api.video.VideoSeriesArchivesRequest
 import blbl.cat3399.core.api.video.VideoSubtitle
@@ -693,7 +694,7 @@ internal class WebVideoMapper(
     private fun parseResume(data: JSONObject): VideoPlayResume? {
         val time = data.optLong("last_play_time", -1L).takeIf { it > 0L } ?: return null
         val lastCid = data.optLong("last_play_cid", -1L).takeIf { it > 0L }
-        return VideoPlayResume(rawTime = time, lastCid = lastCid)
+        return VideoPlayResume(rawTime = time, timeUnit = VideoResumeTimeUnit.MILLIS, lastCid = lastCid)
     }
 
     private fun resolveDurationMs(
