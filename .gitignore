@@ -16,5 +16,7 @@ local.properties
 
 *.apk
 keystore/
-docs/
+docs/*
+!docs/screenshots/
+!docs/screenshots/*.png
 libs/
