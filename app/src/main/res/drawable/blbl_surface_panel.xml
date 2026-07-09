@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/blbl_scrim_panel" />
+    <solid android:color="?attr/blblDialogSurface" />
+    <corners android:radius="@dimen/tv_panel_corner_radius" />
 </shape>

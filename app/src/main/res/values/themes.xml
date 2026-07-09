@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Application-level fallback theme: Default preset (Dark + Violet accent). -->
+    <!-- Application-level fallback theme: Default preset (Dark + brand accent). -->
     <style name="Theme.Blbl" parent="Theme.Blbl.Base.Dark">
-        <item name="blblAccent">@color/blbl_purple</item>
-        <item name="blblAccentContainer">@color/blbl_accent_violet_container</item>
-        <item name="blblAccentWeak">@color/blbl_accent_violet_weak</item>
-        <item name="blblAccentPressed">@color/blbl_accent_violet_pressed</item>
+        <item name="blblAccent">@color/blbl_brand_accent</item>
+        <item name="blblAccentContainer">@color/blbl_brand_accent_container</item>
+        <item name="blblAccentWeak">@color/blbl_brand_accent_weak</item>
+        <item name="blblAccentPressed">@color/blbl_brand_accent_pressed</item>
     </style>
 
     <style name="Theme.Blbl.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Accent (overridden by preset overlay). -->
-        <item name="blblAccent">@color/blbl_purple</item>
-        <item name="blblAccentContainer">@color/blbl_accent_violet_container</item>
-        <item name="blblAccentWeak">@color/blbl_accent_violet_weak</item>
-        <item name="blblAccentPressed">@color/blbl_accent_violet_pressed</item>
+        <item name="blblAccent">@color/blbl_brand_accent</item>
+        <item name="blblAccentContainer">@color/blbl_brand_accent_container</item>
+        <item name="blblAccentWeak">@color/blbl_brand_accent_weak</item>
+        <item name="blblAccentPressed">@color/blbl_brand_accent_pressed</item>
         <item name="blblPageBackdrop">?attr/colorBackground</item>
         <item name="blblDialogSurface">?attr/colorSurface</item>
         <item name="blblOnPageBackdrop">?attr/colorOnSurface</item>
@@ -23,6 +23,7 @@
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorControlActivated">?attr/blblAccent</item>
         <item name="colorControlHighlight">?attr/blblAccentContainer</item>
+        <item name="materialCardViewStyle">@style/Widget.Blbl.Card</item>
 
         <!-- Focus resources (overridden by Player fixed theme). -->
         <item name="blblFocusBgRound">@drawable/blbl_focus_bg_round_white</item>
@@ -108,10 +109,10 @@
 
     <!-- Player uses the same cinema accent as the TV home surface. -->
     <style name="Theme.Blbl.Player.Fixed" parent="Theme.Blbl.Base.Dark">
-        <item name="blblAccent">@color/blbl_red</item>
-        <item name="blblAccentContainer">@color/blbl_accent_blue_container</item>
-        <item name="blblAccentWeak">@color/blbl_accent_blue_weak</item>
-        <item name="blblAccentPressed">@color/blbl_accent_blue_pressed</item>
+        <item name="blblAccent">@color/blbl_brand_accent</item>
+        <item name="blblAccentContainer">@color/blbl_brand_accent_container</item>
+        <item name="blblAccentWeak">@color/blbl_brand_accent_weak</item>
+        <item name="blblAccentPressed">@color/blbl_brand_accent_pressed</item>
 
         <item name="blblFocusBgRound">@drawable/blbl_focus_bg_round</item>
         <item name="blblFocusListSelectorRound">@drawable/blbl_focus_list_selector_round</item>

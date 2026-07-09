@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
-    android:insetLeft="12dp"
-    android:insetTop="6dp"
-    android:insetRight="12dp"
-    android:insetBottom="6dp">
+    android:insetLeft="@dimen/tv_focus_list_inset_horizontal"
+    android:insetTop="@dimen/tv_focus_list_inset_vertical"
+    android:insetRight="@dimen/tv_focus_list_inset_horizontal"
+    android:insetBottom="@dimen/tv_focus_list_inset_vertical">
 
     <selector>
         <item android:state_pressed="true">
             <shape android:shape="rectangle">
-                <solid android:color="#66333333" />
+                <solid android:color="@color/blbl_focus_fill_pressed" />
                 <stroke
-                    android:width="2dp"
-                    android:color="@color/blbl_blue" />
-                <corners android:radius="10dp" />
+                    android:width="@dimen/tv_focus_outline_width"
+                    android:color="?attr/blblAccent" />
+                <corners android:radius="@dimen/tv_focus_corner_radius" />
             </shape>
         </item>
         <item android:state_focused="true">
             <shape android:shape="rectangle">
-                <solid android:color="#4D333333" />
+                <solid android:color="@color/blbl_focus_fill" />
                 <stroke
-                    android:width="2dp"
-                    android:color="@color/blbl_blue" />
-                <corners android:radius="10dp" />
+                    android:width="@dimen/tv_focus_outline_width"
+                    android:color="?attr/blblAccent" />
+                <corners android:radius="@dimen/tv_focus_corner_radius" />
             </shape>
         </item>
         <item android:state_selected="true">
             <shape android:shape="rectangle">
-                <solid android:color="#4D333333" />
+                <solid android:color="@color/blbl_focus_fill" />
                 <stroke
-                    android:width="2dp"
-                    android:color="@color/blbl_blue" />
-                <corners android:radius="10dp" />
+                    android:width="@dimen/tv_focus_outline_width"
+                    android:color="?attr/blblAccent" />
+                <corners android:radius="@dimen/tv_focus_corner_radius" />
             </shape>
         </item>
         <item android:state_activated="true">
             <shape android:shape="rectangle">
-                <solid android:color="#4D333333" />
+                <solid android:color="@color/blbl_focus_fill" />
                 <stroke
-                    android:width="2dp"
-                    android:color="@color/blbl_blue" />
-                <corners android:radius="10dp" />
+                    android:width="@dimen/tv_focus_outline_width"
+                    android:color="?attr/blblAccent" />
+                <corners android:radius="@dimen/tv_focus_corner_radius" />
             </shape>
         </item>
         <item>
             <shape android:shape="rectangle">
-                <solid android:color="#00000000" />
-                <corners android:radius="10dp" />
+                <solid android:color="@color/blbl_scrim_transparent" />
+                <corners android:radius="@dimen/tv_focus_corner_radius" />
             </shape>
         </item>
     </selector>

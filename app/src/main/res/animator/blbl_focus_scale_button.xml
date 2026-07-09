@@ -5,17 +5,17 @@
             <objectAnimator
                 android:duration="180"
                 android:propertyName="scaleX"
-                android:valueTo="1.05"
+                android:valueTo="1.08"
                 android:valueType="floatType" />
             <objectAnimator
                 android:duration="180"
                 android:propertyName="scaleY"
-                android:valueTo="1.05"
+                android:valueTo="1.08"
                 android:valueType="floatType" />
             <objectAnimator
                 android:duration="180"
                 android:propertyName="translationZ"
-                android:valueTo="@dimen/tv_focus_card_lift"
+                android:valueTo="@dimen/tv_focus_button_lift"
                 android:valueType="floatType" />
         </set>
     </item>

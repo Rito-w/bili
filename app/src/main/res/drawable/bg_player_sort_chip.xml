@@ -5,8 +5,8 @@
             <solid android:color="#FF000000" />
             <corners android:radius="14dp" />
             <stroke
-                android:width="2dp"
-                android:color="@color/blbl_blue" />
+                android:width="@dimen/tv_focus_outline_width"
+                android:color="?attr/blblAccent" />
         </shape>
     </item>
     <item android:state_focused="true">
@@ -14,8 +14,8 @@
             <solid android:color="#FF000000" />
             <corners android:radius="14dp" />
             <stroke
-                android:width="2dp"
-                android:color="@color/blbl_blue" />
+                android:width="@dimen/tv_focus_outline_width"
+                android:color="?attr/blblAccent" />
         </shape>
     </item>
     <item android:state_pressed="true" android:state_selected="true">

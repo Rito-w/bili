@@ -7,15 +7,28 @@
 
     <style name="ShapeAppearanceOverlay_Blbl_Rounded">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">12dp</item>
+        <item name="cornerSize">@dimen/tv_card_corner_radius</item>
     </style>
 
-    <style name="ThemeOverlay.Blbl.Accent.Violet" parent="ThemeOverlay.MaterialComponents">
-        <item name="blblAccent">@color/blbl_purple</item>
-        <item name="blblAccentContainer">@color/blbl_accent_violet_container</item>
-        <item name="blblAccentWeak">@color/blbl_accent_violet_weak</item>
-        <item name="blblAccentPressed">@color/blbl_accent_violet_pressed</item>
+    <style name="ShapeAppearanceOverlay_Blbl_Card">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/tv_card_corner_radius</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay_Blbl_Panel">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/tv_panel_corner_radius</item>
+    </style>
+
+    <style name="ThemeOverlay.Blbl.Accent.Brand" parent="ThemeOverlay.MaterialComponents">
+        <item name="blblAccent">@color/blbl_brand_accent</item>
+        <item name="blblAccentContainer">@color/blbl_brand_accent_container</item>
+        <item name="blblAccentWeak">@color/blbl_brand_accent_weak</item>
+        <item name="blblAccentPressed">@color/blbl_brand_accent_pressed</item>
+    </style>
+
+    <!-- Compatibility name consumed by ThemePresets; values come from the single brand accent. -->
+    <style name="ThemeOverlay.Blbl.Accent.Violet" parent="ThemeOverlay.Blbl.Accent.Brand" />
 
     <style name="ThemeOverlay.Blbl.Accent.TvPink" parent="ThemeOverlay.MaterialComponents">
         <item name="blblAccent">@color/blbl_accent_tv_pink</item>
@@ -49,7 +62,7 @@
     </style>
 
     <style name="ThemeOverlay.Blbl.Player.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="colorPrimary">@color/blbl_red</item>
+        <item name="colorPrimary">@color/blbl_brand_accent</item>
         <item name="colorOnPrimary">@color/blbl_text</item>
         <item name="materialAlertDialogTitleTextStyle">@style/Widget.Blbl.MaterialAlertDialog.Title.Text</item>
         <item name="materialAlertDialogBodyTextStyle">@style/Widget.Blbl.MaterialAlertDialog.Body.Text</item>
@@ -67,14 +80,57 @@
 
     <style name="Widget.Blbl.MaterialAlertDialog.Title.Text" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">@dimen/tv_text_size_top_tab</item>
     </style>
 
     <style name="Widget.Blbl.MaterialAlertDialog.Body.Text" parent="MaterialAlertDialog.MaterialComponents.Body.Text">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">@dimen/tv_text_size_supporting</item>
     </style>
 
-    <style name="TextAppearance.Blbl.Tab" parent="TextAppearance.MaterialComponents.Button">
-        <item name="android:textSize">21sp</item>
+    <style name="TextAppearance.Blbl.PageTitle" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">?attr/blblOnPageBackdrop</item>
+        <item name="android:textSize">@dimen/tv_text_size_page_title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Blbl.TopTab" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">@dimen/tv_text_size_top_tab</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.Blbl.CardTitle" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">@dimen/tv_text_size_card_title</item>
+    </style>
+
+    <style name="TextAppearance.Blbl.Supporting" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textSize">@dimen/tv_text_size_supporting</item>
+    </style>
+
+    <style name="TextAppearance.Blbl.Tab" parent="TextAppearance.Blbl.TopTab" />
+
+    <style name="Widget.Blbl.Card" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="cardCornerRadius">@dimen/tv_card_corner_radius</item>
+        <item name="cardElevation">@dimen/tv_card_elevation</item>
+        <item name="strokeColor">?attr/blblFocusStrokeColor</item>
+        <item name="strokeWidth">@dimen/tv_focus_outline_width</item>
+        <item name="android:stateListAnimator">@animator/blbl_focus_scale</item>
+    </style>
+
+    <style name="Widget.Blbl.Panel" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">?attr/blblDialogSurface</item>
+        <item name="cardCornerRadius">@dimen/tv_panel_corner_radius</item>
+        <item name="cardElevation">@dimen/tv_panel_elevation</item>
+    </style>
+
+    <style name="Widget.Blbl.SmallAction" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minWidth">@dimen/tv_small_action_min_size</item>
+        <item name="android:minHeight">@dimen/tv_small_action_min_size</item>
+        <item name="android:stateListAnimator">@animator/blbl_focus_scale_button</item>
+        <item name="android:textAppearance">@style/TextAppearance.Blbl.Supporting</item>
     </style>
 
     <style name="Widget.Blbl.TabLayout" parent="Widget.MaterialComponents.TabLayout">

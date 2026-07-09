@@ -24,17 +24,22 @@
     <color name="blbl_on_page_backdrop_classic">#FFF5FA</color>
     <color name="blbl_on_page_backdrop_secondary_classic">#DFC4D2</color>
 
-    <!-- Focus highlight: white frame + subtle shadow/overlay. -->
+    <!-- Default TV brand accent and semantic colors. Keep intent out of palette aliases. -->
+    <color name="blbl_brand_accent">#E11D48</color>
+    <color name="blbl_brand_accent_container">#33E11D48</color>
+    <color name="blbl_brand_accent_weak">#66E11D48</color>
+    <color name="blbl_brand_accent_pressed">#80E11D48</color>
+    <color name="blbl_semantic_info">#38BDF8</color>
+    <color name="blbl_semantic_live">#FB7299</color>
+    <color name="blbl_semantic_danger">#FF4D4F</color>
+
+    <!-- Focus highlight: high-contrast frame + subtle shadow/overlay. -->
     <color name="blbl_focus_white">#FFFFFF</color>
     <color name="blbl_focus_shadow">#66000000</color>
     <color name="blbl_focus_fill">#4D333333</color>
     <color name="blbl_focus_fill_pressed">#66333333</color>
 
-    <!-- Accent derived colors: keep alpha variants centralized. -->
-    <color name="blbl_accent_violet_container">#33E11D48</color>
-    <color name="blbl_accent_violet_weak">#66E11D48</color>
-    <color name="blbl_accent_violet_pressed">#80E11D48</color>
-
+    <!-- Alternate theme accents. -->
     <color name="blbl_accent_tv_pink_container">#33FB7299</color>
     <color name="blbl_accent_tv_pink_weak">#66FB7299</color>
     <color name="blbl_accent_tv_pink_pressed">#80FB7299</color>
@@ -44,16 +49,26 @@
     <color name="blbl_accent_classic_weak">#80FF8AB3</color>
     <color name="blbl_accent_classic_pressed">#99FF8AB3</color>
 
-    <color name="blbl_accent_blue_container">#33E11D48</color>
-    <color name="blbl_accent_blue_weak">#66E11D48</color>
-    <color name="blbl_accent_blue_pressed">#80E11D48</color>
+    <!-- Theme-independent scrims shared by cards, panels and player chrome. -->
+    <color name="blbl_scrim_transparent">#00000000</color>
+    <color name="blbl_scrim_soft">#66000000</color>
+    <color name="blbl_scrim_medium">#B3000000</color>
+    <color name="blbl_scrim_strong">#E6000000</color>
+    <color name="blbl_scrim_panel">#CC000000</color>
+
     <color name="player_button_tint">#FFFFFF</color>
-    <color name="blbl_purple">#E11D48</color>
-    <color name="blbl_blue">#38BDF8</color>
     <color name="player_comment_thread_root_bg">#2638BDF8</color>
-    <color name="blbl_red">#E11D48</color>
-    <!-- Theme accent base (TV Pink preset). Keep it separate from business-label pink. -->
+
+    <!-- Alternate TV Pink theme accent. It intentionally matches the semantic live hue. -->
     <color name="blbl_accent_tv_pink">#FB7299</color>
-    <color name="blbl_pink">#FB7299</color>
+
+    <!-- Compatibility aliases for existing Kotlin/layout call sites. New UI uses intent tokens above. -->
+    <color name="blbl_purple">@color/blbl_brand_accent</color>
+    <color name="blbl_accent_violet_container">@color/blbl_brand_accent_container</color>
+    <color name="blbl_accent_violet_weak">@color/blbl_brand_accent_weak</color>
+    <color name="blbl_accent_violet_pressed">@color/blbl_brand_accent_pressed</color>
+    <color name="blbl_blue">@color/blbl_semantic_info</color>
+    <color name="blbl_red">@color/blbl_semantic_danger</color>
+    <color name="blbl_pink">@color/blbl_semantic_live</color>
     <color name="player_overlay_bg">#80000000</color>
 </resources>
