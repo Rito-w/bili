@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="splash_logo_width">180dp</dimen>
-    <dimen name="splash_logo_height">186dp</dimen>
+    <dimen name="splash_logo_width">220dp</dimen>
+    <dimen name="splash_logo_height">160dp</dimen>
 
     <!-- Sidebar (baseline 1080p@1.5) -->
     <dimen name="sidebar_width">77dp</dimen>
@@ -29,15 +29,15 @@
     <dimen name="sidebar_nav_item_height_labeled">72dp</dimen>
 
     <!-- Video card -->
-    <dimen name="video_card_margin">8dp</dimen>
-    <dimen name="video_card_text_margin">10dp</dimen>
+    <dimen name="video_card_margin">12dp</dimen>
+    <dimen name="video_card_text_margin">12dp</dimen>
     <dimen name="video_card_duration_text_size">14sp</dimen>
     <dimen name="video_card_duration_padding_h">8dp</dimen>
     <dimen name="video_card_duration_padding_v">3dp</dimen>
     <dimen name="video_card_stat_icon_size">18dp</dimen>
     <dimen name="video_card_stat_text_size">14sp</dimen>
-    <dimen name="video_card_title_text_size">18sp</dimen>
-    <dimen name="video_card_subtitle_text_size">14sp</dimen>
+    <dimen name="video_card_title_text_size">20sp</dimen>
+    <dimen name="video_card_subtitle_text_size">15sp</dimen>
     <dimen name="video_card_progress_bar_height">2.5dp</dimen>
     <dimen name="video_card_progress_bar_radius">1.2dp</dimen>
     <dimen name="video_card_action_button_height">56dp</dimen>

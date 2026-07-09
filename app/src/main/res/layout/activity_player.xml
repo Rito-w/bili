@@ -443,7 +443,7 @@
                 android:padding="?attr/playerOsdPadNormal"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_player_danmaku"
-                />
+                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/btn_comments"

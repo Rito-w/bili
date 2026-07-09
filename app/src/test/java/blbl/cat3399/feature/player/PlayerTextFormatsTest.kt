@@ -55,4 +55,16 @@ class PlayerTextFormatsTest {
         val picked = pickQnByQualityOrder(availableQns = listOf(120, 127), desiredQn = 80)
         assertEquals(120, picked)
     }
+
+    @Test
+    fun pickQnByQualityOrder_should_prefer_hdr_over_plain_8k_for_highest_default() {
+        val picked = pickQnByQualityOrder(availableQns = listOf(120, 125, 127), desiredQn = 129)
+        assertEquals(125, picked)
+    }
+
+    @Test
+    fun pickQnByQualityOrder_should_fallback_to_4k_when_hdr_is_unavailable() {
+        val picked = pickQnByQualityOrder(availableQns = listOf(80, 116, 120), desiredQn = 129)
+        assertEquals(120, picked)
+    }
 }

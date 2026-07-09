@@ -49,11 +49,11 @@
     </style>
 
     <style name="ThemeOverlay.Blbl.Player.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="colorPrimary">@color/blbl_blue</item>
+        <item name="colorPrimary">@color/blbl_red</item>
         <item name="colorOnPrimary">@color/blbl_text</item>
         <item name="materialAlertDialogTitleTextStyle">@style/Widget.Blbl.MaterialAlertDialog.Title.Text</item>
         <item name="materialAlertDialogBodyTextStyle">@style/Widget.Blbl.MaterialAlertDialog.Body.Text</item>
-        <!-- Player is frozen: keep the old list selector/focus behavior. -->
+        <!-- Keep the list selector/focus behavior consistent with the player controls. -->
         <item name="android:listViewStyle">@style/Widget.Blbl.Dialog.ListView</item>
         <item name="android:dropDownListViewStyle">@style/Widget.Blbl.Dialog.ListView</item>
     </style>

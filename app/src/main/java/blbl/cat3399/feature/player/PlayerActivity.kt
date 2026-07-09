@@ -1632,8 +1632,9 @@ class PlayerActivity : BaseActivity() {
                     return true
                 }
                 if (osdMode == OsdMode.Hidden) {
-                    setControlsVisible(true)
-                    focusDownKeyOsdTargetControl()
+                    if (event.repeatCount == 0) {
+                        playNextByPlaybackMode(userInitiated = true)
+                    }
                     return true
                 }
             }
@@ -3619,7 +3620,7 @@ class PlayerActivity : BaseActivity() {
         internal const val SEEK_HINT_HIDE_DELAY_MS = 900L
         internal const val PLAYBACK_TITLE_HINT_HIDE_DELAY_MS = 2_500L
         internal const val AUTO_NEXT_PREVIEW_WINDOW_MS = 5_000L
-        internal const val AUTO_NEXT_TITLE_MAX_CHARS = 18
+        internal const val AUTO_NEXT_TITLE_MAX_CHARS = 12
         internal const val SEEK_OSD_HIDE_DELAY_MS = 1_500L
         internal const val VIDEOSHOT_PREVIEW_HIDE_AFTER_SEEK_MS = 500L
         internal const val AUTO_SKIP_START_WINDOW_MS = 1_000L

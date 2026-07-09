@@ -186,7 +186,7 @@ class AppPrefs(context: Context) {
         set(value) = prefs.edit().putString(KEY_IMAGE_QUALITY, value).apply()
 
     var danmakuEnabled: Boolean
-        get() = prefs.getBoolean(KEY_DANMAKU_ENABLED, true)
+        get() = prefs.getBoolean(KEY_DANMAKU_ENABLED, false)
         set(value) = prefs.edit().putBoolean(KEY_DANMAKU_ENABLED, value).apply()
 
     var danmakuAllowTop: Boolean
@@ -312,7 +312,7 @@ class AppPrefs(context: Context) {
         set(value) = prefs.edit().putFloat(KEY_DANMAKU_AREA, normalizeDanmakuArea(value)).apply()
 
     var playerPreferredQn: Int
-        get() = prefs.getInt(KEY_PLAYER_PREFERRED_QN, 80)
+        get() = prefs.getInt(KEY_PLAYER_PREFERRED_QN, 129)
         set(value) = prefs.edit().putInt(KEY_PLAYER_PREFERRED_QN, value).apply()
 
     var playerPreferredQnPortrait: Int
@@ -323,7 +323,7 @@ class AppPrefs(context: Context) {
         set(value) = prefs.edit().putInt(KEY_PLAYER_PREFERRED_QN_PORTRAIT, value).apply()
 
     var playerPreferredCodec: String
-        get() = prefs.getString(KEY_PLAYER_CODEC, "AVC") ?: "AVC"
+        get() = prefs.getString(KEY_PLAYER_CODEC, "HEVC") ?: "HEVC"
         set(value) = prefs.edit().putString(KEY_PLAYER_CODEC, value).apply()
 
     var playerRenderViewType: String
@@ -810,27 +810,27 @@ class AppPrefs(context: Context) {
 
     var gridSpanCount: Int
         get() {
-            val stored = prefs.getInt(KEY_GRID_SPAN, 4)
-            val span = if (stored <= 0) 4 else stored
+            val stored = prefs.getInt(KEY_GRID_SPAN, 2)
+            val span = if (stored <= 0) 2 else stored
             return span.coerceIn(1, 6)
         }
         set(value) {
-            val span = if (value <= 0) 4 else value
+            val span = if (value <= 0) 2 else value
             prefs.edit().putInt(KEY_GRID_SPAN, span.coerceIn(1, 6)).apply()
         }
 
     var dynamicGridSpanCount: Int
-        get() = prefs.getInt(KEY_DYNAMIC_GRID_SPAN, 3)
+        get() = prefs.getInt(KEY_DYNAMIC_GRID_SPAN, 2)
         set(value) = prefs.edit().putInt(KEY_DYNAMIC_GRID_SPAN, value).apply()
 
     var pgcGridSpanCount: Int
         get() {
-            val stored = prefs.getInt(KEY_PGC_GRID_SPAN, 6)
-            val span = if (stored <= 0) 6 else stored
+            val stored = prefs.getInt(KEY_PGC_GRID_SPAN, 2)
+            val span = if (stored <= 0) 2 else stored
             return span.coerceIn(1, 6)
         }
         set(value) {
-            val span = if (value <= 0) 6 else value
+            val span = if (value <= 0) 2 else value
             prefs.edit().putInt(KEY_PGC_GRID_SPAN, span.coerceIn(1, 6)).apply()
         }
 

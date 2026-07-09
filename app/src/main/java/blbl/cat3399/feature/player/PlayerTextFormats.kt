@@ -54,7 +54,7 @@ internal fun pickAudioIdByPreference(availableAudioIds: List<Int>, desiredAudioI
 internal fun qnLabel(qn: Int): String = SettingsText.qnText(qn)
 
 internal fun qnRank(qn: Int): Int {
-    val order = intArrayOf(6, 16, 32, 64, 74, 80, 100, 112, 116, 120, 125, 126, 127, 129)
+    val order = intArrayOf(6, 16, 32, 64, 74, 80, 100, 112, 116, 120, 127, 125, 126, 129)
     val idx = order.indexOf(qn)
     return if (idx >= 0) idx else (order.size + qn)
 }

@@ -106,9 +106,9 @@
         <item name="blblAccentPressed">@color/blbl_accent_classic_pressed</item>
     </style>
 
-    <!-- Player is frozen for this iteration: keep existing blue focus/active states. -->
+    <!-- Player uses the same cinema accent as the TV home surface. -->
     <style name="Theme.Blbl.Player.Fixed" parent="Theme.Blbl.Base.Dark">
-        <item name="blblAccent">@color/blbl_blue</item>
+        <item name="blblAccent">@color/blbl_red</item>
         <item name="blblAccentContainer">@color/blbl_accent_blue_container</item>
         <item name="blblAccentWeak">@color/blbl_accent_blue_weak</item>
         <item name="blblAccentPressed">@color/blbl_accent_blue_pressed</item>
