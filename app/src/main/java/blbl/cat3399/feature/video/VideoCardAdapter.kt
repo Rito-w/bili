@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import blbl.cat3399.R
@@ -318,9 +319,13 @@ class VideoCardAdapter(
             val pubDateText = item.pubDate?.let { Format.pubDateText(it) }.orEmpty()
             binding.tvPubdate.text = pubDateText
             val showSubtitleRow = !isEpisodeStyleCard && (subtitleText.isNotBlank() || pubDateText.isNotBlank())
-            binding.llSubtitle.isVisible = showSubtitleRow
+            binding.llSubtitle.isInvisible = !showSubtitleRow
             binding.tvSubtitle.isVisible = showSubtitleRow && subtitleText.isNotBlank()
             binding.tvPubdate.isVisible = showSubtitleRow && pubDateText.isNotBlank()
+            binding.root.contentDescription =
+                listOf(item.title, subtitleText, pubDateText)
+                    .filter { it.isNotBlank() }
+                    .joinToString("，")
 
             val showDuration = !isEpisodeStyleCard && watchProgressUi == null && item.durationSec > 0
             binding.tvDuration.isVisible = showDuration

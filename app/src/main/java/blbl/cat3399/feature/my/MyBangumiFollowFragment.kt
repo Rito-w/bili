@@ -17,6 +17,8 @@ import blbl.cat3399.core.paging.appliedOrNull
 import blbl.cat3399.core.ui.AppToast
 import blbl.cat3399.core.ui.DpadGridController
 import blbl.cat3399.core.ui.FocusTreeUtils
+import blbl.cat3399.core.ui.GridSpanPolicy
+import blbl.cat3399.core.ui.UiScale
 import blbl.cat3399.core.ui.postIfAlive
 import blbl.cat3399.core.ui.requestFocusFirstItemOrSelfAfterRefresh
 import blbl.cat3399.databinding.FragmentVideoGridBinding
@@ -129,8 +131,13 @@ class MyBangumiFollowFragment : Fragment(), MyTabSwitchFocusTarget, RefreshKeyHa
     }
 
     private fun spanCountForBangumi(): Int {
-        val prefs = BiliClient.prefs
-        return prefs.pgcGridSpanCount.coerceIn(1, 6)
+        val dm = resources.displayMetrics
+        val widthDp = dm.widthPixels / dm.density
+        return GridSpanPolicy.pgcSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride,
+            uiScale = UiScale.factor(requireContext()),
+        )
     }
 
     override fun requestFocusFirstItemFromTabSwitch(): Boolean {

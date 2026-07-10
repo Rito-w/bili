@@ -871,21 +871,39 @@ class SearchRenderer internal constructor(
             SearchTab.Media,
             -> spanCountForBangumi()
 
-            else -> spanCountForWidth()
+            SearchTab.Live -> spanCountForLive()
+            else -> spanCountForVideo()
         }
 
     private fun spanCountForCurrentTab(): Int = spanCountForTab(state.currentTabIndex)
 
     private fun spanCountForBangumi(): Int {
-        return BiliClient.prefs.pgcGridSpanCount.coerceIn(1, 6)
-    }
-
-    private fun spanCountForWidth(): Int {
         val dm = binding.root.resources.displayMetrics
         val widthDp = dm.widthPixels / dm.density
-        return GridSpanPolicy.fixedSpanCountForWidthDp(
+        return GridSpanPolicy.pgcSpanCountForWidthDp(
             widthDp = widthDp,
-            overrideSpanCount = BiliClient.prefs.gridSpanCount,
+            overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride,
+            uiScale = UiScale.factor(viewContext),
+        )
+    }
+
+    private fun spanCountForVideo(): Int {
+        val dm = binding.root.resources.displayMetrics
+        val widthDp = dm.widthPixels / dm.density
+        return GridSpanPolicy.videoSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = BiliClient.prefs.gridSpanCountOverride,
+            uiScale = UiScale.factor(viewContext),
+        )
+    }
+
+    private fun spanCountForLive(): Int {
+        val dm = binding.root.resources.displayMetrics
+        val widthDp = dm.widthPixels / dm.density
+        return GridSpanPolicy.liveSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = BiliClient.prefs.gridSpanCountOverride,
+            uiScale = UiScale.factor(viewContext),
         )
     }
 

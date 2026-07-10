@@ -2,8 +2,10 @@ package blbl.cat3399.feature.following
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import blbl.cat3399.R
 import blbl.cat3399.core.image.ImageLoader
 import blbl.cat3399.core.image.ImageUrl
 import blbl.cat3399.core.model.Following
@@ -59,8 +61,16 @@ class FollowingGridAdapter(
         fun bind(item: Following, onClick: (Following) -> Unit) {
             binding.tvName.text = item.name
             binding.tvSign.text = item.sign.orEmpty()
-            binding.tvSign.isVisible = !item.sign.isNullOrBlank()
+            binding.tvSign.isInvisible = item.sign.isNullOrBlank()
             binding.tvBadgeLive.isVisible = item.isLive
+            binding.root.contentDescription =
+                listOf(
+                    item.name,
+                    item.sign.orEmpty(),
+                    if (item.isLive) binding.root.context.getString(R.string.live_status_active) else "",
+                )
+                    .filter { it.isNotBlank() }
+                    .joinToString("，")
 
             ImageLoader.loadInto(binding.ivAvatar, ImageUrl.avatar(item.avatarUrl))
             binding.root.setOnClickListener { onClick(item) }

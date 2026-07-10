@@ -808,30 +808,36 @@ class AppPrefs(context: Context) {
             }
         }
 
+    /** Explicit 1-6 column choice, or null when the user has not chosen a global grid size. */
+    val gridSpanCountOverride: Int?
+        get() = storedGridSpanOverride(KEY_GRID_SPAN)
+
     var gridSpanCount: Int
-        get() {
-            val stored = prefs.getInt(KEY_GRID_SPAN, 2)
-            val span = if (stored <= 0) 2 else stored
-            return span.coerceIn(1, 6)
-        }
+        get() = gridSpanCountOverride ?: DEFAULT_VIDEO_GRID_SPAN
         set(value) {
-            val span = if (value <= 0) 2 else value
-            prefs.edit().putInt(KEY_GRID_SPAN, span.coerceIn(1, 6)).apply()
+            if (value <= 0) {
+                prefs.edit().remove(KEY_GRID_SPAN).apply()
+            } else {
+                prefs.edit().putInt(KEY_GRID_SPAN, value.coerceIn(1, 6)).apply()
+            }
         }
 
     var dynamicGridSpanCount: Int
         get() = prefs.getInt(KEY_DYNAMIC_GRID_SPAN, 2)
         set(value) = prefs.edit().putInt(KEY_DYNAMIC_GRID_SPAN, value).apply()
 
+    /** Explicit 1-6 PGC column choice, or null when the TV four-column default should apply. */
+    val pgcGridSpanCountOverride: Int?
+        get() = storedGridSpanOverride(KEY_PGC_GRID_SPAN)
+
     var pgcGridSpanCount: Int
-        get() {
-            val stored = prefs.getInt(KEY_PGC_GRID_SPAN, 2)
-            val span = if (stored <= 0) 2 else stored
-            return span.coerceIn(1, 6)
-        }
+        get() = pgcGridSpanCountOverride ?: DEFAULT_PGC_GRID_SPAN
         set(value) {
-            val span = if (value <= 0) 2 else value
-            prefs.edit().putInt(KEY_PGC_GRID_SPAN, span.coerceIn(1, 6)).apply()
+            if (value <= 0) {
+                prefs.edit().remove(KEY_PGC_GRID_SPAN).apply()
+            } else {
+                prefs.edit().putInt(KEY_PGC_GRID_SPAN, value.coerceIn(1, 6)).apply()
+            }
         }
 
     var pgcEpisodeOrderReversed: Boolean
@@ -911,6 +917,12 @@ class AppPrefs(context: Context) {
             }
             out
         }.getOrDefault(emptyList())
+    }
+
+    private fun storedGridSpanOverride(key: String): Int? {
+        val keyExists = prefs.contains(key)
+        val storedValue = if (keyExists) prefs.getInt(key, 0) else 0
+        return normalizeStoredGridSpanOverride(keyExists = keyExists, storedValue = storedValue)
     }
 
     private fun saveStringList(key: String, value: List<String>) {
@@ -1106,6 +1118,8 @@ class AppPrefs(context: Context) {
         private const val KEY_GRID_SPAN = "grid_span"
         private const val KEY_DYNAMIC_GRID_SPAN = "dynamic_grid_span"
         private const val KEY_PGC_GRID_SPAN = "pgc_grid_span"
+        private const val DEFAULT_VIDEO_GRID_SPAN = 2
+        private const val DEFAULT_PGC_GRID_SPAN = 4
         private const val KEY_PGC_EPISODE_ORDER_REVERSED = "pgc_episode_order_reversed"
         private const val KEY_SEARCH_HISTORY = "search_history"
         private const val KEY_GAIA_VGATE_V_VOUCHER = "gaia_vgate_v_voucher"
@@ -1170,6 +1184,11 @@ class AppPrefs(context: Context) {
             val step = (DANMAKU_AREA_STEP * 100f).roundToInt().coerceAtLeast(1)
             val snapped = ((scaled + step / 2) / step) * step
             return (snapped / 100f).coerceIn(DANMAKU_AREA_MIN, DANMAKU_AREA_MAX)
+        }
+
+        internal fun normalizeStoredGridSpanOverride(keyExists: Boolean, storedValue: Int): Int? {
+            if (!keyExists || storedValue <= 0) return null
+            return storedValue.coerceIn(1, 6)
         }
 
         /**

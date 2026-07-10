@@ -4,7 +4,9 @@
     android:id="@+id/swipe_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/blblContentBackground">
+    android:background="?attr/blblContentBackground"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
@@ -13,5 +15,6 @@
         android:focusable="true"
         android:clipChildren="false"
         android:clipToPadding="false"
-        android:padding="8dp" />
+        android:paddingHorizontal="@dimen/tv_grid_padding_horizontal"
+        android:paddingVertical="@dimen/tv_grid_padding_vertical" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

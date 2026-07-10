@@ -23,6 +23,7 @@ import blbl.cat3399.core.ui.GridViewportFillMonitor
 import blbl.cat3399.core.ui.GridSpanPolicy
 import blbl.cat3399.core.ui.TabContentSwitchFocusHost
 import blbl.cat3399.core.ui.TabSwitchFocusTarget
+import blbl.cat3399.core.ui.UiScale
 import blbl.cat3399.core.ui.postIfAlive
 import blbl.cat3399.core.ui.postIfAttached
 import blbl.cat3399.core.ui.installGridViewportFillMonitor
@@ -317,9 +318,10 @@ class VideoGridFragment : Fragment(), RefreshKeyHandler, TabSwitchFocusTarget {
     private fun spanCountForWidth(): Int {
         val dm = resources.displayMetrics
         val widthDp = dm.widthPixels / dm.density
-        return GridSpanPolicy.fixedSpanCountForWidthDp(
+        return GridSpanPolicy.videoSpanCountForWidthDp(
             widthDp = widthDp,
-            overrideSpanCount = BiliClient.prefs.gridSpanCount,
+            overrideSpanCount = BiliClient.prefs.gridSpanCountOverride,
+            uiScale = UiScale.factor(requireContext()),
         )
     }
 

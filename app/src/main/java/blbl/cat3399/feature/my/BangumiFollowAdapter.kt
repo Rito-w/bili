@@ -2,6 +2,7 @@ package blbl.cat3399.feature.my
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import blbl.cat3399.core.image.ImageLoader
@@ -79,7 +80,11 @@ class BangumiFollowAdapter(
                 }
             val subtitle = metaParts.joinToString(" · ")
             binding.tvSubtitle.text = subtitle
-            binding.tvSubtitle.isVisible = subtitle.isNotBlank()
+            binding.tvSubtitle.isInvisible = subtitle.isBlank()
+            binding.root.contentDescription =
+                listOf(item.title, badgeText.orEmpty(), subtitle)
+                    .filter { it.isNotBlank() }
+                    .joinToString("，")
             ImageLoader.loadInto(binding.ivCover, ImageUrl.poster(item.coverUrl))
 
             binding.root.setOnClickListener {

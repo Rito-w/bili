@@ -57,6 +57,7 @@ class LiveRoomAdapter(
 
     class Vh(private val binding: ItemLiveCardBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: LiveRoomCard, onClick: (position: Int, room: LiveRoomCard) -> Unit) {
+            val context = binding.root.context
             binding.tvTitle.text = item.title
             binding.tvSubtitle.text =
                 buildString {
@@ -68,11 +69,20 @@ class LiveRoomAdapter(
                     }
                     if (!item.isLive) {
                         if (isNotEmpty()) append(" · ")
-                        append("未开播")
+                        append(context.getString(R.string.live_status_inactive))
                     }
                 }
             binding.tvOnline.text = if (item.isLive) Format.count(item.online) else "-"
             binding.tvBadge.visibility = if (item.isLive) View.VISIBLE else View.GONE
+            binding.root.contentDescription =
+                listOf(
+                    item.title,
+                    binding.tvSubtitle.text.toString(),
+                    if (item.isLive) context.getString(R.string.live_status_active) else "",
+                    if (item.isLive) context.getString(R.string.live_online_count_format, Format.count(item.online)) else "",
+                )
+                    .filter { it.isNotBlank() }
+                    .joinToString("，")
             ImageLoader.loadInto(binding.ivCover, ImageUrl.cover(item.coverUrl))
 
             applyStatsOverlayTranslation()

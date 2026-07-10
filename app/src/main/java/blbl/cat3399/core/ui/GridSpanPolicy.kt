@@ -4,13 +4,60 @@ object GridSpanPolicy {
     private const val MIN_SPAN = 1
     private const val MAX_SPAN = 6
 
-    fun fixedSpanCountForWidthDp(widthDp: Float, overrideSpanCount: Int): Int {
-        if (overrideSpanCount > 0) return overrideSpanCount.coerceIn(MIN_SPAN, MAX_SPAN)
-        return when {
-            widthDp >= 1100f -> 4
-            widthDp >= 800f -> 3
-            else -> 2
+    /**
+     * Resolves the large 16:9 browse-card grid.
+     *
+     * A nullable override is intentional: `null` means that the user has never selected a
+     * column count (or kept the legacy automatic value), while a stored value such as `2`
+     * must win over content-specific defaults.
+     */
+    fun videoSpanCountForWidthDp(
+        widthDp: Float,
+        overrideSpanCount: Int?,
+        uiScale: Float,
+    ): Int =
+        resolveSpanCount(overrideSpanCount) {
+            when {
+                effectiveWidthDp(widthDp, uiScale) >= 600f -> 2
+                else -> 1
+            }
         }
+
+    /** Resolves the 12:17 PGC/poster grid: 4 columns at the 960dp TV baseline. */
+    fun pgcSpanCountForWidthDp(
+        widthDp: Float,
+        overrideSpanCount: Int?,
+        uiScale: Float,
+    ): Int =
+        resolveSpanCount(overrideSpanCount) {
+            when {
+                effectiveWidthDp(widthDp, uiScale) >= 840f -> 4
+                effectiveWidthDp(widthDp, uiScale) >= 560f -> 3
+                effectiveWidthDp(widthDp, uiScale) >= 360f -> 2
+                else -> 1
+            }
+        }
+
+    /** Resolves the live-room grid: 3 columns at the 960dp TV baseline. */
+    fun liveSpanCountForWidthDp(
+        widthDp: Float,
+        overrideSpanCount: Int?,
+        uiScale: Float,
+    ): Int =
+        resolveSpanCount(overrideSpanCount) {
+            when {
+                effectiveWidthDp(widthDp, uiScale) >= 840f -> 3
+                effectiveWidthDp(widthDp, uiScale) >= 560f -> 2
+                else -> 1
+            }
+        }
+
+    fun fixedSpanCountForWidthDp(widthDp: Float, overrideSpanCount: Int): Int {
+        return videoSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = overrideSpanCount.takeIf { it > 0 },
+            uiScale = 1f,
+        )
     }
 
     fun dynamicSpanCountForWidthDp(widthDp: Float, dynamicOverrideSpanCount: Int, globalOverrideSpanCount: Int): Int {
@@ -31,5 +78,14 @@ object GridSpanPolicy {
         val raw = (widthDp / minWidthDp).toInt()
         return raw.coerceIn(minSpan, maxSpan)
     }
-}
 
+    private inline fun resolveSpanCount(overrideSpanCount: Int?, automatic: () -> Int): Int {
+        return overrideSpanCount?.coerceIn(MIN_SPAN, MAX_SPAN) ?: automatic().coerceIn(MIN_SPAN, MAX_SPAN)
+    }
+
+    private fun effectiveWidthDp(widthDp: Float, uiScale: Float): Float {
+        val safeWidth = widthDp.takeIf { it.isFinite() && it > 0f } ?: 0f
+        val safeScale = uiScale.takeIf { it.isFinite() && it > 0f } ?: 1f
+        return safeWidth / safeScale
+    }
+}

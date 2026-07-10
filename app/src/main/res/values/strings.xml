@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">BLBL TV</string>
     <string name="badge_charging">充电</string>
+    <string name="badge_live">LIVE</string>
+    <string name="badge_hot">热门</string>
+    <string name="live_status_active">直播中</string>
+    <string name="live_status_inactive">未开播</string>
+    <string name="live_online_count_format">在线 %1$s</string>
+    <string name="live_area_hot">热门分区</string>
     <string name="tab_recommend">推荐</string>
     <string name="tab_bangumi">番剧</string>
     <string name="tab_cinema">影视</string>

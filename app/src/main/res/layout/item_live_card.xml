@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.Blbl.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/video_card_margin"
     android:clickable="true"
     android:focusable="true"
-    android:stateListAnimator="@animator/blbl_focus_scale"
-    app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="10dp"
-    app:cardElevation="0dp"
+    android:importantForAccessibility="yes"
     app:cardUseCompatPadding="false"
-    app:strokeColor="?attr/blblFocusStrokeColor"
-    app:strokeWidth="2dp">
+    app:strokeColor="?attr/blblFocusStrokeFocusOnlyColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="noHideDescendants">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_cover"
@@ -31,7 +29,7 @@
                 android:id="@+id/iv_cover"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:adjustViewBounds="true"
+                android:contentDescription="@null"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -43,13 +41,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.8" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <View
                 android:id="@+id/v_cover_fade"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@drawable/video_card_bottom_fade"
+                android:background="@drawable/blbl_scrim_bottom"
                 android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -61,12 +59,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/video_card_text_margin"
-                android:background="#CCFF3B30"
-                android:paddingHorizontal="@dimen/video_card_duration_padding_h"
-                android:paddingVertical="@dimen/video_card_duration_padding_v"
-                android:text="LIVE"
+                android:background="@drawable/bg_live_badge"
+                android:paddingHorizontal="@dimen/live_badge_padding_horizontal"
+                android:paddingVertical="@dimen/live_badge_padding_vertical"
+                android:text="@string/badge_live"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/video_card_duration_text_size"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/video_card_text_margin"
+                android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/video_card_duration_padding_h"
                 android:paddingVertical="@dimen/video_card_duration_padding_v"
@@ -85,35 +85,38 @@
                     android:id="@+id/iv_stat_online"
                     android:layout_width="@dimen/video_card_stat_icon_size"
                     android:layout_height="@dimen/video_card_stat_icon_size"
-                    android:layout_gravity="center_vertical"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_stat_play" />
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_stat_play"
+                    app:tint="@color/blbl_text_on_media" />
 
                 <TextView
                     android:id="@+id/tv_online"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:shadowColor="#CC000000"
-                    android:shadowDx="0"
+                    android:shadowColor="@color/blbl_scrim_strong"
                     android:shadowDy="1"
                     android:shadowRadius="2"
                     android:textColor="@color/blbl_text_on_media"
-                    android:textSize="@dimen/video_card_stat_text_size" />
+                    android:textSize="@dimen/video_card_stat_text_size"
+                    android:textStyle="bold" />
             </LinearLayout>
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/video_card_text_margin"
+            android:layout_height="@dimen/video_card_title_block_height"
+            android:layout_marginHorizontal="@dimen/video_card_text_margin"
+            android:layout_marginTop="@dimen/video_card_text_margin"
             android:ellipsize="end"
+            android:gravity="top"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="@dimen/video_card_title_line_spacing"
             android:lines="2"
             android:maxLines="2"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="@dimen/video_card_title_text_size"
+            android:textAppearance="@style/TextAppearance.Blbl.CardTitle"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_cover" />
@@ -121,17 +124,15 @@
         <TextView
             android:id="@+id/tv_subtitle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/video_card_meta_block_height"
             android:layout_marginHorizontal="@dimen/video_card_text_margin"
-            android:layout_marginBottom="@dimen/video_card_text_margin"
             android:ellipsize="end"
+            android:gravity="center_vertical"
             android:maxLines="1"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="@dimen/video_card_subtitle_text_size"
+            android:textAppearance="@style/TextAppearance.Blbl.Supporting"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

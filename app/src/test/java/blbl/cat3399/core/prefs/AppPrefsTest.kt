@@ -42,4 +42,12 @@ class AppPrefsTest {
         assertEquals(0.6f, AppPrefs.normalizeDanmakuArea(0.55f), 0.0001f)
         assertEquals(1.0f, AppPrefs.normalizeDanmakuArea(Float.NaN), 0.0001f)
     }
+
+    @Test
+    fun normalizeStoredGridSpanOverride_distinguishes_missing_legacy_auto_and_explicit_two() {
+        assertNull(AppPrefs.normalizeStoredGridSpanOverride(keyExists = false, storedValue = 2))
+        assertNull(AppPrefs.normalizeStoredGridSpanOverride(keyExists = true, storedValue = 0))
+        assertEquals(2, AppPrefs.normalizeStoredGridSpanOverride(keyExists = true, storedValue = 2))
+        assertEquals(6, AppPrefs.normalizeStoredGridSpanOverride(keyExists = true, storedValue = 99))
+    }
 }

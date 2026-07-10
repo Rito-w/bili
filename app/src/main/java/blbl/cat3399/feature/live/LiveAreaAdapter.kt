@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import blbl.cat3399.R
 import blbl.cat3399.core.image.ImageLoader
 import blbl.cat3399.core.image.ImageUrl
 import blbl.cat3399.core.model.LiveAreaParent
@@ -50,6 +51,11 @@ class LiveAreaAdapter(
         fun bind(item: LiveAreaParent.Child, onClick: (position: Int, area: LiveAreaParent.Child) -> Unit) {
             binding.tvTitle.text = item.name
             binding.tvBadge.visibility = if (item.hot) View.VISIBLE else View.GONE
+            binding.root.contentDescription =
+                listOf(
+                    item.name,
+                    if (item.hot) binding.root.context.getString(R.string.live_area_hot) else "",
+                ).filter { it.isNotBlank() }.joinToString("，")
             ImageLoader.loadInto(binding.ivCover, ImageUrl.cover(item.coverUrl))
             binding.root.setOnClickListener {
                 val pos = bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener

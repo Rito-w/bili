@@ -70,7 +70,10 @@
     <dimen name="sidebar_nav_selected_indicator_corner_radius">2dp</dimen>
 
     <!-- Video card -->
-    <dimen name="video_card_margin">12dp</dimen>
+    <dimen name="tv_grid_padding_horizontal">16dp</dimen>
+    <dimen name="tv_grid_padding_vertical">12dp</dimen>
+    <dimen name="tv_grid_item_margin">10dp</dimen>
+    <dimen name="video_card_margin">@dimen/tv_grid_item_margin</dimen>
     <dimen name="video_card_text_margin">12dp</dimen>
     <dimen name="video_card_duration_text_size">16sp</dimen>
     <dimen name="video_card_duration_padding_h">8dp</dimen>
@@ -79,6 +82,9 @@
     <dimen name="video_card_stat_text_size">16sp</dimen>
     <dimen name="video_card_title_text_size">@dimen/tv_text_size_card_title</dimen>
     <dimen name="video_card_subtitle_text_size">@dimen/tv_text_size_supporting</dimen>
+    <dimen name="video_card_title_block_height">62dp</dimen>
+    <dimen name="video_card_meta_block_height">36dp</dimen>
+    <dimen name="video_card_title_line_spacing">2dp</dimen>
     <dimen name="video_card_progress_bar_height">2.5dp</dimen>
     <dimen name="video_card_progress_bar_radius">1.2dp</dimen>
     <dimen name="video_card_action_button_height">56dp</dimen>
@@ -89,6 +95,19 @@
     <dimen name="video_card_action_icon_up_size">29dp</dimen>
     <dimen name="video_card_action_icon_dismiss_size">30dp</dimen>
     <dimen name="video_card_action_button_radius">16dp</dimen>
+
+    <!-- Live room/area and 12:17 PGC cards share the TV card grammar. -->
+    <dimen name="live_badge_padding_horizontal">10dp</dimen>
+    <dimen name="live_badge_padding_vertical">4dp</dimen>
+    <dimen name="live_badge_corner_radius">12dp</dimen>
+    <dimen name="pgc_card_text_padding_horizontal">10dp</dimen>
+    <dimen name="pgc_card_text_padding_top">10dp</dimen>
+    <dimen name="pgc_card_title_text_size">18sp</dimen>
+    <dimen name="pgc_card_title_block_height">52dp</dimen>
+    <dimen name="pgc_card_meta_block_height">34dp</dimen>
+    <dimen name="pgc_card_badge_height">28dp</dimen>
+    <dimen name="pgc_card_badge_min_width">28dp</dimen>
+    <dimen name="pgc_card_badge_padding_horizontal">8dp</dimen>
 
     <!-- Player: bottom recommend panel -->
     <dimen name="player_recommend_card_width">260dp</dimen>
@@ -130,7 +149,9 @@
     <dimen name="following_grid_name_margin_top">12dp</dimen>
     <dimen name="following_grid_name_text_size">18sp</dimen>
     <dimen name="following_grid_sign_margin_top">6dp</dimen>
-    <dimen name="following_grid_sign_text_size">14sp</dimen>
+    <dimen name="following_grid_sign_text_size">@dimen/tv_text_size_supporting</dimen>
+    <dimen name="following_grid_name_block_height">28dp</dimen>
+    <dimen name="following_grid_sign_block_height">26dp</dimen>
 
     <!-- Search: history/suggest/hot list -->
     <dimen name="search_suggest_margin_bottom">14dp</dimen>

@@ -19,7 +19,9 @@ import blbl.cat3399.core.ui.AppToast
 import blbl.cat3399.core.ui.TabContentSwitchFocusHost
 import blbl.cat3399.core.ui.DpadGridController
 import blbl.cat3399.core.ui.FocusTreeUtils
+import blbl.cat3399.core.ui.GridSpanPolicy
 import blbl.cat3399.core.ui.TabSwitchFocusTarget
+import blbl.cat3399.core.ui.UiScale
 import blbl.cat3399.core.ui.postIfAlive
 import blbl.cat3399.core.ui.postIfAttached
 import blbl.cat3399.core.ui.requestFocusAdapterPositionReliable
@@ -202,7 +204,15 @@ class PgcRecommendGridFragment : Fragment(), RefreshKeyHandler, TabSwitchFocusTa
         return true
     }
 
-    private fun spanCountForPgc(): Int = BiliClient.prefs.pgcGridSpanCount.coerceIn(1, 6)
+    private fun spanCountForPgc(): Int {
+        val dm = resources.displayMetrics
+        val widthDp = dm.widthPixels / dm.density
+        return GridSpanPolicy.pgcSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride,
+            uiScale = UiScale.factor(requireContext()),
+        )
+    }
 
     override fun requestFocusFirstCardFromTab(): Boolean {
         pendingFocusFirstCardFromTab = true

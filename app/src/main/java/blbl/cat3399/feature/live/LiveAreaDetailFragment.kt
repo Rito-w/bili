@@ -233,23 +233,19 @@ class LiveAreaDetailFragment : Fragment() {
     }
 
     private fun spanCountForWidth(): Int {
-        val override = BiliClient.prefs.gridSpanCount
-        if (override > 0) return override.coerceIn(1, 6)
         val dm = resources.displayMetrics
         val widthDp = dm.widthPixels / dm.density
-        return GridSpanPolicy.autoSpanCountForWidthDp(
+        return GridSpanPolicy.liveSpanCountForWidthDp(
             widthDp = widthDp,
-            overrideSpanCount = override,
+            overrideSpanCount = BiliClient.prefs.gridSpanCountOverride,
             uiScale = UiScale.factor(requireContext()),
         )
     }
 
     private fun autoSpanCountForWidthDp(widthDp: Float): Int {
-        val override = BiliClient.prefs.gridSpanCount
-        if (override > 0) return override.coerceIn(1, 6)
-        return GridSpanPolicy.autoSpanCountForWidthDp(
+        return GridSpanPolicy.liveSpanCountForWidthDp(
             widthDp = widthDp,
-            overrideSpanCount = override,
+            overrideSpanCount = BiliClient.prefs.gridSpanCountOverride,
             uiScale = UiScale.factor(requireContext()),
         )
     }
