@@ -3,17 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/blblPageBackdrop">
+    android:background="?attr/blblPageBackdrop"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/tv_top_level_header_height"
+        android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginTop="@dimen/tv_safe_margin_vertical"
+        android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,16 +26,28 @@
             android:id="@+id/tab_layout"
             style="@style/Widget.Blbl.TabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:focusable="false" />
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:focusable="false"
+            android:paddingStart="@dimen/tv_focus_list_inset_horizontal"
+            android:paddingTop="@dimen/tv_focus_list_inset_vertical"
+            android:paddingEnd="@dimen/tv_focus_list_inset_horizontal"
+            android:paddingBottom="@dimen/tv_focus_list_inset_vertical" />
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginTop="@dimen/tv_top_level_header_content_gap"
+        android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginBottom="@dimen/tv_safe_margin_vertical"
         android:background="?attr/blblContentBackground"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -34,7 +34,7 @@ class SidebarNavAdapter(
     fun setShowLabelsAlways(enabled: Boolean) {
         if (showLabelsAlways == enabled) return
         showLabelsAlways = enabled
-        notifyDataSetChanged()
+        if (itemCount > 0) notifyItemRangeChanged(0, itemCount)
     }
 
     fun select(id: Int, trigger: Boolean) {
@@ -95,10 +95,15 @@ class SidebarNavAdapter(
         ) {
             binding.ivIcon.setImageResource(item.iconRes)
             binding.tvLabel.text = item.title
-            binding.tvLabel.visibility = if (showLabelsAlways || selected) View.VISIBLE else View.GONE
+            binding.tvLabel.visibility = if (showLabelsAlways) View.VISIBLE else View.GONE
             val ctx = binding.root.context
+            binding.card.contentDescription = item.title
             binding.card.setCardBackgroundColor(
-                if (selected) ThemeColor.resolve(ctx, R.attr.blblAccentContainer, R.color.blbl_surface) else 0x00000000,
+                if (selected) {
+                    ThemeColor.resolve(ctx, R.attr.blblAccentContainer, R.color.blbl_brand_accent_container)
+                } else {
+                    0x00000000
+                },
             )
             binding.card.isSelected = selected
             val iconTint =
@@ -108,19 +113,13 @@ class SidebarNavAdapter(
                     ThemeColor.resolve(ctx, R.attr.blblOnPageBackdropSecondary, R.color.blbl_text_secondary)
                 }
             binding.ivIcon.imageTintList = ColorStateList.valueOf(iconTint)
-
-            val heightRes =
-                when {
-                    showLabelsAlways -> R.dimen.sidebar_nav_item_height_labeled
-                    selected -> R.dimen.sidebar_nav_item_height_selected
-                    else -> R.dimen.sidebar_nav_item_height_default
-                }
-            val heightPx = binding.root.resources.getDimensionPixelSize(heightRes).coerceAtLeast(1)
-            val lp = binding.card.layoutParams
-            if (lp.height != heightPx) {
-                lp.height = heightPx
-                binding.card.layoutParams = lp
-            }
+            binding.tvLabel.setTextColor(
+                if (selected) {
+                    ThemeColor.resolve(ctx, R.attr.blblOnPageBackdrop, R.color.blbl_text)
+                } else {
+                    ThemeColor.resolve(ctx, R.attr.blblOnPageBackdropSecondary, R.color.blbl_text_secondary)
+                },
+            )
             binding.root.setOnClickListener { onClick() }
         }
     }

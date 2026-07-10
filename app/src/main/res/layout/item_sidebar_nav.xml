@@ -3,38 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/sidebar_nav_item_height_default"
     android:layout_marginVertical="@dimen/sidebar_nav_card_margin_v"
     android:layout_marginHorizontal="@dimen/sidebar_nav_card_margin_h"
     android:clickable="true"
     android:focusable="true"
     android:stateListAnimator="@animator/blbl_focus_scale"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="@dimen/tv_card_corner_radius"
     app:cardElevation="0dp"
     app:strokeColor="?attr/blblFocusStrokeFocusOnlyColor"
-    app:strokeWidth="2dp">
+    app:strokeWidth="@dimen/tv_focus_outline_width">
 
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/sidebar_nav_container_padding_v">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/sidebar_nav_container_padding_start"
+        android:paddingEnd="@dimen/sidebar_nav_container_padding_end">
 
         <ImageView
             android:id="@+id/iv_icon"
             android:layout_width="@dimen/sidebar_nav_icon_size"
             android:layout_height="@dimen/sidebar_nav_icon_size"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/tv_label"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/sidebar_nav_label_margin_top"
+            android:layout_marginStart="@dimen/sidebar_nav_label_margin_start"
+            android:layout_weight="1"
             android:ellipsize="end"
+            android:includeFontPadding="false"
             android:maxLines="1"
             android:textColor="?attr/blblOnPageBackdrop"
             android:textSize="@dimen/sidebar_nav_label_text_size"

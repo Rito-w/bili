@@ -5,6 +5,8 @@
     <dimen name="tv_design_baseline_height">540dp</dimen>
     <dimen name="tv_safe_margin_horizontal">48dp</dimen>
     <dimen name="tv_safe_margin_vertical">24dp</dimen>
+    <dimen name="tv_top_level_header_height">72dp</dimen>
+    <dimen name="tv_top_level_header_content_gap">8dp</dimen>
 
     <!-- Type scale: do not reduce supporting content below the 16sp readability floor. -->
     <dimen name="tv_text_size_page_title">30sp</dimen>
@@ -34,30 +36,33 @@
     <dimen name="splash_logo_width">220dp</dimen>
     <dimen name="splash_logo_height">160dp</dimen>
 
-    <!-- Sidebar (baseline 1080p@1.5) -->
-    <dimen name="sidebar_width">77dp</dimen>
+    <!-- Sidebar: a 96dp safe icon rail that expands horizontally while focused. -->
+    <dimen name="sidebar_width">96dp</dimen>
+    <dimen name="sidebar_width_expanded">232dp</dimen>
     <dimen name="sidebar_user_size">48dp</dimen>
+    <dimen name="sidebar_user_margin_start">24dp</dimen>
     <dimen name="sidebar_user_margin_top">12dp</dimen>
     <dimen name="sidebar_login_size">56dp</dimen>
+    <dimen name="sidebar_login_margin_start">20dp</dimen>
     <dimen name="sidebar_login_margin_top">12dp</dimen>
     <dimen name="sidebar_login_text_size">16sp</dimen>
     <dimen name="sidebar_nav_margin_top">16dp</dimen>
     <dimen name="sidebar_settings_size">44dp</dimen>
     <dimen name="sidebar_settings_padding">6dp</dimen>
-    <dimen name="sidebar_main_settings_size">34dp</dimen>
-    <dimen name="sidebar_main_settings_padding">4.5dp</dimen>
-    <dimen name="sidebar_settings_margin_bottom">12dp</dimen>
+    <dimen name="sidebar_main_settings_size">@dimen/tv_small_action_min_size</dimen>
+    <dimen name="sidebar_main_settings_margin_start">24dp</dimen>
+    <dimen name="sidebar_main_settings_padding">10dp</dimen>
+    <dimen name="sidebar_settings_margin_bottom">0dp</dimen>
 
     <!-- Sidebar nav item -->
     <dimen name="sidebar_nav_card_margin_v">2dp</dimen>
-    <dimen name="sidebar_nav_card_margin_h">6dp</dimen>
-    <dimen name="sidebar_nav_container_padding_v">8dp</dimen>
-    <dimen name="sidebar_nav_icon_size">32dp</dimen>
-    <dimen name="sidebar_nav_label_margin_top">4dp</dimen>
-    <dimen name="sidebar_nav_label_text_size">14sp</dimen>
+    <dimen name="sidebar_nav_card_margin_h">12dp</dimen>
+    <dimen name="sidebar_nav_container_padding_start">22dp</dimen>
+    <dimen name="sidebar_nav_container_padding_end">14dp</dimen>
+    <dimen name="sidebar_nav_icon_size">28dp</dimen>
+    <dimen name="sidebar_nav_label_margin_start">14dp</dimen>
+    <dimen name="sidebar_nav_label_text_size">@dimen/tv_text_size_supporting</dimen>
     <dimen name="sidebar_nav_item_height_default">48dp</dimen>
-    <dimen name="sidebar_nav_item_height_selected">84dp</dimen>
-    <dimen name="sidebar_nav_item_height_labeled">72dp</dimen>
 
     <!-- Video card -->
     <dimen name="video_card_margin">12dp</dimen>
