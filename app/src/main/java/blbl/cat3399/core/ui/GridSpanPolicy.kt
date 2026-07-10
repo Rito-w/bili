@@ -46,7 +46,7 @@ object GridSpanPolicy {
     ): Int =
         resolveSpanCount(overrideSpanCount) {
             when {
-                effectiveWidthDp(widthDp, uiScale) >= 840f -> 3
+                effectiveWidthDp(widthDp, uiScale) >= 780f -> 3
                 effectiveWidthDp(widthDp, uiScale) >= 560f -> 2
                 else -> 1
             }

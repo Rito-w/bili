@@ -7,10 +7,10 @@
 
     <ImageButton
         android:id="@+id/btn_back"
-        android:layout_width="@dimen/sidebar_settings_size"
-        android:layout_height="@dimen/sidebar_settings_size"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginTop="@dimen/tv_safe_margin_vertical"
         android:background="?attr/blblFocusBgRound"
         android:contentDescription="@string/search_backspace"
         android:focusable="true"
@@ -25,15 +25,14 @@
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:text="我的关注"
         android:textColor="?attr/blblOnPageBackdrop"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.Blbl.PageTitle"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_back"
@@ -57,7 +56,10 @@
             android:clipToPadding="false"
             android:descendantFocusability="afterDescendants"
             android:focusable="true"
-            android:padding="8dp" />
+            android:paddingStart="@dimen/tv_safe_margin_horizontal"
+            android:paddingTop="16dp"
+            android:paddingEnd="@dimen/tv_safe_margin_horizontal"
+            android:paddingBottom="@dimen/tv_safe_margin_vertical" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
@@ -79,14 +81,17 @@
             android:layout_height="wrap_content"
             android:text="关注列表需要登录"
             android:textColor="?attr/blblOnPageBackdrop"
-            android:textSize="18sp" />
+            android:textAppearance="@style/TextAppearance.Blbl.PageTitle" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="二维码登录" />
+            android:layout_height="64dp"
+            android:layout_marginTop="24dp"
+            android:minWidth="220dp"
+            android:stateListAnimator="@animator/blbl_focus_scale_button"
+            android:text="二维码登录"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

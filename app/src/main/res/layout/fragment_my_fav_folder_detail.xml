@@ -7,10 +7,10 @@
 
     <ImageButton
         android:id="@+id/btn_back"
-        android:layout_width="@dimen/sidebar_settings_size"
-        android:layout_height="@dimen/sidebar_settings_size"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginTop="@dimen/tv_safe_margin_vertical"
         android:background="?attr/blblFocusBgRound"
         android:contentDescription="@string/search_backspace"
         android:focusable="true"
@@ -25,14 +25,13 @@
         android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
         android:ellipsize="end"
         android:includeFontPadding="false"
         android:maxLines="1"
         android:textColor="?attr/blblOnPageBackdrop"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.Blbl.PageTitle"
         app:layout_constraintBottom_toBottomOf="@id/btn_back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btn_back"
@@ -56,7 +55,10 @@
             android:clipToPadding="false"
             android:descendantFocusability="afterDescendants"
             android:focusable="true"
-            android:padding="8dp" />
+            android:paddingStart="@dimen/tv_safe_margin_horizontal"
+            android:paddingTop="16dp"
+            android:paddingEnd="@dimen/tv_safe_margin_horizontal"
+            android:paddingBottom="@dimen/tv_safe_margin_vertical" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -78,6 +78,19 @@ class GridSpanPolicyTest {
     }
 
     @Test
+    fun live_default_keeps_three_columns_for_real_tv_browse_content_width() {
+        // The 960dp viewport yields about 780dp after the collapsed rail, safe area and grid padding.
+        assertEquals(
+            3,
+            GridSpanPolicy.liveSpanCountForWidthDp(
+                widthDp = 780f,
+                overrideSpanCount = null,
+                uiScale = 1f,
+            ),
+        )
+    }
+
+    @Test
     fun explicit_user_overrides_win_for_every_content_kind_and_are_clamped() {
         for (span in 1..6) {
             assertEquals(span, GridSpanPolicy.videoSpanCountForWidthDp(960f, span, 1f))

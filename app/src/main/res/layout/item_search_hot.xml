@@ -10,10 +10,10 @@
     android:nextFocusLeft="@id/recycler_suggest"
     android:stateListAnimator="@animator/blbl_focus_scale"
     app:cardBackgroundColor="?attr/colorSurface"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="@dimen/tv_card_corner_radius"
     app:cardElevation="0dp"
     app:strokeColor="?attr/blblFocusStrokeColor"
-    app:strokeWidth="2dp">
+    app:strokeWidth="@dimen/tv_focus_outline_width">
 
     <LinearLayout
         android:id="@+id/container"

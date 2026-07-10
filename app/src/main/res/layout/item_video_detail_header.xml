@@ -101,10 +101,10 @@
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/tv_meta">
 
@@ -148,8 +148,8 @@
         android:clickable="false"
         android:focusable="false"
         android:orientation="vertical"
-        android:paddingHorizontal="6dp"
-        android:paddingVertical="4dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_title"
@@ -197,10 +197,10 @@
         android:stateListAnimator="@animator/blbl_focus_scale"
         android:visibility="gone"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/chip_group_tags">
 
@@ -218,34 +218,34 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_play"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="180dp"
+        android:layout_height="60dp"
         android:layout_marginTop="12dp"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         android:text="播放"
         android:textSize="22sp"
         android:textAllCaps="false"
-        app:cornerRadius="14dp"
+        app:cornerRadius="@dimen/tv_card_corner_radius"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/card_tab" />
 
     <blbl.cat3399.feature.player.HoldProgressCardView
         android:id="@+id/btn_like"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="12dp"
         android:clickable="true"
-        android:contentDescription="@string/player_btn_comments"
+        android:contentDescription="@string/action_like"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintBottom_toBottomOf="@id/btn_play"
         app:layout_constraintStart_toEndOf="@id/btn_play"
         app:layout_constraintTop_toTopOf="@id/btn_play">
@@ -254,25 +254,26 @@
             android:id="@+id/iv_like"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
+            android:contentDescription="@string/action_like"
+            android:padding="14dp"
             android:src="@drawable/ic_action_like"
             app:tint="?android:attr/textColorSecondary" />
     </blbl.cat3399.feature.player.HoldProgressCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_coin"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="12dp"
         android:clickable="true"
+        android:contentDescription="@string/action_coin"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintBottom_toBottomOf="@id/btn_like"
         app:layout_constraintStart_toEndOf="@id/btn_like"
         app:layout_constraintTop_toTopOf="@id/btn_like">
@@ -281,25 +282,26 @@
             android:id="@+id/iv_coin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
+            android:contentDescription="@string/action_coin"
+            android:padding="14dp"
             android:src="@drawable/ic_action_coin"
             app:tint="?android:attr/textColorSecondary" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_fav"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="12dp"
         android:clickable="true"
+        android:contentDescription="@string/action_favorite"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintBottom_toBottomOf="@id/btn_coin"
         app:layout_constraintStart_toEndOf="@id/btn_coin"
         app:layout_constraintTop_toTopOf="@id/btn_coin">
@@ -308,25 +310,25 @@
             android:id="@+id/iv_fav"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/app_name"
-            android:padding="10dp"
+            android:contentDescription="@string/action_favorite"
+            android:padding="14dp"
             android:src="@drawable/ic_action_fav"
             app:tint="?android:attr/textColorSecondary" />
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_comments"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="12dp"
         android:clickable="true"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
         app:cardBackgroundColor="@android:color/transparent"
-        app:cardCornerRadius="14dp"
+        app:cardCornerRadius="@dimen/tv_card_corner_radius"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintBottom_toBottomOf="@id/btn_fav"
         app:layout_constraintStart_toEndOf="@id/btn_fav"
         app:layout_constraintTop_toTopOf="@id/btn_fav">
@@ -336,7 +338,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/player_btn_comments"
-            android:padding="10dp"
+            android:padding="14dp"
             android:src="@drawable/ic_comment"
             app:tint="?android:attr/textColorSecondary" />
     </com.google.android.material.card.MaterialCardView>
@@ -352,7 +354,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_secondary"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginStart="12dp"
         android:focusable="true"
         android:stateListAnimator="@animator/blbl_focus_scale"
@@ -360,9 +362,9 @@
         android:textSize="22sp"
         android:textAllCaps="false"
         android:visibility="gone"
-        app:cornerRadius="14dp"
+        app:cornerRadius="@dimen/tv_card_corner_radius"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintBottom_toBottomOf="@id/btn_play"
         app:layout_constraintStart_toEndOf="@id/barrier_play_row_end"
         app:layout_constraintTop_toTopOf="@id/btn_play" />
@@ -388,7 +390,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_parts_order"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="48dp"
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -398,7 +400,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintStart_toEndOf="@id/tv_parts_header"
         app:layout_constraintTop_toTopOf="@id/tv_parts_header">
 
@@ -423,7 +425,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -460,7 +462,7 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btn_season_order"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="48dp"
         android:layout_marginStart="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -470,7 +472,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="0dp"
         app:strokeColor="?attr/blblFocusStrokeColor"
-        app:strokeWidth="2dp"
+        app:strokeWidth="@dimen/tv_focus_outline_width"
         app:layout_constraintStart_toEndOf="@id/tv_season_header"
         app:layout_constraintTop_toTopOf="@id/tv_season_header">
 
@@ -495,7 +497,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

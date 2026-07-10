@@ -9,10 +9,10 @@
     android:focusable="true"
     android:stateListAnimator="@animator/blbl_focus_scale"
     app:cardBackgroundColor="@android:color/transparent"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="@dimen/tv_card_corner_radius"
     app:cardElevation="0dp"
     app:strokeColor="?attr/blblFocusStrokeFocusOnlyColor"
-    app:strokeWidth="2dp">
+    app:strokeWidth="@dimen/tv_focus_outline_width">
 
     <LinearLayout
         android:id="@+id/container"

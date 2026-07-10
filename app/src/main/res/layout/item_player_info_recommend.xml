@@ -8,10 +8,10 @@
     android:focusable="true"
     android:stateListAnimator="@animator/blbl_focus_scale"
     app:cardBackgroundColor="#1AFFFFFF"
-    app:cardCornerRadius="12dp"
+    app:cardCornerRadius="@dimen/tv_card_corner_radius"
     app:cardElevation="0dp"
     app:strokeColor="?attr/blblFocusStrokeColor"
-    app:strokeWidth="2dp">
+    app:strokeWidth="@dimen/tv_focus_outline_width">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -53,7 +53,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="?android:attr/textColorSecondary"
-                android:textSize="13sp" />
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -64,8 +64,8 @@
 
                 <ImageView
                     android:id="@+id/iv_view_icon"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_stat_play"
                     app:tint="?android:attr/textColorSecondary" />
@@ -76,12 +76,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/iv_danmaku_icon"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
                     android:layout_marginStart="10dp"
                     android:contentDescription="@string/app_name"
                     android:src="@drawable/ic_stat_danmaku"
@@ -93,7 +93,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

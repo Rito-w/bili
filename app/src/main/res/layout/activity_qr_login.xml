@@ -4,49 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/blblPageBackdrop"
-    android:paddingVertical="20dp">
+    android:paddingHorizontal="@dimen/tv_safe_margin_horizontal"
+    android:paddingVertical="@dimen/tv_safe_margin_vertical">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_qr_end_50"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.56" />
+        app:layout_constraintGuide_percent="0.58" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_panel_start_60"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.66" />
+        app:layout_constraintGuide_percent="0.64" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.2" />
+        app:layout_constraintGuide_percent="0.12" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
+        app:layout_constraintGuide_percent="0.88" />
 
     <ImageView
         android:id="@+id/iv_qr"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="?attr/colorSurface"
-        android:padding="6dp"
+        android:padding="12dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@id/guideline_bottom"
         app:layout_constraintDimensionRatio="1:1"
@@ -72,7 +73,8 @@
             android:layout_height="wrap_content"
             android:text="二维码登录"
             android:textColor="?attr/blblOnPageBackdrop"
-            android:textSize="22sp" />
+            android:textSize="@dimen/tv_text_size_page_title"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_status"
@@ -80,21 +82,25 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:textColor="?attr/blblOnPageBackdropSecondary"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_refresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_marginTop="18dp"
-            android:text="刷新二维码" />
+            android:stateListAnimator="@animator/blbl_focus_scale_button"
+            android:text="刷新二维码"
+            android:textSize="20sp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_clear"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_marginTop="12dp"
+            android:stateListAnimator="@animator/blbl_focus_scale_button"
             android:text="清除登录"
+            android:textSize="20sp"
             app:backgroundTint="#444444" />
 
     </LinearLayout>

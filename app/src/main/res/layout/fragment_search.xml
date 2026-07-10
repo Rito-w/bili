@@ -7,10 +7,10 @@
 
     <ImageView
         android:id="@+id/iv_search"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="@dimen/search_header_icon_size"
+        android:layout_height="@dimen/search_header_icon_size"
+        android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+        android:layout_marginTop="@dimen/tv_safe_margin_vertical"
         android:contentDescription="@string/tab_search"
         android:src="@drawable/ic_nav_search"
         app:tint="?attr/blblOnPageBackdropSecondary"
@@ -20,9 +20,9 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/tv_query"
         android:layout_width="0dp"
-        android:layout_height="32dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="@dimen/search_query_height"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
         android:background="?attr/blblFocusBgRound"
         android:ellipsize="end"
         android:gravity="center_vertical"
@@ -30,11 +30,11 @@
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="2dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="8dp"
         android:textColor="?attr/blblOnPageBackdrop"
         android:textColorHint="?attr/blblOnPageBackdropSecondary"
-        android:textSize="22sp"
+        android:textSize="@dimen/search_query_text_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/iv_search"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +45,7 @@
         android:id="@+id/panel_input"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:orientation="horizontal"
@@ -58,8 +58,8 @@
             android:id="@+id/panel_keyboard"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+            android:layout_marginEnd="16dp"
             android:layout_weight="1.25"
             android:clipChildren="false"
             android:clipToPadding="false"
@@ -79,17 +79,17 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btn_clear"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="@dimen/search_action_height"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
                     android:stateListAnimator="@animator/blbl_focus_scale"
                     app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="12dp"
+                    app:cardCornerRadius="@dimen/tv_card_corner_radius"
                     app:cardElevation="0dp"
                     app:strokeColor="?attr/blblFocusStrokeColor"
-                    app:strokeWidth="2dp">
+                    app:strokeWidth="@dimen/tv_focus_outline_width">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -97,22 +97,22 @@
                         android:gravity="center"
                         android:text="@string/search_clear"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/search_action_text_size" />
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btn_backspace"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="@dimen/search_action_height"
                     android:layout_weight="1"
                     android:clickable="true"
                     android:focusable="true"
                     android:stateListAnimator="@animator/blbl_focus_scale"
                     app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="12dp"
+                    app:cardCornerRadius="@dimen/tv_card_corner_radius"
                     app:cardElevation="0dp"
                     app:strokeColor="?attr/blblFocusStrokeColor"
-                    app:strokeWidth="2dp">
+                    app:strokeWidth="@dimen/tv_focus_outline_width">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -120,7 +120,7 @@
                         android:gravity="center"
                         android:text="@string/search_backspace"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/search_action_text_size" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
@@ -143,15 +143,15 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/btn_search"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="@dimen/search_action_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:stateListAnimator="@animator/blbl_focus_scale"
                     app:cardBackgroundColor="?attr/colorSurface"
-                    app:cardCornerRadius="12dp"
+                    app:cardCornerRadius="@dimen/tv_card_corner_radius"
                     app:cardElevation="0dp"
                     app:strokeColor="?attr/blblFocusStrokeColor"
-                    app:strokeWidth="2dp">
+                    app:strokeWidth="@dimen/tv_focus_outline_width">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -159,7 +159,7 @@
                         android:gravity="center"
                         android:text="@string/search_action"
                         android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/search_action_text_size" />
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
         </LinearLayout>
@@ -168,7 +168,7 @@
             android:id="@+id/panel_history"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="16dp"
             android:layout_weight="0.8"
             android:clipChildren="false"
             android:clipToPadding="false"
@@ -189,17 +189,17 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/btn_clear_history"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="56dp"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:stateListAnimator="@animator/blbl_focus_scale"
                 android:visibility="gone"
                 app:cardBackgroundColor="?attr/colorSurface"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/tv_card_corner_radius"
                 app:cardElevation="0dp"
                 app:strokeColor="?attr/blblFocusStrokeColor"
-                app:strokeWidth="2dp">
+                app:strokeWidth="@dimen/tv_focus_outline_width">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -207,7 +207,7 @@
                     android:gravity="center"
                     android:text="@string/search_clear_history"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
 
@@ -215,7 +215,7 @@
             android:id="@+id/recycler_hot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
             android:layout_weight="1"
             android:clipChildren="false"
             android:clipToPadding="false"
@@ -229,7 +229,7 @@
         android:id="@+id/panel_results"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -241,8 +241,8 @@
             style="@style/Widget.Blbl.TabLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+            android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             android:focusable="false"
             app:layout_constraintEnd_toStartOf="@id/btn_sort"
@@ -252,16 +252,16 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btn_sort"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="56dp"
+            android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
             android:clickable="true"
             android:focusable="true"
             android:stateListAnimator="@animator/blbl_focus_scale"
             app:cardBackgroundColor="?attr/colorSurface"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="@dimen/tv_card_corner_radius"
             app:cardElevation="0dp"
             app:strokeColor="?attr/blblFocusStrokeColor"
-            app:strokeWidth="2dp"
+            app:strokeWidth="@dimen/tv_focus_outline_width"
             app:layout_constraintBaseline_toBaselineOf="@id/tab_layout"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -286,7 +286,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/search_sort_totalrank"
                     android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="14sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -294,8 +294,8 @@
             android:id="@+id/swipe_refresh"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
+            android:layout_marginEnd="@dimen/tv_safe_margin_horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -309,7 +309,8 @@
                 android:clipToPadding="false"
                 android:descendantFocusability="afterDescendants"
                 android:focusable="true"
-                android:paddingTop="10dp" />
+                android:paddingTop="16dp"
+                android:paddingBottom="@dimen/tv_safe_margin_vertical" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
@@ -321,7 +322,7 @@
             android:focusableInTouchMode="true"
             android:text="@string/search_unsupported"
             android:textColor="?attr/blblOnPageBackdropSecondary"
-            android:textSize="16sp"
+            android:textSize="@dimen/tv_text_size_supporting"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

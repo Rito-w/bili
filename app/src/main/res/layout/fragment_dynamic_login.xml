@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/blblPageBackdrop">
+    android:background="?attr/blblPageBackdrop"
+    android:paddingHorizontal="@dimen/tv_safe_margin_horizontal"
+    android:paddingVertical="@dimen/tv_safe_margin_vertical">
 
     <TextView
         android:id="@+id/tv_tip"
@@ -11,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="动态页需要登录"
         android:textColor="?attr/blblOnPageBackdrop"
-        android:textSize="18sp"
+        android:textAppearance="@style/TextAppearance.Blbl.PageTitle"
         app:layout_constraintBottom_toTopOf="@id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,8 +23,12 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="64dp"
+        android:layout_marginTop="24dp"
+        android:minWidth="220dp"
+        android:stateListAnimator="@animator/blbl_focus_scale_button"
         android:text="二维码登录"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
