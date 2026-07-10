@@ -96,6 +96,7 @@ class SidebarNavAdapter(
             binding.ivIcon.setImageResource(item.iconRes)
             binding.tvLabel.text = item.title
             binding.tvLabel.visibility = if (showLabelsAlways) View.VISIBLE else View.GONE
+            binding.selectedIndicator.visibility = if (selected) View.VISIBLE else View.GONE
             val ctx = binding.root.context
             binding.card.contentDescription = item.title
             binding.card.setCardBackgroundColor(

@@ -39,6 +39,7 @@
     <!-- Sidebar: a 96dp safe icon rail that expands horizontally while focused. -->
     <dimen name="sidebar_width">96dp</dimen>
     <dimen name="sidebar_width_expanded">232dp</dimen>
+    <dimen name="main_sidebar_entry_edge_slop">24dp</dimen>
     <dimen name="sidebar_user_size">48dp</dimen>
     <dimen name="sidebar_user_margin_start">24dp</dimen>
     <dimen name="sidebar_user_margin_top">12dp</dimen>
@@ -63,6 +64,10 @@
     <dimen name="sidebar_nav_label_margin_start">14dp</dimen>
     <dimen name="sidebar_nav_label_text_size">@dimen/tv_text_size_supporting</dimen>
     <dimen name="sidebar_nav_item_height_default">48dp</dimen>
+    <dimen name="sidebar_nav_selected_indicator_width">4dp</dimen>
+    <dimen name="sidebar_nav_selected_indicator_height">24dp</dimen>
+    <dimen name="sidebar_nav_selected_indicator_margin_start">4dp</dimen>
+    <dimen name="sidebar_nav_selected_indicator_corner_radius">2dp</dimen>
 
     <!-- Video card -->
     <dimen name="video_card_margin">12dp</dimen>

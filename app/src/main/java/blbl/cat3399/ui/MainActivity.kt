@@ -83,6 +83,32 @@ internal object SidebarPresentationPolicy {
         }
 }
 
+internal enum class SidebarEntryAction {
+    FOCUS_SELECTED_NAV,
+    DEFER_TO_SYSTEM,
+}
+
+internal object SidebarEntryPolicy {
+    fun actionForDpadLeft(
+        focusedStartPx: Int,
+        mainContainerStartPx: Int,
+        safeContentInsetPx: Int,
+        edgeSlopPx: Int,
+        sidebarPresentation: SidebarPresentation,
+    ): SidebarEntryAction {
+        if (sidebarPresentation == SidebarPresentation.EXPANDED) {
+            return SidebarEntryAction.DEFER_TO_SYSTEM
+        }
+        val relativeStartPx = (focusedStartPx - mainContainerStartPx).coerceAtLeast(0)
+        val entryThresholdPx = safeContentInsetPx.coerceAtLeast(0) + edgeSlopPx.coerceAtLeast(0)
+        return if (relativeStartPx <= entryThresholdPx) {
+            SidebarEntryAction.FOCUS_SELECTED_NAV
+        } else {
+            SidebarEntryAction.DEFER_TO_SYSTEM
+        }
+    }
+}
+
 class MainActivity : BaseActivity(), SidebarFocusHost {
     private enum class UserInfoOverlayMode {
         PROFILE,
@@ -1407,6 +1433,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
     }
 
     private fun canEnterSidebarFrom(view: View): Boolean {
+        var entryBoundaryView = view
         val rv = view.findAncestorRecyclerView()
         if (rv != null) {
             val lm = rv.layoutManager
@@ -1414,20 +1441,28 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
                 val child = rv.findContainingItemView(view) ?: view
                 val lp = child.layoutParams as? StaggeredGridLayoutManager.LayoutParams
                 if (lp != null && lp.spanIndex == 0) {
-                    val focusLoc = IntArray(2)
-                    val containerLoc = IntArray(2)
-                    child.getLocationOnScreen(focusLoc)
-                    binding.mainContainer.getLocationOnScreen(containerLoc)
-                    return (focusLoc[0] - containerLoc[0]) <= dp(24f)
+                    entryBoundaryView = child
                 }
             }
         }
 
         val focusLoc = IntArray(2)
         val containerLoc = IntArray(2)
-        view.getLocationOnScreen(focusLoc)
+        entryBoundaryView.getLocationOnScreen(focusLoc)
         binding.mainContainer.getLocationOnScreen(containerLoc)
-        return (focusLoc[0] - containerLoc[0]) <= dp(24f)
+        val scaledResources = binding.mainContainer.resources
+        val presentation =
+            sidebarPresentation
+                ?: SidebarPresentationPolicy.forMainFocus(
+                    autoHideSidebar = BiliClient.prefs.mainAutoHideSidebarOnEnterContent,
+                )
+        return SidebarEntryPolicy.actionForDpadLeft(
+            focusedStartPx = focusLoc[0],
+            mainContainerStartPx = containerLoc[0],
+            safeContentInsetPx = scaledResources.getDimensionPixelSize(R.dimen.tv_safe_margin_horizontal),
+            edgeSlopPx = scaledResources.getDimensionPixelSize(R.dimen.main_sidebar_entry_edge_slop),
+            sidebarPresentation = presentation,
+        ) == SidebarEntryAction.FOCUS_SELECTED_NAV
     }
 
     private fun View.findAncestorRecyclerView(): RecyclerView? {
@@ -1437,11 +1472,6 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
             current = current.parent as? View
         }
         return null
-    }
-
-    private fun dp(valueDp: Float): Int {
-        val dm = resources.displayMetrics
-        return (valueDp * dm.density).toInt()
     }
 
     private fun isNavKey(keyCode: Int): Boolean {
