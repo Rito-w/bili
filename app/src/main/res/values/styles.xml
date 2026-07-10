@@ -112,7 +112,7 @@
     <style name="TextAppearance.Blbl.Tab" parent="TextAppearance.Blbl.TopTab" />
 
     <style name="Widget.Blbl.Card" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="cardBackgroundColor">@color/blbl_card_surface</item>
         <item name="cardCornerRadius">@dimen/tv_card_corner_radius</item>
         <item name="cardElevation">@dimen/tv_card_elevation</item>
         <item name="strokeColor">?attr/blblFocusStrokeColor</item>

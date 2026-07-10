@@ -22,6 +22,7 @@
 
     <attr name="blblFocusBgRound" format="reference" />
     <attr name="blblFocusListSelectorRound" format="reference" />
+    <attr name="blblFocusRingColor" format="color" />
     <attr name="blblFocusStrokeColor" format="reference|color" />
     <attr name="blblFocusStrokeFocusOnlyColor" format="reference|color" />
 </resources>

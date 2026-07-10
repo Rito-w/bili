@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="blbl_bg">#05070A</color>
-    <color name="blbl_surface">#151922</color>
-    <color name="blbl_text">#F8FAFC</color>
-    <color name="blbl_text_secondary">#A8B3C7</color>
+    <color name="blbl_surface">#121720</color>
+    <color name="blbl_surface_secondary">#1B2230</color>
+    <color name="blbl_text">#F7F9FC</color>
+    <color name="blbl_text_secondary">#B5BFCE</color>
+    <color name="blbl_text_weak">#8995A7</color>
 
     <!-- Text/icon tint used on top of media covers with scrims/shadows (theme-independent). -->
     <color name="blbl_text_on_media">#EDEDED</color>
@@ -25,16 +27,17 @@
     <color name="blbl_on_page_backdrop_secondary_classic">#DFC4D2</color>
 
     <!-- Default TV brand accent and semantic colors. Keep intent out of palette aliases. -->
-    <color name="blbl_brand_accent">#E11D48</color>
-    <color name="blbl_brand_accent_container">#33E11D48</color>
-    <color name="blbl_brand_accent_weak">#66E11D48</color>
-    <color name="blbl_brand_accent_pressed">#80E11D48</color>
+    <color name="blbl_brand_accent">#FB7299</color>
+    <color name="blbl_brand_accent_container">#33FB7299</color>
+    <color name="blbl_brand_accent_weak">#66FB7299</color>
+    <color name="blbl_brand_accent_pressed">#80FB7299</color>
     <color name="blbl_semantic_info">#38BDF8</color>
-    <color name="blbl_semantic_live">#FB7299</color>
-    <color name="blbl_semantic_danger">#FF4D4F</color>
+    <color name="blbl_semantic_live">#FF4D5E</color>
+    <color name="blbl_semantic_danger">#FF4D5E</color>
 
     <!-- Focus highlight: high-contrast frame + subtle shadow/overlay. -->
     <color name="blbl_focus_white">#FFFFFF</color>
+    <color name="blbl_focus_ring_light">#C2185B</color>
     <color name="blbl_focus_shadow">#66000000</color>
     <color name="blbl_focus_fill">#4D333333</color>
     <color name="blbl_focus_fill_pressed">#66333333</color>
@@ -59,7 +62,7 @@
     <color name="player_button_tint">#FFFFFF</color>
     <color name="player_comment_thread_root_bg">#2638BDF8</color>
 
-    <!-- Alternate TV Pink theme accent. It intentionally matches the semantic live hue. -->
+    <!-- Alternate TV Pink theme accent. It intentionally matches the default brand accent. -->
     <color name="blbl_accent_tv_pink">#FB7299</color>
 
     <!-- Compatibility aliases for existing Kotlin/layout call sites. New UI uses intent tokens above. -->

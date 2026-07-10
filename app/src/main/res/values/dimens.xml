@@ -13,17 +13,19 @@
     <dimen name="tv_text_size_supporting">16sp</dimen>
 
     <!-- Shared card, panel and D-pad focus geometry. -->
-    <dimen name="tv_card_corner_radius">12dp</dimen>
+    <dimen name="tv_card_corner_radius">14dp</dimen>
     <dimen name="tv_card_content_padding">16dp</dimen>
     <dimen name="tv_card_gap">16dp</dimen>
     <dimen name="tv_card_elevation">0dp</dimen>
-    <dimen name="tv_focus_card_lift">8dp</dimen>
+    <dimen name="tv_focus_card_lift">12dp</dimen>
     <dimen name="tv_panel_width">360dp</dimen>
-    <dimen name="tv_panel_corner_radius">16dp</dimen>
+    <dimen name="tv_panel_corner_radius">20dp</dimen>
     <dimen name="tv_panel_padding">24dp</dimen>
-    <dimen name="tv_panel_elevation">10dp</dimen>
+    <dimen name="tv_panel_elevation">12dp</dimen>
     <dimen name="tv_focus_outline_width">3dp</dimen>
-    <dimen name="tv_focus_corner_radius">12dp</dimen>
+    <dimen name="tv_focus_corner_radius">@dimen/tv_card_corner_radius</dimen>
+    <dimen name="tv_focus_shadow_corner_radius">16dp</dimen>
+    <dimen name="tv_focus_shadow_inset">2dp</dimen>
     <dimen name="tv_focus_list_inset_horizontal">12dp</dimen>
     <dimen name="tv_focus_list_inset_vertical">6dp</dimen>
     <dimen name="tv_focus_button_lift">4dp</dimen>
@@ -60,11 +62,11 @@
     <!-- Video card -->
     <dimen name="video_card_margin">12dp</dimen>
     <dimen name="video_card_text_margin">12dp</dimen>
-    <dimen name="video_card_duration_text_size">14sp</dimen>
+    <dimen name="video_card_duration_text_size">16sp</dimen>
     <dimen name="video_card_duration_padding_h">8dp</dimen>
     <dimen name="video_card_duration_padding_v">3dp</dimen>
     <dimen name="video_card_stat_icon_size">18dp</dimen>
-    <dimen name="video_card_stat_text_size">14sp</dimen>
+    <dimen name="video_card_stat_text_size">16sp</dimen>
     <dimen name="video_card_title_text_size">@dimen/tv_text_size_card_title</dimen>
     <dimen name="video_card_subtitle_text_size">@dimen/tv_text_size_supporting</dimen>
     <dimen name="video_card_progress_bar_height">2.5dp</dimen>
