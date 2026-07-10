@@ -38,6 +38,10 @@
     <!-- Focus highlight: high-contrast frame + subtle shadow/overlay. -->
     <color name="blbl_focus_white">#FFFFFF</color>
     <color name="blbl_focus_ring_light">#C2185B</color>
+    <color name="blbl_focus_surface_dark">@color/blbl_surface_secondary</color>
+    <color name="blbl_focus_surface_tv_pink">#FCE7EF</color>
+    <color name="blbl_focus_surface_classic">#8A416A</color>
+    <color name="blbl_focus_surface_player">@color/blbl_surface_secondary</color>
     <color name="blbl_focus_shadow">#66000000</color>
     <color name="blbl_focus_fill">#4D333333</color>
     <color name="blbl_focus_fill_pressed">#66333333</color>
