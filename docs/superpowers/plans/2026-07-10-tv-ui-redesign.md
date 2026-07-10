@@ -13,6 +13,8 @@
 - Keep existing API, account, paging, playback-engine, quality-selection, and long-press action semantics unchanged.
 - Keep user-selectable theme, UI scale, grid span, and player preferences working.
 - Use a 960×540 mdpi TV design baseline with at least 48dp horizontal and 24dp vertical safe margins for important content.
+- Use `#05070A` page background, `#121720` primary surface, `#1B2230` secondary surface, `#F7F9FC` primary text, `#B5BFCE` secondary text, `#8995A7` weak text, `#FB7299` brand accent, and `#FF4D5E` live/danger semantics.
+- Use 14dp card corners, 20dp panel corners, and the full focused-card combination of 3dp ring, focused surface lift, and 12dp visual elevation.
 - Default video grid is two columns; default 12:17 PGC/poster grid is four columns.
 - Card focus uses 1.05 scale, 3dp outline, surface lift, and 180ms motion; small action focus may use 1.08 scale.
 - Main card title is 22sp and supporting content is at least 16sp; page title is 30sp and top tabs are 24sp.
@@ -173,6 +175,7 @@
 - [ ] Capture home, hot, bangumi, movie, search, live, dynamic, my, detail and player states after content finishes loading.
 - [ ] Inspect each screenshot for safe margins, focus visibility, text clipping, density, loading artifacts and image distortion; fix defects and recapture.
 - [ ] Exercise D-pad navigation and Back on every major flow, recording any unreachable control as a defect before completion.
+- [ ] Functionally verify cold start, disclaimer, sidebar destination switching, tab switching, refresh, search entry/results, video-detail opening, playback start/pause/seek/OSD, next-video shortcut, settings changes, QR-login screen, Back behavior and double-Back exit; capture logcat around crashes or failed transitions.
+- [ ] Verify theme switching, UI-scale changes, video/PGC grid-count changes and activity recreation still preserve readable layout and focus.
 - [ ] Update README feature bullets and screenshot gallery with the final emulator captures.
 - [ ] Run fresh final verification: `./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug`; expect all tasks successful and exit code 0.
-
