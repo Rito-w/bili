@@ -7,6 +7,7 @@ local.properties
 # IntelliJ / Android Studio
 .idea/
 *.iml
+.worktrees/
 
 # Kotlin
 *.kotlin_metadata
