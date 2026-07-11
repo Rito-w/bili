@@ -52,6 +52,13 @@ object ApkUpdater {
     private val okHttp: OkHttpClient
         get() = okHttpLazy.value
 
+    private val redirectProbeHttp: OkHttpClient by lazy {
+        okHttp.newBuilder()
+            .followRedirects(false)
+            .followSslRedirects(false)
+            .build()
+    }
+
     fun evictConnections() {
         if (okHttpLazy.isInitialized()) okHttp.connectionPool.evictAll()
     }
@@ -121,7 +128,12 @@ object ApkUpdater {
                     delay(400L * attempt)
                 }
             }
-            throw lastError ?: IllegalStateException("fetch latest version failed")
+            try {
+                return@withContext fetchLatestFromDownloadRedirect()
+            } catch (fallbackError: Throwable) {
+                lastError?.addSuppressed(fallbackError)
+                throw lastError ?: fallbackError
+            }
         }
     }
 
@@ -172,6 +184,35 @@ object ApkUpdater {
             changelog = json.optString("body", "").trim(),
             apkUrl = apkUrl,
         )
+    }
+
+    private fun fetchLatestFromDownloadRedirect(): RemoteUpdate {
+        val request =
+            Request.Builder()
+                .url(GITHUB_LATEST_APK_URL)
+                .header("Cache-Control", "no-cache")
+                .header("User-Agent", "Rito-w-bili/${BuildConfig.VERSION_NAME}")
+                .head()
+                .build()
+        val response = redirectProbeHttp.newCall(request).execute()
+        response.use { result ->
+            check(result.code in 300..399) { "GitHub latest redirect HTTP ${result.code}" }
+            val location = result.header("Location").orEmpty()
+            val versionName =
+                parseVersionFromReleaseAssetUrl(location)
+                    ?: error("GitHub latest redirect 缺少版本号")
+            return RemoteUpdate(
+                versionName = versionName,
+                changelog = "更新说明暂时无法获取，请前往项目 GitHub Release 查看。",
+                apkUrl = apkUrlFor(versionName),
+            )
+        }
+    }
+
+    internal fun parseVersionFromReleaseAssetUrl(url: String): String? {
+        val match = Regex("/releases/download/v?([^/]+)/", RegexOption.IGNORE_CASE).find(url.trim()) ?: return null
+        val versionName = match.groupValues[1].trim()
+        return versionName.takeIf { parseVersion(it) != null }
     }
 
     internal fun parseChangelog(raw: String): RemoteUpdate {

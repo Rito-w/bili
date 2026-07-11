@@ -88,4 +88,14 @@ class ApkUpdaterChangelogTest {
             )
         }
     }
+
+    @Test
+    fun parseVersionFromReleaseAssetUrl_should_extract_version_from_github_redirect() {
+        assertEquals(
+            "0.1.1",
+            ApkUpdater.parseVersionFromReleaseAssetUrl(
+                "https://github.com/Rito-w/bili/releases/download/v0.1.1/app-release.apk",
+            ),
+        )
+    }
 }
