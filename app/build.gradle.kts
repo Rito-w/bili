@@ -8,6 +8,21 @@ android {
     namespace = "blbl.cat3399"
     compileSdk = 36
 
+    val configuredVersionName = project.findProperty("versionName")?.toString()?.trim()?.removePrefix("v") ?: "0.1.0"
+
+    fun semanticVersionCode(versionName: String): Int {
+        val parts =
+            versionName
+                .substringBefore('-')
+                .substringBefore('+')
+                .split('.')
+                .map { it.toIntOrNull() ?: 0 }
+        val major = parts.getOrElse(0) { 0 }.coerceIn(0, 2000)
+        val minor = parts.getOrElse(1) { 0 }.coerceIn(0, 999)
+        val patch = parts.getOrElse(2) { 0 }.coerceIn(0, 999)
+        return (major * 1_000_000 + minor * 1_000 + patch).coerceAtLeast(1)
+    }
+
     fun propOrEnv(name: String): String? {
         val fromProp = project.findProperty(name) as String?
         if (!fromProp.isNullOrBlank()) return fromProp
@@ -20,8 +35,8 @@ android {
         applicationId = "blbl.cat3399"
         minSdk = 21
         targetSdk = 36
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
-        versionName = project.findProperty("versionName") as String? ?: "0.1.0"
+        versionCode = project.findProperty("versionCode")?.toString()?.toIntOrNull() ?: semanticVersionCode(configuredVersionName)
+        versionName = configuredVersionName
 
         vectorDrawables {
             useSupportLibrary = true
@@ -137,6 +152,7 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.json:json:20240303")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 }
 

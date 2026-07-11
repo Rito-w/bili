@@ -93,6 +93,19 @@ class SidebarNavAdapter(
             showLabelsAlways: Boolean,
             onClick: () -> Unit,
         ) {
+            val rootLayoutParams = binding.root.layoutParams
+            val desiredWidth =
+                if (showLabelsAlways) {
+                    val resources = binding.root.resources
+                    resources.getDimensionPixelSize(R.dimen.sidebar_width_expanded) -
+                        (resources.getDimensionPixelSize(R.dimen.sidebar_nav_card_margin_h) * 2)
+                } else {
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                }
+            if (rootLayoutParams.width != desiredWidth) {
+                rootLayoutParams.width = desiredWidth
+                binding.root.layoutParams = rootLayoutParams
+            }
             binding.ivIcon.setImageResource(item.iconRes)
             binding.tvLabel.text = item.title
             binding.tvLabel.visibility = if (showLabelsAlways) View.VISIBLE else View.GONE

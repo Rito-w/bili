@@ -207,11 +207,13 @@ class PgcRecommendGridFragment : Fragment(), RefreshKeyHandler, TabSwitchFocusTa
     private fun spanCountForPgc(): Int {
         val dm = resources.displayMetrics
         val widthDp = dm.widthPixels / dm.density
-        return GridSpanPolicy.pgcSpanCountForWidthDp(
-            widthDp = widthDp,
-            overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride,
-            uiScale = UiScale.factor(requireContext()),
-        )
+        val overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride
+        val uiScale = UiScale.factor(requireContext())
+        return if (source.isDrama) {
+            GridSpanPolicy.pgcSpanCountForWidthDp(widthDp, overrideSpanCount, uiScale)
+        } else {
+            GridSpanPolicy.animeSpanCountForWidthDp(widthDp, overrideSpanCount, uiScale)
+        }
     }
 
     override fun requestFocusFirstCardFromTab(): Boolean {

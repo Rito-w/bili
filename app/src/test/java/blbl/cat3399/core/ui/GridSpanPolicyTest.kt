@@ -58,6 +58,27 @@ class GridSpanPolicyTest {
     }
 
     @Test
+    fun anime_default_is_two_columns_on_tv_without_changing_cinema_policy() {
+        assertEquals(
+            2,
+            GridSpanPolicy.animeSpanCountForWidthDp(
+                widthDp = 960f,
+                overrideSpanCount = null,
+                uiScale = 1f,
+            ),
+        )
+        assertEquals(
+            1,
+            GridSpanPolicy.animeSpanCountForWidthDp(
+                widthDp = 480f,
+                overrideSpanCount = null,
+                uiScale = 1f,
+            ),
+        )
+        assertEquals(4, GridSpanPolicy.pgcSpanCountForWidthDp(960f, null, 1f))
+    }
+
+    @Test
     fun live_default_is_three_columns_at_tv_baseline_and_two_when_narrower() {
         assertEquals(
             3,

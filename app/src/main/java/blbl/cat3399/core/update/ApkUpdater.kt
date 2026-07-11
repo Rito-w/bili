@@ -18,6 +18,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -26,13 +27,12 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 object ApkUpdater {
-    private const val DEBUG_APK_URL = "https://cat3399.top/blbl/blbl-latest-debug.apk"
-    private const val RELEASE_APK_URL = "https://cat3399.top/blbl/blbl-latest-release.apk"
-    private const val CHANGELOG_URL = "https://cat3399.top/blbl/CHANGELOG.md"
+    private const val GITHUB_LATEST_RELEASE_API = "https://api.github.com/repos/Rito-w/bili/releases/latest"
+    private const val GITHUB_LATEST_APK_URL = "https://github.com/Rito-w/bili/releases/latest/download/app-release.apk"
     val TEST_APK_URL: String
-        get() = if (BuildConfig.DEBUG) DEBUG_APK_URL else RELEASE_APK_URL
+        get() = GITHUB_LATEST_APK_URL
     val TEST_CHANGELOG_URL: String
-        get() = CHANGELOG_URL
+        get() = GITHUB_LATEST_RELEASE_API
 
     private const val COOLDOWN_MS = 5_000L
 
@@ -84,6 +84,7 @@ object ApkUpdater {
     data class RemoteUpdate(
         val versionName: String,
         val changelog: String,
+        val apkUrl: String = "",
         val versions: List<RemoteUpdate> = emptyList(),
     ) {
         val displayChangelog: String
@@ -129,6 +130,9 @@ object ApkUpdater {
             Request.Builder()
                 .url(url)
                 .header("Cache-Control", "no-cache")
+                .header("Accept", "application/vnd.github+json")
+                .header("X-GitHub-Api-Version", "2022-11-28")
+                .header("User-Agent", "Rito-w-bili/${BuildConfig.VERSION_NAME}")
                 .get()
                 .build()
         val call = okHttp.newCall(req)
@@ -136,8 +140,38 @@ object ApkUpdater {
         res.use { r ->
             check(r.isSuccessful) { "HTTP ${r.code} ${r.message}" }
             val body = r.body ?: error("empty body")
-            return parseChangelog(body.string())
+            return parseGitHubRelease(body.string())
         }
+    }
+
+    internal fun parseGitHubRelease(raw: String): RemoteUpdate {
+        val json = JSONObject(raw)
+        val versionName = json.optString("tag_name", "").trim().removePrefix("v")
+        check(parseVersion(versionName) != null) { "Release 缺少有效版本号" }
+
+        val assets = json.optJSONArray("assets")
+        var fallbackApkUrl: String? = null
+        var preferredApkUrl: String? = null
+        if (assets != null) {
+            for (index in 0 until assets.length()) {
+                val asset = assets.optJSONObject(index) ?: continue
+                val name = asset.optString("name", "").trim()
+                val contentType = asset.optString("content_type", "").trim()
+                val url = asset.optString("browser_download_url", "").trim()
+                val isApk =
+                    name.endsWith(".apk", ignoreCase = true) ||
+                        contentType.equals("application/vnd.android.package-archive", ignoreCase = true)
+                if (!isApk || !url.startsWith("https://")) continue
+                if (fallbackApkUrl == null) fallbackApkUrl = url
+                if (name.equals("app-release.apk", ignoreCase = true)) preferredApkUrl = url
+            }
+        }
+        val apkUrl = preferredApkUrl ?: fallbackApkUrl ?: error("Release 中未找到 APK 产物")
+        return RemoteUpdate(
+            versionName = versionName,
+            changelog = json.optString("body", "").trim(),
+            apkUrl = apkUrl,
+        )
     }
 
     internal fun parseChangelog(raw: String): RemoteUpdate {
@@ -178,8 +212,7 @@ object ApkUpdater {
 
     fun apkUrlFor(versionName: String): String {
         val cleanVersion = versionName.trim().removePrefix("v")
-        val channel = if (BuildConfig.DEBUG) "debug" else "release"
-        return "https://cat3399.top/blbl/blbl-$cleanVersion-$channel.apk"
+        return "https://github.com/Rito-w/bili/releases/download/v$cleanVersion/app-release.apk"
     }
 
     private data class VersionHeading(

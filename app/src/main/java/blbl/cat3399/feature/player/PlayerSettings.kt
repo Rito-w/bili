@@ -30,7 +30,6 @@ import java.util.Locale
 
 internal object PlayerSettingKeys {
     const val PLAYER_ENGINE = "player_engine"
-    const val RESOLUTION = "resolution"
     const val AUDIO_TRACK = "audio_track"
     const val CODEC = "codec"
     const val PLAYBACK_SPEED = "playback_speed"
@@ -143,14 +142,6 @@ internal fun PlayerActivity.toggleDanmakuReloadSettingFlag(
     )
 }
 
-private fun PlayerActivity.persistResolutionPreference(prefs: AppPrefs, qn: Int) {
-    when (currentVideoIsPortrait) {
-        true -> prefs.playerPreferredQnPortrait = qn
-        false -> prefs.playerPreferredQn = qn
-        null -> Unit
-    }
-}
-
 internal fun PlayerActivity.defaultSubtitleLangCode(): String {
     return BiliClient.prefs.subtitlePreferredLang
         .trim()
@@ -176,19 +167,24 @@ internal fun PlayerActivity.resolvedSubtitleLangCode(): String {
 }
 
 internal fun PlayerActivity.applyResolutionSetting(qn: Int) {
-    session =
-        if (shouldPersistPlayerSettingsToGlobal() && currentVideoIsPortrait != null) {
-            session.copy(preferredQn = qn, targetQn = 0)
-        } else if (qn == session.preferredQn) {
-            session.copy(targetQn = 0)
-        } else {
-            session.copy(targetQn = qn)
-        }
-    if (shouldPersistPlayerSettingsToGlobal()) {
-        persistResolutionPreference(BiliClient.prefs, qn)
-    }
+    session = session.copy(preferredQn = 0, targetQn = qn.coerceAtLeast(0), actualQn = 0)
+    updateQualityButton()
     reloadStream(keepPosition = true)
     refreshSettingsPanel()
+}
+
+internal fun PlayerActivity.updateQualityButton() {
+    val actualQn = session.actualQn.takeIf { it > 0 }
+    val manualQn = session.targetQn.takeIf { it > 0 }
+    val displayQn = actualQn ?: manualQn
+    binding.btnQuality.text = displayQn?.let(::qnLabel)?.substringBefore(' ') ?: "自动"
+    binding.btnQuality.contentDescription =
+        when {
+            actualQn != null && manualQn == null -> "画质：${qnLabel(actualQn)}，自动选择"
+            actualQn != null -> "画质：${qnLabel(actualQn)}"
+            manualQn != null -> "画质：${qnLabel(manualQn)}，正在切换"
+            else -> "画质：自动选择最高可用"
+        }
 }
 
 internal fun PlayerActivity.applyAudioTrackSetting(id: Int) {
@@ -303,7 +299,6 @@ internal fun PlayerActivity.applyDanmakuEnabledSetting(enabled: Boolean) {
 internal fun PlayerActivity.handleSettingsItemClick(item: PlayerSettingsAdapter.SettingItem) {
     when (item.key) {
         PlayerSettingKeys.PLAYER_ENGINE -> showPlayerEngineDialog()
-        PlayerSettingKeys.RESOLUTION -> showResolutionDialog()
         PlayerSettingKeys.AUDIO_TRACK -> showAudioDialog()
         PlayerSettingKeys.CODEC -> showCodecDialog()
         PlayerSettingKeys.PLAYBACK_SPEED -> showSpeedDialog()
@@ -487,13 +482,11 @@ private fun PlayerActivity.buildRootSettingsItems(
     subtitleSupported: Boolean,
 ): List<PlayerSettingsAdapter.SettingItem> {
     return listOfNotNull(
-        settingItem(PlayerSettingKeys.RESOLUTION, "分辨率", resolutionSubtitle()),
         settingItem(PlayerSettingKeys.AUDIO_TRACK, "音轨", audioSubtitle()),
         settingItem(PlayerSettingKeys.CODEC, "视频编码", session.preferCodec),
         settingItem(PlayerSettingKeys.PLAYBACK_SPEED, "播放速度", String.format(Locale.US, "%.2fx", session.playbackSpeed)),
         settingItem(PlayerSettingKeys.PLAYBACK_MODE, "播放模式", playbackModeSubtitle()),
         subtitleSupported.takeIf { it }?.let { settingItem(PlayerSettingKeys.SUBTITLE_MENU, "字幕设置", ">") },
-        settingItem(PlayerSettingKeys.DANMAKU_MENU, "弹幕设置", ">"),
         settingItem(PlayerSettingKeys.AUDIO_BALANCE, "音频平衡", session.audioBalanceLevel.label),
         settingItem(
             PlayerSettingKeys.PERSISTENT_BOTTOM_PROGRESS,
@@ -680,20 +673,14 @@ private fun PlayerActivity.refreshSettingsPanel() {
 }
 
 internal fun PlayerActivity.showResolutionDialog() {
-    // Follow docs: qn list for resolution/framerate.
-    // Keep the full list so user can force-pick even if the server later falls back.
-    val docQns = PlaybackSettingChoices.resolutionQns
-    val available = lastAvailableQns.toSet()
-    val currentQn = selectedResolutionQn()
-    val currentIndex = docQns.indexOfFirst { it == currentQn }.takeIf { it >= 0 } ?: 0
+    val options = qualityMenuQns(lastAvailableQns)
+    val currentQn = session.targetQn.takeIf { it > 0 } ?: 0
+    val currentIndex = options.indexOf(currentQn).coerceAtLeast(0)
     showSettingsChoiceDialog(
-        title = "分辨率",
-        options = docQns,
+        title = "画质",
+        options = options,
         checkedIndex = currentIndex,
-        label = { qn ->
-            val text = qnLabel(qn)
-            if (available.contains(qn)) "${text}（可用）" else text
-        },
+        label = ::qnLabel,
     ) { qn -> applyResolutionSetting(qn) }
 }
 

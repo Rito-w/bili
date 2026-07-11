@@ -35,4 +35,13 @@ class SidebarPresentationPolicyTest {
             ),
         )
     }
+
+    @Test
+    fun everyPresentation_reservesTheSameRailWidthSoMainContentNeverJumps() {
+        val collapsedWidthPx = 96
+
+        assertEquals(collapsedWidthPx, SidebarLayoutPolicy.reservedRailWidthPx(SidebarPresentation.EXPANDED, collapsedWidthPx))
+        assertEquals(collapsedWidthPx, SidebarLayoutPolicy.reservedRailWidthPx(SidebarPresentation.COLLAPSED, collapsedWidthPx))
+        assertEquals(collapsedWidthPx, SidebarLayoutPolicy.reservedRailWidthPx(SidebarPresentation.HIDDEN, collapsedWidthPx))
+    }
 }

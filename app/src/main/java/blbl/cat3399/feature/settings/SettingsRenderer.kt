@@ -277,13 +277,6 @@ class SettingsRenderer(
 
             "播放设置" ->
                 listOf(
-                    SettingEntry(SettingId.PlayerPreferredQn, "默认画质", SettingsText.qnText(prefs.playerPreferredQn), null),
-                    SettingEntry(
-                        SettingId.PlayerPreferredQnPortrait,
-                        "默认画质（竖屏）",
-                        SettingsText.qnText(prefs.playerPreferredQnPortrait),
-                        null,
-                    ),
                     SettingEntry(SettingId.PlayerPreferredAudioId, "默认音轨", SettingsText.audioText(prefs.playerPreferredAudioId), null),
                     SettingEntry(SettingId.PlayerSpeed, "默认播放速度", String.format(java.util.Locale.US, "%.2fx", prefs.playerSpeed), null),
                     SettingEntry(
@@ -448,7 +441,6 @@ class SettingsRenderer(
                     SettingEntry(SettingId.QqGroup, "QQ交流群", SettingsConstants.QQ_GROUP, null),
                     SettingEntry(SettingId.LogTag, "日志标签", "BLBL", "用于 Logcat 过滤"),
                     SettingEntry(SettingId.ExportLogs, "导出日志", "保存文件", null),
-                    SettingEntry(SettingId.UploadLogs, "上传日志", "点击上传", "打包并上传日志zip到开发者（含设备/版本/非登录配置元数据）"),
                     playerKernelEntry(),
                     SettingEntry(
                         SettingId.AutoUpdateCheckEnabled,

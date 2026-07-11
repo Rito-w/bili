@@ -110,7 +110,7 @@ internal fun PlayerActivity.showSettingsPanel(openedFromMenuKey: Boolean = false
     // even if it relies on constraints to those bars.
     setControlsVisible(true)
     binding.settingsPanel.visibility = View.VISIBLE
-    showSettingsRoot(focusKey = PlayerSettingKeys.RESOLUTION)
+    showSettingsRoot(focusKey = PlayerSettingKeys.AUDIO_TRACK)
     syncPlayerInfoPanelVisibility()
 }
 

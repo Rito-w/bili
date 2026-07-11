@@ -867,9 +867,8 @@ class SearchRenderer internal constructor(
 
     private fun spanCountForTab(index: Int): Int =
         when (state.tabForIndex(index)) {
-            SearchTab.Bangumi,
-            SearchTab.Media,
-            -> spanCountForBangumi()
+            SearchTab.Bangumi -> spanCountForAnime()
+            SearchTab.Media -> spanCountForPgc()
 
             SearchTab.Live -> spanCountForLive()
             else -> spanCountForVideo()
@@ -877,7 +876,17 @@ class SearchRenderer internal constructor(
 
     private fun spanCountForCurrentTab(): Int = spanCountForTab(state.currentTabIndex)
 
-    private fun spanCountForBangumi(): Int {
+    private fun spanCountForAnime(): Int {
+        val dm = binding.root.resources.displayMetrics
+        val widthDp = dm.widthPixels / dm.density
+        return GridSpanPolicy.animeSpanCountForWidthDp(
+            widthDp = widthDp,
+            overrideSpanCount = BiliClient.prefs.pgcGridSpanCountOverride,
+            uiScale = UiScale.factor(viewContext),
+        )
+    }
+
+    private fun spanCountForPgc(): Int {
         val dm = binding.root.resources.displayMetrics
         val widthDp = dm.widthPixels / dm.density
         return GridSpanPolicy.pgcSpanCountForWidthDp(

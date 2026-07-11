@@ -202,7 +202,7 @@ internal fun PlayerActivity.resetPlaybackStateForNewMedia(
     subtitleItems = emptyList()
     lastAvailableQns = emptyList()
     lastAvailableAudioIds = emptyList()
-    session = session.copy(actualQn = 0)
+    session = session.copy(preferredQn = 0, targetQn = 0, actualQn = 0)
     session = session.copy(actualAudioId = 0)
     currentViewDurationMs = null
     debug.reset()
@@ -295,6 +295,7 @@ internal fun PlayerActivity.resetPlaybackStateForNewMedia(
     applyPlaybackMode(engine)
     updateSubtitleButton()
     updateDanmakuButton()
+    updateQualityButton()
     updateUpButton()
     (binding.recyclerSettings.adapter as? PlayerSettingsAdapter)?.let { refreshSettings(it) }
 }
@@ -525,7 +526,7 @@ internal fun PlayerActivity.startPlayback(
                     trace?.log("duration:playurl", "duration=${durationMs}ms")
                 }
                 showRiskControlBypassHintIfNeeded(playStream)
-                lastAvailableQns = parseDashVideoQnList(playStream)
+                lastAvailableQns = parseSelectableDashVideoQnList(playStream, constraints = playbackConstraints)
                 lastAvailableAudioIds = parseDashAudioIdList(playStream, constraints = playbackConstraints)
                 logPlayUrlTrackSummary(source = "start", stream = playStream, constraints = playbackConstraints)
                 if (subtitleSupported && session.subtitleEnabled) {
@@ -1079,8 +1080,6 @@ internal fun PlayerActivity.handlePlaybackEnded(engine: BlblPlayerEngine) {
 }
 
 internal fun PlayerActivity.applyPerVideoPreferredQn(detail: VideoDetail, cid: Long) {
-    val prefs = BiliClient.prefs
-
     val dim = detail.pages.firstOrNull { it.cid == cid }?.dimension ?: detail.dimension
 
     val width = dim?.width ?: 0
@@ -1095,9 +1094,8 @@ internal fun PlayerActivity.applyPerVideoPreferredQn(detail: VideoDetail, cid: L
 
     val isPortraitVideo = (effectiveW > 0 && effectiveH > 0 && effectiveH > effectiveW)
     currentVideoIsPortrait = isPortraitVideo
-    val preferredQn = if (isPortraitVideo) prefs.playerPreferredQnPortrait else prefs.playerPreferredQn
-    if (session.preferredQn != preferredQn) {
-        session = session.copy(preferredQn = preferredQn)
+    if (session.preferredQn != 0) {
+        session = session.copy(preferredQn = 0)
     }
 }
 

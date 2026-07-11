@@ -133,7 +133,9 @@ object ApkUpdateFlow {
             activity.lifecycleScope.launch {
                 try {
                     val currentVersion = BuildConfig.VERSION_NAME
-                    val latestVersion = latestVersionHint ?: ApkUpdater.fetchLatestUpdate().versionName
+                    val fetchedUpdate = if (latestVersionHint == null || apkUrl == null) ApkUpdater.fetchLatestUpdate() else null
+                    val latestVersion = latestVersionHint ?: fetchedUpdate?.versionName ?: error("无法确定更新版本")
+                    val resolvedApkUrl = apkUrl ?: fetchedUpdate?.apkUrl ?: ApkUpdater.apkUrlFor(latestVersion)
                     val isNewer = ApkUpdater.isRemoteNewer(latestVersion, currentVersion)
                     onResolved?.invoke(latestVersion, isNewer)
                     if (!isNewer && apkUrl == null) {
@@ -149,7 +151,7 @@ object ApkUpdateFlow {
                     val apkFile =
                         ApkUpdater.downloadApkToCache(
                             context = activity,
-                            url = apkUrl ?: latestVersionHint?.let(ApkUpdater::apkUrlFor) ?: ApkUpdater.TEST_APK_URL,
+                            url = resolvedApkUrl,
                         ) { dlState ->
                             when (dlState) {
                                 ApkUpdater.Progress.Connecting -> {

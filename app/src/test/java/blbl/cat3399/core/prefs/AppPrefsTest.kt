@@ -50,4 +50,23 @@ class AppPrefsTest {
         assertEquals(2, AppPrefs.normalizeStoredGridSpanOverride(keyExists = true, storedValue = 2))
         assertEquals(6, AppPrefs.normalizeStoredGridSpanOverride(keyExists = true, storedValue = 99))
     }
+
+    @Test
+    fun normalizePlayerOsdButtons_should_remove_retired_player_features_from_legacy_preferences() {
+        val normalized =
+            AppPrefs.normalizePlayerOsdButtons(
+                listOf(
+                    AppPrefs.PLAYER_OSD_BTN_DANMAKU,
+                    AppPrefs.PLAYER_OSD_BTN_COMMENTS,
+                    AppPrefs.PLAYER_OSD_BTN_DETAIL,
+                    AppPrefs.PLAYER_OSD_BTN_SPONSOR_SUBMIT,
+                    AppPrefs.PLAYER_OSD_BTN_NEXT,
+                ),
+            )
+
+        assertEquals(
+            listOf(AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE, AppPrefs.PLAYER_OSD_BTN_NEXT),
+            normalized,
+        )
+    }
 }

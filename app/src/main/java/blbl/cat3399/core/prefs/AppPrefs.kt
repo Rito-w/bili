@@ -658,15 +658,11 @@ class AppPrefs(context: Context) {
                 PLAYER_DOWN_KEY_OSD_FOCUS_PLAY_PAUSE,
                 PLAYER_DOWN_KEY_OSD_FOCUS_NEXT,
                 PLAYER_DOWN_KEY_OSD_FOCUS_SUBTITLE,
-                PLAYER_DOWN_KEY_OSD_FOCUS_DANMAKU,
-                PLAYER_DOWN_KEY_OSD_FOCUS_COMMENTS,
-                PLAYER_DOWN_KEY_OSD_FOCUS_DETAIL,
                 PLAYER_DOWN_KEY_OSD_FOCUS_UP,
                 PLAYER_DOWN_KEY_OSD_FOCUS_LIKE,
                 PLAYER_DOWN_KEY_OSD_FOCUS_COIN,
                 PLAYER_DOWN_KEY_OSD_FOCUS_FAV,
                 PLAYER_DOWN_KEY_OSD_FOCUS_LIST_PANEL,
-                PLAYER_DOWN_KEY_OSD_FOCUS_SPONSOR_SUBMIT,
                 PLAYER_DOWN_KEY_OSD_FOCUS_ADVANCED,
                 -> normalized
 
@@ -680,15 +676,11 @@ class AppPrefs(context: Context) {
                     PLAYER_DOWN_KEY_OSD_FOCUS_PLAY_PAUSE,
                     PLAYER_DOWN_KEY_OSD_FOCUS_NEXT,
                     PLAYER_DOWN_KEY_OSD_FOCUS_SUBTITLE,
-                    PLAYER_DOWN_KEY_OSD_FOCUS_DANMAKU,
-                    PLAYER_DOWN_KEY_OSD_FOCUS_COMMENTS,
-                    PLAYER_DOWN_KEY_OSD_FOCUS_DETAIL,
                     PLAYER_DOWN_KEY_OSD_FOCUS_UP,
                     PLAYER_DOWN_KEY_OSD_FOCUS_LIKE,
                     PLAYER_DOWN_KEY_OSD_FOCUS_COIN,
                     PLAYER_DOWN_KEY_OSD_FOCUS_FAV,
                     PLAYER_DOWN_KEY_OSD_FOCUS_LIST_PANEL,
-                    PLAYER_DOWN_KEY_OSD_FOCUS_SPONSOR_SUBMIT,
                     PLAYER_DOWN_KEY_OSD_FOCUS_ADVANCED,
                     -> value
 
@@ -790,12 +782,11 @@ class AppPrefs(context: Context) {
             if (!prefs.contains(KEY_PLAYER_OSD_BUTTONS)) return DEFAULT_PLAYER_OSD_BUTTONS
             val stored = loadStringList(KEY_PLAYER_OSD_BUTTONS)
             val normalized = normalizePlayerOsdButtons(stored)
-            return migratePlayerOsdDetailButtonIfNeeded(normalized)
+            if (normalized != stored) saveStringList(KEY_PLAYER_OSD_BUTTONS, normalized)
+            return normalized
         }
         set(value) {
             saveStringList(KEY_PLAYER_OSD_BUTTONS, normalizePlayerOsdButtons(value))
-            // Once user manually configures OSD buttons, never force-enable new buttons again.
-            prefs.edit().putBoolean(KEY_PLAYER_OSD_BUTTONS_DETAIL_MIGRATED, true).apply()
         }
 
     internal var playerCustomShortcuts: List<PlayerCustomShortcut>
@@ -946,33 +937,6 @@ class AppPrefs(context: Context) {
         return out
     }
 
-    private fun migratePlayerOsdDetailButtonIfNeeded(normalized: List<String>): List<String> {
-        if (prefs.getBoolean(KEY_PLAYER_OSD_BUTTONS_DETAIL_MIGRATED, false)) return normalized
-        // Requirement: auto-enable the new "Detail" button even for users who previously customized OSD.
-        // Do it only once so the user can later disable it in Settings.
-        prefs.edit().putBoolean(KEY_PLAYER_OSD_BUTTONS_DETAIL_MIGRATED, true).apply()
-        if (normalized.contains(PLAYER_OSD_BTN_DETAIL)) return normalized
-
-        val migrated = normalized + PLAYER_OSD_BTN_DETAIL
-        saveStringList(KEY_PLAYER_OSD_BUTTONS, migrated)
-        return migrated
-    }
-
-    private fun normalizePlayerOsdButtons(value: List<String>): List<String> {
-        val out = ArrayList<String>(value.size + 1)
-        val seen = HashSet<String>(value.size + 1)
-        for (raw in value) {
-            val key = raw.trim()
-            if (key.isBlank()) continue
-            if (!PLAYER_OSD_BUTTON_KEYS.contains(key)) continue
-            if (seen.add(key)) out.add(key)
-        }
-        if (!seen.contains(PLAYER_OSD_BTN_PLAY_PAUSE)) {
-            out.add(0, PLAYER_OSD_BTN_PLAY_PAUSE)
-        }
-        return out
-    }
-
     private fun normalizeUiScaleFactor(value: Float): Float {
         val v = if (value.isFinite()) value else UI_SCALE_FACTOR_DEFAULT
         val clamped = v.coerceIn(UI_SCALE_FACTOR_MIN, UI_SCALE_FACTOR_MAX)
@@ -1113,7 +1077,6 @@ class AppPrefs(context: Context) {
         private const val KEY_PLAYER_SETTINGS_APPLY_TO_GLOBAL = "player_settings_apply_to_global"
         private const val KEY_PLAYER_UP_QUICK_CARD_ENABLED = "player_up_quick_card_enabled"
         private const val KEY_PLAYER_OSD_BUTTONS = "player_osd_buttons"
-        private const val KEY_PLAYER_OSD_BUTTONS_DETAIL_MIGRATED = "player_osd_buttons_detail_migrated"
         private const val KEY_PLAYER_CUSTOM_SHORTCUTS = "player_custom_shortcuts"
         private const val KEY_GRID_SPAN = "grid_span"
         private const val KEY_DYNAMIC_GRID_SPAN = "dynamic_grid_span"
@@ -1189,6 +1152,21 @@ class AppPrefs(context: Context) {
         internal fun normalizeStoredGridSpanOverride(keyExists: Boolean, storedValue: Int): Int? {
             if (!keyExists || storedValue <= 0) return null
             return storedValue.coerceIn(1, 6)
+        }
+
+        internal fun normalizePlayerOsdButtons(value: List<String>): List<String> {
+            val out = ArrayList<String>(value.size + 1)
+            val seen = HashSet<String>(value.size + 1)
+            for (raw in value) {
+                val key = raw.trim()
+                if (key.isBlank()) continue
+                if (!PLAYER_OSD_BUTTON_KEYS.contains(key)) continue
+                if (seen.add(key)) out.add(key)
+            }
+            if (!seen.contains(PLAYER_OSD_BTN_PLAY_PAUSE)) {
+                out.add(0, PLAYER_OSD_BTN_PLAY_PAUSE)
+            }
+            return out
         }
 
         /**
@@ -1284,10 +1262,6 @@ class AppPrefs(context: Context) {
                 PLAYER_OSD_BTN_PLAY_PAUSE,
                 PLAYER_OSD_BTN_NEXT,
                 PLAYER_OSD_BTN_SUBTITLE,
-                PLAYER_OSD_BTN_DANMAKU,
-                PLAYER_OSD_BTN_COMMENTS,
-                PLAYER_OSD_BTN_DETAIL,
-                PLAYER_OSD_BTN_SPONSOR_SUBMIT,
                 PLAYER_OSD_BTN_UP,
                 PLAYER_OSD_BTN_LIST_PANEL,
                 PLAYER_OSD_BTN_ADVANCED,
@@ -1299,15 +1273,11 @@ class AppPrefs(context: Context) {
                 PLAYER_OSD_BTN_PLAY_PAUSE,
                 PLAYER_OSD_BTN_NEXT,
                 PLAYER_OSD_BTN_SUBTITLE,
-                PLAYER_OSD_BTN_DANMAKU,
-                PLAYER_OSD_BTN_COMMENTS,
-                PLAYER_OSD_BTN_DETAIL,
                 PLAYER_OSD_BTN_UP,
                 PLAYER_OSD_BTN_LIKE,
                 PLAYER_OSD_BTN_COIN,
                 PLAYER_OSD_BTN_FAV,
                 PLAYER_OSD_BTN_LIST_PANEL,
-                PLAYER_OSD_BTN_SPONSOR_SUBMIT,
                 PLAYER_OSD_BTN_ADVANCED,
             )
 

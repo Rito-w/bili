@@ -23,6 +23,19 @@ object GridSpanPolicy {
             }
         }
 
+    /** Resolves the anime poster grid: two wide cards on the TV baseline. */
+    fun animeSpanCountForWidthDp(
+        widthDp: Float,
+        overrideSpanCount: Int?,
+        uiScale: Float,
+    ): Int =
+        resolveSpanCount(overrideSpanCount) {
+            when {
+                effectiveWidthDp(widthDp, uiScale) >= 600f -> 2
+                else -> 1
+            }
+        }
+
     /** Resolves the 12:17 PGC/poster grid: 4 columns at the 960dp TV baseline. */
     fun pgcSpanCountForWidthDp(
         widthDp: Float,

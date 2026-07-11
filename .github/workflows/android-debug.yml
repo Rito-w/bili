@@ -27,7 +27,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
       - name: Build debug APK
-        run: ./gradlew assembleDebug -PversionName=${{ inputs.version_name }} -PversionCode=${{ github.run_number }}
+        run: ./gradlew assembleDebug -PversionName=${{ inputs.version_name }}
       - name: Upload debug APK to R2 (optional)
         env:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}

@@ -83,6 +83,19 @@ internal object SidebarPresentationPolicy {
         }
 }
 
+internal object SidebarLayoutPolicy {
+    fun reservedRailWidthPx(
+        presentation: SidebarPresentation,
+        collapsedWidthPx: Int,
+    ): Int =
+        when (presentation) {
+            SidebarPresentation.EXPANDED,
+            SidebarPresentation.COLLAPSED,
+            SidebarPresentation.HIDDEN,
+            -> collapsedWidthPx.coerceAtLeast(0)
+        }
+}
+
 internal enum class SidebarEntryAction {
     FOCUS_SELECTED_NAV,
     DEFER_TO_SYSTEM,
@@ -971,7 +984,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
             AppPopup.confirm(
                 context = this,
                 title = "检测到上次异常退出",
-                message = "为了帮助开发者定位问题，请到「设置 - 关于应用」导出或上传日志。",
+                message = "为了帮助开发者定位问题，请到「设置 - 关于应用」导出日志，并在反馈问题时附上文件。",
                 positiveText = "打开设置",
                 negativeText = "知道了",
                 onPositive = { startActivity(Intent(this, SettingsActivity::class.java)) },
@@ -1077,7 +1090,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
                 ApkUpdateFlow.startDownloadAndInstall(
                     activity = this,
                     latestVersionHint = selectedUpdate.versionName,
-                    apkUrl = ApkUpdater.apkUrlFor(selectedUpdate.versionName),
+                    apkUrl = selectedUpdate.apkUrl,
                 )
             }
     }
@@ -1315,25 +1328,24 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
         val mainLayoutParams = binding.mainContainer.layoutParams as? ConstraintLayout.LayoutParams ?: return
         val sidebarLayoutParams = binding.sidebar.layoutParams as? ConstraintLayout.LayoutParams ?: return
         val sidebarResources = binding.sidebar.resources
+        sidebarLayoutParams.width =
+            SidebarLayoutPolicy.reservedRailWidthPx(
+                presentation = presentation,
+                collapsedWidthPx = sidebarResources.getDimensionPixelSize(R.dimen.sidebar_width),
+            )
+        mainLayoutParams.startToStart = ConstraintLayout.LayoutParams.UNSET
+        mainLayoutParams.startToEnd = R.id.sidebar
         when (presentation) {
             SidebarPresentation.EXPANDED -> {
                 binding.sidebar.visibility = View.VISIBLE
-                sidebarLayoutParams.width = sidebarResources.getDimensionPixelSize(R.dimen.sidebar_width_expanded)
-                mainLayoutParams.startToStart = ConstraintLayout.LayoutParams.UNSET
-                mainLayoutParams.startToEnd = R.id.sidebar
             }
 
             SidebarPresentation.COLLAPSED -> {
                 binding.sidebar.visibility = View.VISIBLE
-                sidebarLayoutParams.width = sidebarResources.getDimensionPixelSize(R.dimen.sidebar_width)
-                mainLayoutParams.startToStart = ConstraintLayout.LayoutParams.UNSET
-                mainLayoutParams.startToEnd = R.id.sidebar
             }
 
             SidebarPresentation.HIDDEN -> {
-                binding.sidebar.visibility = View.GONE
-                mainLayoutParams.startToEnd = ConstraintLayout.LayoutParams.UNSET
-                mainLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID
+                binding.sidebar.visibility = View.INVISIBLE
             }
         }
         binding.sidebar.layoutParams = sidebarLayoutParams

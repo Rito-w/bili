@@ -73,6 +73,19 @@ internal fun pickQnByQualityOrder(availableQns: List<Int>, desiredQn: Int): Int 
     return available.minBy { qnRank(it) }
 }
 
+internal fun qualityMenuQns(availableQns: List<Int>): List<Int> =
+    buildList {
+        add(0)
+        addAll(
+            availableQns
+                .asSequence()
+                .filter { it > 0 }
+                .distinct()
+                .sortedByDescending(::qnRank)
+                .toList(),
+        )
+    }
+
 internal fun areaText(area: Float): String = SettingsText.areaText(area)
 
 internal fun subtitleBottomPaddingText(fraction: Float): String = SettingsText.subtitleBottomPaddingText(fraction)

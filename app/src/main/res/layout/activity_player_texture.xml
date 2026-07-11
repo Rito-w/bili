@@ -445,6 +445,22 @@
             app:tint="@color/player_button_tint"
             android:contentDescription="@string/player_btn_subtitle" />
 
+            <TextView
+                android:id="@+id/btn_quality"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/playerOsdButtonTargetSize"
+                android:layout_marginEnd="?attr/playerOsdGap"
+                android:background="?attr/blblFocusBgRound"
+                android:contentDescription="@string/player_btn_quality"
+                android:focusable="true"
+                android:gravity="center"
+                android:minWidth="?attr/playerOsdButtonTargetSize"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="自动"
+                android:textColor="@color/player_button_tint"
+                android:textSize="12sp" />
+
             <ImageButton
                 android:id="@+id/btn_danmaku"
                 android:layout_width="?attr/playerOsdButtonTargetSize"
@@ -469,6 +485,7 @@
                 android:padding="?attr/playerOsdPadNormal"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_comment"
+                android:visibility="gone"
                 app:tint="@color/player_button_tint" />
 
             <ImageButton

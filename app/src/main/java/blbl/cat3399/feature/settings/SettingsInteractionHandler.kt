@@ -26,7 +26,6 @@ import blbl.cat3399.core.io.CreateDocumentRequest
 import blbl.cat3399.core.io.DocumentExporter
 import blbl.cat3399.core.log.AppLog
 import blbl.cat3399.core.log.LogExporter
-import blbl.cat3399.core.log.LogUploadClient
 import blbl.cat3399.core.net.BiliClient
 import blbl.cat3399.core.prefs.AppConfigBackup
 import blbl.cat3399.core.prefs.AppPrefs
@@ -91,7 +90,6 @@ class SettingsInteractionHandler(
     private var testUpdateJob: Job? = null
     private var testUpdateCheckJob: Job? = null
     private var exportLogsJob: Job? = null
-    private var uploadLogsJob: Job? = null
     private var clearCacheJob: Job? = null
     private var cacheSizeJob: Job? = null
     private var configTransferJob: Job? = null
@@ -357,137 +355,6 @@ class SettingsInteractionHandler(
         }
     }
 
-    private fun showUploadLogsDialog() {
-        if (uploadLogsJob?.isActive == true) {
-            AppToast.show(activity, "正在上传…")
-            return
-        }
-
-        AppPopup.confirm(
-            context = activity,
-            title = "上传日志",
-            message =
-                "将日志上传给开发者便于排查问题。\n\n" +
-                    "会随日志附带设备、版本、屏幕和非登录配置元数据，不包含登录 Cookie。\n\n" +
-                    "反馈问题时请带上上传成功后显示的文件名。",
-            positiveText = "上传",
-            negativeText = "取消",
-            cancelable = true,
-            onPositive = { startUploadLogs() },
-        )
-    }
-
-    private fun startUploadLogs() {
-        uploadLogsJob?.cancel()
-        val popup =
-            AppPopup.progress(
-                context = activity,
-                title = "上传日志",
-                status = "准备中…",
-                negativeText = "取消",
-                cancelable = false,
-                onNegative = { uploadLogsJob?.cancel() },
-            )
-
-        uploadLogsJob =
-            activity.lifecycleScope.launch {
-                var exportedFile: File? = null
-                try {
-                    val nowMs = System.currentTimeMillis()
-                    val deviceUuid = BiliClient.prefs.deviceUuid
-                    val epochSeconds = (nowMs / 1000L).coerceAtLeast(0L)
-                    val deviceId8 = deviceUuid.replace("-", "").take(8).ifBlank { "unknown00" }
-                    val fileName = "${epochSeconds}-${deviceId8}.zip"
-                    val metaJson = buildUploadMetaJson(nowMs = nowMs, deviceUuid = deviceUuid)
-
-                    popup?.updateProgress(null)
-                    popup?.updateStatus("打包中…")
-                    val export =
-                        withContext(Dispatchers.IO) {
-                            LogExporter.exportToLocalFile(
-                                context = activity,
-                                nowMs = nowMs,
-                                fileNameOverride = fileName,
-                                extras =
-                                    listOf(
-                                        LogExporter.ZipExtra(
-                                            path = "meta.json",
-                                            bytes = metaJson.toByteArray(Charsets.UTF_8),
-                                        ),
-                                    ),
-                            )
-                        }
-                    exportedFile = export.file
-
-                    currentCoroutineContext().ensureActive()
-                    popup?.updateProgress(0)
-                    popup?.updateStatus("上传中… 0%")
-                    var lastPct = -1
-                    var lastUpdateAtMs = 0L
-                    withContext(Dispatchers.IO) {
-                        LogUploadClient.uploadZip(
-                            file = export.file,
-                            fileName = export.fileName,
-                            onProgress = { sentBytes, totalBytes ->
-                                if (totalBytes <= 0L) return@uploadZip
-                                val pct = ((sentBytes.coerceAtLeast(0L) * 100L) / totalBytes).toInt().coerceIn(0, 100)
-                                val now = System.currentTimeMillis()
-                                if (pct == lastPct && now - lastUpdateAtMs < 80L) return@uploadZip
-                                lastPct = pct
-                                lastUpdateAtMs = now
-                                val hint = "${SettingsText.formatBytes(sentBytes)}/${SettingsText.formatBytes(totalBytes)}"
-                                popup?.updateProgress(pct)
-                                popup?.updateStatus("上传中… ${pct}% $hint")
-                            },
-                        )
-                    }
-
-                    popup?.dismiss()
-                    showUploadLogsSuccessPopup(
-                        fileName = export.fileName,
-                    )
-                } catch (_: CancellationException) {
-                    popup?.dismiss()
-                } catch (t: Throwable) {
-                    popup?.dismiss()
-                    AppLog.w("Settings", "upload logs failed", t)
-                    val msg = t.message?.takeIf { it.isNotBlank() } ?: "未知错误"
-                    AppToast.showLong(activity, "上传失败：$msg")
-                } finally {
-                    withContext(NonCancellable + Dispatchers.IO) {
-                        exportedFile?.let { runCatching { it.delete() } }
-                    }
-                }
-            }
-    }
-
-    private fun showUploadLogsSuccessPopup(
-        fileName: String,
-    ) {
-        val body = "文件：$fileName"
-
-        AppPopup.custom(
-            context = activity,
-            title = "上传成功",
-            cancelable = true,
-            actions =
-                listOf(
-                    PopupAction(role = PopupActionRole.NEGATIVE, text = "关闭"),
-                    PopupAction(role = PopupActionRole.NEUTRAL, text = "复制文件名") {
-                        copyToClipboard(label = "日志文件名", text = fileName, toastText = "已复制文件名")
-                    },
-                ),
-            preferredActionRole = PopupActionRole.NEUTRAL,
-            content = { dialogContext ->
-                val tv =
-                    android.view.LayoutInflater.from(dialogContext)
-                        .inflate(blbl.cat3399.R.layout.view_popup_message, null, false) as TextView
-                tv.text = body
-                tv
-            },
-        )
-    }
-
     private fun formatUploadTimestamp(nowMs: Long): String {
         val sdf = SimpleDateFormat("yyyyMMdd_HHmmss_SSS", Locale.US)
         return runCatching { sdf.format(Date(nowMs)) }.getOrNull()?.takeIf { it.isNotBlank() } ?: nowMs.toString()
@@ -748,10 +615,6 @@ class SettingsInteractionHandler(
                     onFallbackToLocal = { exportLogsToLocalFile(prepared) },
                     logTag = "logs",
                 )
-            }
-
-            SettingId.UploadLogs -> {
-                showUploadLogsDialog()
             }
 
             SettingId.AutoUpdateCheckEnabled -> {
@@ -1171,34 +1034,6 @@ class SettingsInteractionHandler(
                 renderer.refreshSection(entry.id)
             }
 
-            SettingId.PlayerPreferredQn -> {
-                val options =
-                    PlaybackSettingChoices.resolutionQns.map { it to SettingsText.qnText(it) }
-                showChoiceDialog(
-                    title = "默认画质",
-                    items = options.map { it.second },
-                    current = SettingsText.qnText(prefs.playerPreferredQn),
-                ) { selected ->
-                    val qn = options.firstOrNull { it.second == selected }?.first
-                    if (qn != null) prefs.playerPreferredQn = qn
-                    renderer.refreshSection(entry.id)
-                }
-            }
-
-            SettingId.PlayerPreferredQnPortrait -> {
-                val options =
-                    PlaybackSettingChoices.resolutionQns.map { it to SettingsText.qnText(it) }
-                showChoiceDialog(
-                    title = "默认画质（竖屏）",
-                    items = options.map { it.second },
-                    current = SettingsText.qnText(prefs.playerPreferredQnPortrait),
-                ) { selected ->
-                    val qn = options.firstOrNull { it.second == selected }?.first
-                    if (qn != null) prefs.playerPreferredQnPortrait = qn
-                    renderer.refreshSection(entry.id)
-                }
-            }
-
             SettingId.PlayerPreferredAudioId -> {
                 val options = PlaybackSettingChoices.audioTrackIds
                 val optionLabels = options.map { SettingsText.audioText(it) }
@@ -1465,15 +1300,11 @@ class SettingsInteractionHandler(
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_PREV to "上一个",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_NEXT to "下一个",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_SUBTITLE to "字幕",
-                        blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_DANMAKU to "弹幕",
-                        blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_COMMENTS to "评论",
-                        blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_DETAIL to "视频详情页",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_UP to "UP主",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_LIKE to "点赞",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_COIN to "投币",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_FAV to "收藏",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_LIST_PANEL to "列表面板",
-                        blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_SPONSOR_SUBMIT to "上传广告片段",
                         blbl.cat3399.core.prefs.AppPrefs.PLAYER_DOWN_KEY_OSD_FOCUS_ADVANCED to "更多设置",
                     )
                 showChoiceDialog(
@@ -1679,15 +1510,11 @@ class SettingsInteractionHandler(
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE to "播放/暂停",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_NEXT to "下一个",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_SUBTITLE to "字幕",
-                blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_DANMAKU to "弹幕",
-                blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_COMMENTS to "评论",
-                blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_DETAIL to "视频详情页",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_UP to "UP主",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_LIKE to "点赞",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_COIN to "投币",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_FAV to "收藏",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_LIST_PANEL to "列表",
-                blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_SPONSOR_SUBMIT to "上传广告片段",
                 blbl.cat3399.core.prefs.AppPrefs.PLAYER_OSD_BTN_ADVANCED to "更多设置",
             )
         val keys = options.map { it.first }
@@ -2702,7 +2529,7 @@ class SettingsInteractionHandler(
                     state.testUpdateCheckedAtMs = System.currentTimeMillis()
                     if (promptIfUpdate && state.testUpdateCheckState is TestUpdateCheckState.UpdateAvailable) {
                         ApkUpdateFlow.showUpdatePrompt(activity, update) { selectedUpdate ->
-                            startTestUpdateDownload(selectedUpdate.versionName)
+                            startTestUpdateDownload(selectedUpdate.versionName, selectedUpdate.apkUrl)
                         }
                     }
                 } catch (_: CancellationException) {
@@ -2715,7 +2542,10 @@ class SettingsInteractionHandler(
             }
     }
 
-    private fun startTestUpdateDownload(latestVersionHint: String? = null) {
+    private fun startTestUpdateDownload(
+        latestVersionHint: String? = null,
+        apkUrl: String? = null,
+    ) {
         if (testUpdateJob?.isActive == true) {
             AppToast.show(activity, "正在下载更新…")
             return
@@ -2725,7 +2555,7 @@ class SettingsInteractionHandler(
             ApkUpdateFlow.startDownloadAndInstall(
                 activity = activity,
                 latestVersionHint = latestVersionHint,
-                apkUrl = latestVersionHint?.let(ApkUpdater::apkUrlFor),
+                apkUrl = apkUrl ?: latestVersionHint?.let(ApkUpdater::apkUrlFor),
             ) { latestVersion, isNewer ->
                 if (!isNewer && latestVersionHint == null) state.testUpdateCheckState = TestUpdateCheckState.Latest(latestVersion)
                 state.testUpdateCheckedAtMs = System.currentTimeMillis()

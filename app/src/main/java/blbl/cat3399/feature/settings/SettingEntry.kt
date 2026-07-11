@@ -40,8 +40,6 @@ enum class SettingId(
     MainMyVisibleTabs("main_my_visible_tabs"),
 
     // 播放设置
-    PlayerPreferredQn("player_preferred_qn"),
-    PlayerPreferredQnPortrait("player_preferred_qn_portrait"),
     PlayerPreferredAudioId("player_preferred_audio_id"),
     PlayerCdnPreference("player_cdn_preference"),
     LiveHighBitrateEnabled("live_high_bitrate_enabled"),
@@ -106,7 +104,6 @@ enum class SettingId(
     QqGroup("qq_group"),
     LogTag("log_tag"),
     ExportLogs("export_logs"),
-    UploadLogs("upload_logs"),
     AutoUpdateCheckEnabled("auto_update_check_enabled"),
     CheckUpdate("check_update"),
 

@@ -185,6 +185,7 @@ class LivePlayerActivity : BaseActivity() {
         setContentView(binding.root)
         Immersive.apply(this, prefs.fullscreenEnabled)
         PlayerUiMode.applyLive(this, binding)
+        binding.btnQuality.visibility = View.GONE
         resetBufferingOverlayState()
 
         roomId = intent.getLongExtra(EXTRA_ROOM_ID, 0L)

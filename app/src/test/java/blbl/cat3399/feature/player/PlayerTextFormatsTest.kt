@@ -67,4 +67,21 @@ class PlayerTextFormatsTest {
         val picked = pickQnByQualityOrder(availableQns = listOf(80, 116, 120), desiredQn = 129)
         assertEquals(120, picked)
     }
+
+    @Test
+    fun pickQnByQualityOrder_should_pick_highest_available_when_automatic() {
+        val picked = pickQnByQualityOrder(availableQns = listOf(32, 80, 120, 125), desiredQn = 0)
+        assertEquals(125, picked)
+    }
+
+    @Test
+    fun qualityMenuQns_should_show_automatic_then_only_detected_qualities_highest_first() {
+        val menu = qualityMenuQns(availableQns = listOf(32, 80, 120, 80, 0, -1))
+        assertEquals(listOf(0, 120, 80, 32), menu)
+    }
+
+    @Test
+    fun qnLabel_should_name_zero_as_automatic_highest() {
+        assertEquals("自动（最高可用）", qnLabel(0))
+    }
 }

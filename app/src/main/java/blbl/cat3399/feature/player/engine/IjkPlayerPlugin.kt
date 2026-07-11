@@ -26,8 +26,6 @@ import java.util.zip.ZipInputStream
 import kotlin.math.roundToInt
 
 internal object IjkPlayerPlugin {
-    private const val BASE_URL = "https://cat3399.top/blbl/ijkplayer"
-    private const val ZIP_FILE_NAME = "libijkplayer.zip"
     private const val SO_FILE_NAME = "libijkplayer.so"
     private const val INSTALL_STAMP_FILE_NAME = "install_stamp"
     private const val REQUIRED_INSTALL_STAMP = 3
@@ -146,8 +144,7 @@ internal object IjkPlayerPlugin {
     }
 
     private fun zipUrl(abi: String): String {
-        val safeAbi = abi.trim()
-        return "$BASE_URL/$safeAbi/$ZIP_FILE_NAME?cb=${System.currentTimeMillis()}"
+        return "${ijkPluginReleaseUrl(abi)}?cb=${System.currentTimeMillis()}"
     }
 
     private val okHttp: OkHttpClient by lazy {

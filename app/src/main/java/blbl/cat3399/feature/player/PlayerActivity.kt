@@ -800,7 +800,7 @@ class PlayerActivity : BaseActivity() {
             playbackSpeed = prefs.playerSpeed,
             preferCodec = prefs.playerPreferredCodec,
             preferAudioId = prefs.playerPreferredAudioId,
-            preferredQn = prefs.playerPreferredQn,
+            preferredQn = 0,
             targetQn = 0,
             playbackModeOverride = null,
             subtitleEnabled = prefs.subtitleEnabledDefault,
@@ -2021,6 +2021,11 @@ class PlayerActivity : BaseActivity() {
             toggleSettingsPanel()
         }
 
+        binding.btnQuality.setOnClickListener {
+            showResolutionDialog()
+            setControlsVisible(true)
+        }
+
         installLikeButtonHoldInteraction()
         binding.btnLike.setOnClickListener { onLikeButtonClicked() }
         binding.btnCoin.setOnClickListener { onCoinButtonClicked() }
@@ -2157,6 +2162,7 @@ class PlayerActivity : BaseActivity() {
         updatePlayPauseIcon(engine.isPlaying)
         updateSubtitleButton()
         updateDanmakuButton()
+        updateQualityButton()
         updateUpButton()
         updatePlaylistControls()
         // Do not auto-show OSD when opening the player; user interaction will bring it up.
@@ -3056,7 +3062,7 @@ class PlayerActivity : BaseActivity() {
                     )
                 playStream.durationMs?.let { currentViewDurationMs = it }
                 showRiskControlBypassHintIfNeeded(playStream)
-                lastAvailableQns = parseDashVideoQnList(playStream)
+                lastAvailableQns = parseSelectableDashVideoQnList(playStream, constraints = playbackConstraints)
                 lastAvailableAudioIds = parseDashAudioIdList(playStream, constraints = playbackConstraints)
                 logPlayUrlTrackSummary(source = "reload", stream = playStream, constraints = playbackConstraints)
                 if (engine.kind == PlayerEngineKind.IjkPlayer && playable !is Playable.Dash) {
@@ -3434,14 +3440,6 @@ class PlayerActivity : BaseActivity() {
         binding.danmakuView.trimToTimeRange(minTimeMs = minTimeMs, maxTimeMs = maxTimeMs)
     }
 
-    internal fun resolutionSubtitle(): String {
-        val qn =
-            session.actualQn.takeIf { it > 0 }
-                ?: session.targetQn.takeIf { it > 0 }
-                ?: session.preferredQn
-        return qnLabel(qn)
-    }
-
     internal fun audioSubtitle(): String {
         val id =
             session.actualAudioId.takeIf { it > 0 }
@@ -3478,6 +3476,7 @@ class PlayerActivity : BaseActivity() {
 
         if (changed) {
             refreshSettings(binding.recyclerSettings.adapter as PlayerSettingsAdapter)
+            updateQualityButton()
         }
     }
 
