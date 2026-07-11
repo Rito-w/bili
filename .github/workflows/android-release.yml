@@ -90,6 +90,13 @@ jobs:
           RELEASE_TAG: ${{ startsWith(inputs.version_name, 'v') && inputs.version_name || format('v{0}', inputs.version_name) }}
           CHANGELOG: ${{ inputs.changelog }}
         run: |
+          mkdir -p release-assets
+          for abi in arm64-v8a armeabi-v7a x86_64 x86; do
+            curl -L --fail --silent --show-error \
+              "https://github.com/Rito-w/bili/releases/download/v0.1.2/libijkplayer-${abi}.zip" \
+              -o "release-assets/libijkplayer-${abi}.zip"
+            unzip -tq "release-assets/libijkplayer-${abi}.zip"
+          done
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             if [ -n "${CHANGELOG:-}" ]; then
               printf '%s' "$CHANGELOG" > changelog.md
@@ -103,4 +110,8 @@ jobs:
               gh release create "$RELEASE_TAG" --title "$RELEASE_TAG" --generate-notes --target "$GITHUB_SHA"
             fi
           fi
-          gh release upload "$RELEASE_TAG" "app/build/outputs/apk/release/app-release.apk#blbl-android-${VERSION_NAME}-release.apk" --clobber
+          gh release upload \
+            "$RELEASE_TAG" \
+            "app/build/outputs/apk/release/app-release.apk#blbl-android-${VERSION_NAME}-release.apk" \
+            release-assets/libijkplayer-*.zip \
+            --clobber
