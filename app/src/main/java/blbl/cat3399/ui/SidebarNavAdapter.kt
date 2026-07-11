@@ -22,19 +22,12 @@ class SidebarNavAdapter(
 
     private val items = ArrayList<NavItem>()
     private var selectedId: Int = ID_HOME
-    private var showLabelsAlways: Boolean = false
 
     fun submit(list: List<NavItem>, selectedId: Int) {
         items.clear()
         items.addAll(list)
         this.selectedId = selectedId
         notifyDataSetChanged()
-    }
-
-    fun setShowLabelsAlways(enabled: Boolean) {
-        if (showLabelsAlways == enabled) return
-        showLabelsAlways = enabled
-        if (itemCount > 0) notifyItemRangeChanged(0, itemCount)
     }
 
     fun select(id: Int, trigger: Boolean) {
@@ -76,9 +69,9 @@ class SidebarNavAdapter(
         val selected = item.id == selectedId
         AppLog.d(
             "Nav",
-            "bind pos=$position id=${item.id} selected=$selected labels=$showLabelsAlways t=${SystemClock.uptimeMillis()}",
+            "bind pos=$position id=${item.id} selected=$selected t=${SystemClock.uptimeMillis()}",
         )
-        holder.bind(item, selected, showLabelsAlways) {
+        holder.bind(item, selected) {
             val handled = onClick(item)
             if (handled) select(item.id, trigger = false)
         }
@@ -90,25 +83,9 @@ class SidebarNavAdapter(
         fun bind(
             item: NavItem,
             selected: Boolean,
-            showLabelsAlways: Boolean,
             onClick: () -> Unit,
         ) {
-            val rootLayoutParams = binding.root.layoutParams
-            val desiredWidth =
-                if (showLabelsAlways) {
-                    val resources = binding.root.resources
-                    resources.getDimensionPixelSize(R.dimen.sidebar_width_expanded) -
-                        (resources.getDimensionPixelSize(R.dimen.sidebar_nav_card_margin_h) * 2)
-                } else {
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                }
-            if (rootLayoutParams.width != desiredWidth) {
-                rootLayoutParams.width = desiredWidth
-                binding.root.layoutParams = rootLayoutParams
-            }
             binding.ivIcon.setImageResource(item.iconRes)
-            binding.tvLabel.text = item.title
-            binding.tvLabel.visibility = if (showLabelsAlways) View.VISIBLE else View.GONE
             binding.selectedIndicator.visibility = if (selected) View.VISIBLE else View.GONE
             val ctx = binding.root.context
             binding.card.contentDescription = item.title
@@ -127,13 +104,6 @@ class SidebarNavAdapter(
                     ThemeColor.resolve(ctx, R.attr.blblOnPageBackdropSecondary, R.color.blbl_text_secondary)
                 }
             binding.ivIcon.imageTintList = ColorStateList.valueOf(iconTint)
-            binding.tvLabel.setTextColor(
-                if (selected) {
-                    ThemeColor.resolve(ctx, R.attr.blblOnPageBackdrop, R.color.blbl_text)
-                } else {
-                    ThemeColor.resolve(ctx, R.attr.blblOnPageBackdropSecondary, R.color.blbl_text_secondary)
-                },
-            )
             binding.root.setOnClickListener { onClick() }
         }
     }

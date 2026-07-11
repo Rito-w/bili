@@ -33,19 +33,6 @@
                 android:layout_width="@dimen/sidebar_nav_icon_size"
                 android:layout_height="@dimen/sidebar_nav_icon_size"
                 android:contentDescription="@null" />
-
-            <TextView
-                android:id="@+id/tv_label"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/sidebar_nav_label_margin_start"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:includeFontPadding="false"
-                android:maxLines="1"
-                android:textColor="?attr/blblOnPageBackdrop"
-                android:textSize="@dimen/sidebar_nav_label_text_size"
-                android:visibility="gone" />
         </LinearLayout>
 
         <View

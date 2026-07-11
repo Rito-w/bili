@@ -67,7 +67,7 @@ internal enum class SidebarFocusArea {
 }
 
 internal object SidebarPresentationPolicy {
-    fun forSidebarFocus(): SidebarPresentation = SidebarPresentation.EXPANDED
+    fun forSidebarFocus(): SidebarPresentation = SidebarPresentation.COLLAPSED
 
     fun forMainFocus(autoHideSidebar: Boolean): SidebarPresentation =
         if (autoHideSidebar) SidebarPresentation.HIDDEN else SidebarPresentation.COLLAPSED
@@ -1320,9 +1320,6 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
     }
 
     private fun setSidebarPresentation(presentation: SidebarPresentation) {
-        if (::navAdapter.isInitialized) {
-            navAdapter.setShowLabelsAlways(presentation == SidebarPresentation.EXPANDED)
-        }
         if (sidebarPresentation == presentation) return
 
         val mainLayoutParams = binding.mainContainer.layoutParams as? ConstraintLayout.LayoutParams ?: return

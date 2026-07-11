@@ -5,8 +5,8 @@ import org.junit.Test
 
 class SidebarPresentationPolicyTest {
     @Test
-    fun sidebarFocus_expandsAndShowsTheNavigationLabels() {
-        assertEquals(SidebarPresentation.EXPANDED, SidebarPresentationPolicy.forSidebarFocus())
+    fun sidebarFocus_keepsTheNavigationAsAnIconRail() {
+        assertEquals(SidebarPresentation.COLLAPSED, SidebarPresentationPolicy.forSidebarFocus())
     }
 
     @Test
