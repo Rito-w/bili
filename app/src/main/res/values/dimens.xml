@@ -88,6 +88,7 @@
     <dimen name="tv_grid_item_margin">10dp</dimen>
     <dimen name="video_card_margin">@dimen/tv_grid_item_margin</dimen>
     <dimen name="video_card_text_margin">12dp</dimen>
+    <dimen name="video_card_title_margin_top">8dp</dimen>
     <dimen name="video_card_duration_text_size">16sp</dimen>
     <dimen name="video_card_duration_padding_h">8dp</dimen>
     <dimen name="video_card_duration_padding_v">3dp</dimen>
@@ -100,13 +101,15 @@
     <dimen name="video_card_title_line_spacing">2dp</dimen>
     <dimen name="video_card_progress_bar_height">2.5dp</dimen>
     <dimen name="video_card_progress_bar_radius">1.2dp</dimen>
-    <dimen name="video_card_action_button_height">56dp</dimen>
+    <dimen name="video_card_action_button_height">68dp</dimen>
     <dimen name="video_card_action_group_margin_h">8dp</dimen>
     <dimen name="video_card_action_gap">7dp</dimen>
-    <dimen name="video_card_action_icon_watch_later_size">42dp</dimen>
-    <dimen name="video_card_action_icon_detail_size">31dp</dimen>
-    <dimen name="video_card_action_icon_up_size">29dp</dimen>
-    <dimen name="video_card_action_icon_dismiss_size">30dp</dimen>
+    <dimen name="video_card_action_icon_watch_later_size">26dp</dimen>
+    <dimen name="video_card_action_icon_detail_size">24dp</dimen>
+    <dimen name="video_card_action_icon_up_size">24dp</dimen>
+    <dimen name="video_card_action_icon_dismiss_size">24dp</dimen>
+    <dimen name="video_card_action_label_gap">4dp</dimen>
+    <dimen name="video_card_action_label_text_size">16sp</dimen>
     <dimen name="video_card_action_button_radius">16dp</dimen>
 
     <!-- Live room/area and 12:17 PGC cards share the TV card grammar. -->

@@ -824,7 +824,7 @@ class AppPrefs(context: Context) {
         get() = prefs.getInt(KEY_DYNAMIC_GRID_SPAN, 2)
         set(value) = prefs.edit().putInt(KEY_DYNAMIC_GRID_SPAN, value).apply()
 
-    /** Explicit 1-6 PGC column choice, or null when the TV four-column default should apply. */
+    /** Explicit 1-6 PGC column choice, or null when the TV two-column default should apply. */
     val pgcGridSpanCountOverride: Int?
         get() = storedGridSpanOverride(KEY_PGC_GRID_SPAN)
 
@@ -1090,7 +1090,7 @@ class AppPrefs(context: Context) {
         private const val KEY_DYNAMIC_GRID_SPAN = "dynamic_grid_span"
         private const val KEY_PGC_GRID_SPAN = "pgc_grid_span"
         private const val DEFAULT_VIDEO_GRID_SPAN = 2
-        private const val DEFAULT_PGC_GRID_SPAN = 4
+        private const val DEFAULT_PGC_GRID_SPAN = 2
         private const val KEY_PGC_EPISODE_ORDER_REVERSED = "pgc_episode_order_reversed"
         private const val KEY_SEARCH_HISTORY = "search_history"
         private const val KEY_GAIA_VGATE_V_VOUCHER = "gaia_vgate_v_voucher"

@@ -36,7 +36,7 @@ object GridSpanPolicy {
             }
         }
 
-    /** Resolves the 12:17 PGC/poster grid: 4 columns at the 960dp TV baseline. */
+    /** Resolves the cinematic PGC grid: two readable landscape cards on the TV baseline. */
     fun pgcSpanCountForWidthDp(
         widthDp: Float,
         overrideSpanCount: Int?,
@@ -44,9 +44,7 @@ object GridSpanPolicy {
     ): Int =
         resolveSpanCount(overrideSpanCount) {
             when {
-                effectiveWidthDp(widthDp, uiScale) >= 840f -> 4
-                effectiveWidthDp(widthDp, uiScale) >= 560f -> 3
-                effectiveWidthDp(widthDp, uiScale) >= 360f -> 2
+                effectiveWidthDp(widthDp, uiScale) >= 600f -> 2
                 else -> 1
             }
         }

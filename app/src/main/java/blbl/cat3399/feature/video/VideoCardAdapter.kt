@@ -361,6 +361,7 @@ class VideoCardAdapter(
                 overlayUi = overlayUi,
                 actionDelegate = actionDelegate,
             )
+            applyFocusEmphasis(binding.root.hasFocus())
 
             binding.root.setOnClickListener {
                 val pos = bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
@@ -384,6 +385,7 @@ class VideoCardAdapter(
 
             binding.root.onFocusChangeListener =
                 View.OnFocusChangeListener { _, hasFocus ->
+                    applyFocusEmphasis(hasFocus)
                     if (!hasFocus) {
                         binding.root.post {
                             if (bindingAdapterPosition != RecyclerView.NO_POSITION && !binding.root.hasFocus()) {
@@ -392,6 +394,11 @@ class VideoCardAdapter(
                         }
                     }
                 }
+        }
+
+        private fun applyFocusEmphasis(hasFocus: Boolean) {
+            binding.tvTitle.alpha = if (hasFocus) 1f else 0.94f
+            binding.llSubtitle.alpha = if (hasFocus) 1f else 0.72f
         }
 
         private fun applyFixedSizing() {
@@ -490,6 +497,13 @@ class VideoCardAdapter(
                     binding.ivActionUp,
                     binding.ivActionDismiss,
                 )
+            val actionLabels =
+                listOf(
+                    binding.tvActionWatchLater,
+                    binding.tvActionDetail,
+                    binding.tvActionUp,
+                    binding.tvActionDismiss,
+                )
 
             if (overlayUi == null) {
                 actionButtons.forEach { it.isSelected = false }
@@ -502,6 +516,7 @@ class VideoCardAdapter(
                 actionButtons[index].isSelected = overlayUi.selectedIndex == index
                 actionIcons[index].setImageResource(action.iconResId)
                 actionIcons[index].contentDescription = action.contentDescription
+                actionLabels[index].text = action.contentDescription
                 actionButtons[index].setOnClickListener {
                     val pos = bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION } ?: return@setOnClickListener
                     onOverlayActionClick(item, pos, index)

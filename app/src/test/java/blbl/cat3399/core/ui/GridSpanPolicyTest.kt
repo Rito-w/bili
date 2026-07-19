@@ -38,9 +38,9 @@ class GridSpanPolicyTest {
     }
 
     @Test
-    fun pgc_default_is_four_columns_at_tv_baseline_and_three_when_narrower() {
+    fun pgc_default_is_two_columns_at_tv_baseline_and_one_when_narrower() {
         assertEquals(
-            4,
+            2,
             GridSpanPolicy.pgcSpanCountForWidthDp(
                 widthDp = 960f,
                 overrideSpanCount = null,
@@ -48,9 +48,9 @@ class GridSpanPolicyTest {
             ),
         )
         assertEquals(
-            3,
+            1,
             GridSpanPolicy.pgcSpanCountForWidthDp(
-                widthDp = 600f,
+                widthDp = 480f,
                 overrideSpanCount = null,
                 uiScale = 1f,
             ),
@@ -75,7 +75,7 @@ class GridSpanPolicyTest {
                 uiScale = 1f,
             ),
         )
-        assertEquals(4, GridSpanPolicy.pgcSpanCountForWidthDp(960f, null, 1f))
+        assertEquals(2, GridSpanPolicy.pgcSpanCountForWidthDp(960f, null, 1f))
     }
 
     @Test
@@ -115,6 +115,7 @@ class GridSpanPolicyTest {
     fun explicit_user_overrides_win_for_every_content_kind_and_are_clamped() {
         for (span in 1..6) {
             assertEquals(span, GridSpanPolicy.videoSpanCountForWidthDp(960f, span, 1f))
+            assertEquals(span, GridSpanPolicy.animeSpanCountForWidthDp(960f, span, 1f))
             assertEquals(span, GridSpanPolicy.pgcSpanCountForWidthDp(960f, span, 1f))
             assertEquals(span, GridSpanPolicy.liveSpanCountForWidthDp(960f, span, 1f))
         }
@@ -127,7 +128,7 @@ class GridSpanPolicyTest {
     @Test
     fun ui_scale_reduces_effective_width_before_selecting_automatic_span() {
         assertEquals(
-            3,
+            2,
             GridSpanPolicy.pgcSpanCountForWidthDp(
                 widthDp = 960f,
                 overrideSpanCount = null,

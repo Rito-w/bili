@@ -8,6 +8,7 @@
     android:clickable="true"
     android:focusable="true"
     android:importantForAccessibility="yes"
+    app:cardBackgroundColor="@color/blbl_scrim_transparent"
     app:cardUseCompatPadding="false"
     app:strokeColor="?attr/blblFocusStrokeFocusOnlyColor">
 
@@ -79,7 +80,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <FrameLayout
+                <LinearLayout
                     android:id="@+id/btn_action_watch_later"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/video_card_action_button_height"
@@ -87,19 +88,31 @@
                     android:background="@drawable/bg_video_card_action_button"
                     android:clickable="true"
                     android:focusable="false"
-                    android:foreground="?attr/selectableItemBackgroundBorderless">
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/iv_action_watch_later"
                         android:layout_width="@dimen/video_card_action_icon_watch_later_size"
                         android:layout_height="@dimen/video_card_action_icon_watch_later_size"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal"
                         android:contentDescription="@string/video_card_action_watch_later"
                         android:src="@drawable/ic_video_card_watch_later"
                         app:tint="@android:color/white" />
-                </FrameLayout>
 
-                <FrameLayout
+                    <TextView
+                        android:id="@+id/tv_action_watch_later"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/video_card_action_label_gap"
+                        android:maxLines="1"
+                        android:text="@string/video_card_action_watch_later"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/video_card_action_label_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/btn_action_detail"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/video_card_action_button_height"
@@ -108,19 +121,31 @@
                     android:background="@drawable/bg_video_card_action_button"
                     android:clickable="true"
                     android:focusable="false"
-                    android:foreground="?attr/selectableItemBackgroundBorderless">
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/iv_action_detail"
                         android:layout_width="@dimen/video_card_action_icon_detail_size"
                         android:layout_height="@dimen/video_card_action_icon_detail_size"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal"
                         android:contentDescription="@string/video_card_action_open_detail"
                         android:src="@drawable/ic_player_detail"
                         app:tint="@android:color/white" />
-                </FrameLayout>
 
-                <FrameLayout
+                    <TextView
+                        android:id="@+id/tv_action_detail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/video_card_action_label_gap"
+                        android:maxLines="1"
+                        android:text="@string/video_card_action_open_detail"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/video_card_action_label_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/btn_action_up"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/video_card_action_button_height"
@@ -129,19 +154,31 @@
                     android:background="@drawable/bg_video_card_action_button"
                     android:clickable="true"
                     android:focusable="false"
-                    android:foreground="?attr/selectableItemBackgroundBorderless">
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/iv_action_up"
                         android:layout_width="@dimen/video_card_action_icon_up_size"
                         android:layout_height="@dimen/video_card_action_icon_up_size"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal"
                         android:contentDescription="@string/video_card_action_open_up"
                         android:src="@drawable/ic_player_up"
                         app:tint="@android:color/white" />
-                </FrameLayout>
 
-                <FrameLayout
+                    <TextView
+                        android:id="@+id/tv_action_up"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/video_card_action_label_gap"
+                        android:maxLines="1"
+                        android:text="@string/video_card_action_open_up"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/video_card_action_label_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/btn_action_dismiss"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/video_card_action_button_height"
@@ -150,17 +187,29 @@
                     android:background="@drawable/bg_video_card_action_button"
                     android:clickable="true"
                     android:focusable="false"
-                    android:foreground="?attr/selectableItemBackgroundBorderless">
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/iv_action_dismiss"
                         android:layout_width="@dimen/video_card_action_icon_dismiss_size"
                         android:layout_height="@dimen/video_card_action_icon_dismiss_size"
-                        android:layout_gravity="center"
+                        android:layout_gravity="center_horizontal"
                         android:contentDescription="@string/video_card_action_not_interested"
                         android:src="@drawable/ic_video_card_delete"
                         app:tint="@android:color/white" />
-                </FrameLayout>
+
+                    <TextView
+                        android:id="@+id/tv_action_dismiss"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/video_card_action_label_gap"
+                        android:maxLines="1"
+                        android:text="@string/video_card_action_not_interested"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/video_card_action_label_text_size" />
+                </LinearLayout>
             </LinearLayout>
 
             <ProgressBar
@@ -314,7 +363,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/video_card_title_block_height"
             android:layout_marginHorizontal="@dimen/video_card_text_margin"
-            android:layout_marginTop="@dimen/video_card_text_margin"
+            android:layout_marginTop="@dimen/video_card_title_margin_top"
             android:ellipsize="end"
             android:gravity="top"
             android:includeFontPadding="false"
