@@ -778,15 +778,22 @@ class AppPrefs(context: Context) {
         get() {
             // IMPORTANT:
             // - If the key doesn't exist yet, user never configured OSD -> return our default set.
-            // - If the key exists (even if empty), respect it and only normalize (e.g. keep Play/Pause).
+            // - Existing installs receive the social actions once; later customizations remain untouched.
             if (!prefs.contains(KEY_PLAYER_OSD_BUTTONS)) return DEFAULT_PLAYER_OSD_BUTTONS
             val stored = loadStringList(KEY_PLAYER_OSD_BUTTONS)
             val normalized = normalizePlayerOsdButtons(stored)
+            if (!prefs.getBoolean(KEY_PLAYER_OSD_SOCIAL_BUTTONS_MIGRATED, false)) {
+                val migrated = migratePlayerOsdSocialButtons(normalized)
+                saveStringList(KEY_PLAYER_OSD_BUTTONS, migrated)
+                prefs.edit().putBoolean(KEY_PLAYER_OSD_SOCIAL_BUTTONS_MIGRATED, true).apply()
+                return migrated
+            }
             if (normalized != stored) saveStringList(KEY_PLAYER_OSD_BUTTONS, normalized)
             return normalized
         }
         set(value) {
             saveStringList(KEY_PLAYER_OSD_BUTTONS, normalizePlayerOsdButtons(value))
+            prefs.edit().putBoolean(KEY_PLAYER_OSD_SOCIAL_BUTTONS_MIGRATED, true).apply()
         }
 
     internal var playerCustomShortcuts: List<PlayerCustomShortcut>
@@ -1077,6 +1084,7 @@ class AppPrefs(context: Context) {
         private const val KEY_PLAYER_SETTINGS_APPLY_TO_GLOBAL = "player_settings_apply_to_global"
         private const val KEY_PLAYER_UP_QUICK_CARD_ENABLED = "player_up_quick_card_enabled"
         private const val KEY_PLAYER_OSD_BUTTONS = "player_osd_buttons"
+        private const val KEY_PLAYER_OSD_SOCIAL_BUTTONS_MIGRATED = "player_osd_social_buttons_migrated_v1"
         private const val KEY_PLAYER_CUSTOM_SHORTCUTS = "player_custom_shortcuts"
         private const val KEY_GRID_SPAN = "grid_span"
         private const val KEY_DYNAMIC_GRID_SPAN = "dynamic_grid_span"
@@ -1167,6 +1175,28 @@ class AppPrefs(context: Context) {
                 out.add(0, PLAYER_OSD_BTN_PLAY_PAUSE)
             }
             return out
+        }
+
+        internal fun migratePlayerOsdSocialButtons(value: List<String>): List<String> {
+            val normalized = normalizePlayerOsdButtons(value)
+            val socialButtons =
+                listOf(
+                    PLAYER_OSD_BTN_LIKE,
+                    PLAYER_OSD_BTN_COIN,
+                    PLAYER_OSD_BTN_FAV,
+                )
+            val missing = socialButtons.filterNot(normalized::contains)
+            if (missing.isEmpty()) return normalized
+
+            val anchorIndex =
+                normalized.indices
+                    .filter { normalized[it] == PLAYER_OSD_BTN_UP || socialButtons.contains(normalized[it]) }
+                    .maxOrNull()
+                    ?: normalized.indexOf(PLAYER_OSD_BTN_SUBTITLE).takeIf { it >= 0 }
+                    ?: normalized.lastIndex
+            return normalized.toMutableList().apply {
+                addAll(anchorIndex + 1, missing)
+            }
         }
 
         /**
@@ -1263,6 +1293,9 @@ class AppPrefs(context: Context) {
                 PLAYER_OSD_BTN_NEXT,
                 PLAYER_OSD_BTN_SUBTITLE,
                 PLAYER_OSD_BTN_UP,
+                PLAYER_OSD_BTN_LIKE,
+                PLAYER_OSD_BTN_COIN,
+                PLAYER_OSD_BTN_FAV,
                 PLAYER_OSD_BTN_LIST_PANEL,
                 PLAYER_OSD_BTN_ADVANCED,
             )

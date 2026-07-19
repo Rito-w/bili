@@ -194,6 +194,11 @@ class UserScaleTabLayout @JvmOverloads constructor(
                     if (basePx <= 0f) return false
                     context.uiScaler(scale).scaledPxF(basePx, minPx = 1f)
                 }
+        val scaler = context.uiScaler()
+        val expectedPaddingHorizontal =
+            scaler.scaledDimenPx(R.dimen.tv_top_tab_focus_padding_horizontal)
+        val expectedPaddingVertical =
+            scaler.scaledDimenPx(R.dimen.tv_top_tab_focus_padding_vertical)
 
         var changed = false
 
@@ -226,6 +231,29 @@ class UserScaleTabLayout @JvmOverloads constructor(
 
         if (!tv.isDuplicateParentStateEnabled) {
             tv.isDuplicateParentStateEnabled = true
+            changed = true
+        }
+        if (tv.background == null) {
+            val a = context.obtainStyledAttributes(intArrayOf(R.attr.blblFocusBgRound))
+            try {
+                tv.background = a.getDrawable(0)
+            } finally {
+                a.recycle()
+            }
+            changed = true
+        }
+        if (
+            tv.paddingStart != expectedPaddingHorizontal ||
+            tv.paddingTop != expectedPaddingVertical ||
+            tv.paddingEnd != expectedPaddingHorizontal ||
+            tv.paddingBottom != expectedPaddingVertical
+        ) {
+            tv.setPaddingRelative(
+                expectedPaddingHorizontal,
+                expectedPaddingVertical,
+                expectedPaddingHorizontal,
+                expectedPaddingVertical,
+            )
             changed = true
         }
 

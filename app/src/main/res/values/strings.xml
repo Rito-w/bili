@@ -106,7 +106,13 @@
 
     <string name="player_btn_subtitle">字幕</string>
     <string name="player_btn_quality">画质</string>
+    <string name="player_btn_previous">上一个</string>
+    <string name="player_btn_play_pause">播放/暂停</string>
+    <string name="player_btn_next">下一个</string>
+    <string name="player_btn_danmaku">弹幕</string>
+    <string name="player_btn_up">UP 主</string>
     <string name="player_btn_list_panel">列表</string>
+    <string name="player_btn_advanced">播放设置</string>
     <string name="player_list_tab_page">视频列表</string>
     <string name="player_list_tab_parts">合集/分P</string>
     <string name="player_list_tab_recommend">推荐</string>

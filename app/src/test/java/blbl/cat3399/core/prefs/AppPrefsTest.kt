@@ -69,4 +69,71 @@ class AppPrefsTest {
             normalized,
         )
     }
+
+    @Test
+    fun defaultPlayerOsdButtons_should_include_social_actions_after_up_entry() {
+        assertEquals(
+            listOf(
+                AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE,
+                AppPrefs.PLAYER_OSD_BTN_NEXT,
+                AppPrefs.PLAYER_OSD_BTN_SUBTITLE,
+                AppPrefs.PLAYER_OSD_BTN_UP,
+                AppPrefs.PLAYER_OSD_BTN_LIKE,
+                AppPrefs.PLAYER_OSD_BTN_COIN,
+                AppPrefs.PLAYER_OSD_BTN_FAV,
+                AppPrefs.PLAYER_OSD_BTN_LIST_PANEL,
+                AppPrefs.PLAYER_OSD_BTN_ADVANCED,
+            ),
+            AppPrefs.DEFAULT_PLAYER_OSD_BUTTONS,
+        )
+    }
+
+    @Test
+    fun migratePlayerOsdSocialButtons_should_add_missing_actions_once_after_up_entry() {
+        val legacy =
+            listOf(
+                AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE,
+                AppPrefs.PLAYER_OSD_BTN_NEXT,
+                AppPrefs.PLAYER_OSD_BTN_UP,
+                AppPrefs.PLAYER_OSD_BTN_LIST_PANEL,
+            )
+
+        val migrated = AppPrefs.migratePlayerOsdSocialButtons(legacy)
+
+        assertEquals(
+            listOf(
+                AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE,
+                AppPrefs.PLAYER_OSD_BTN_NEXT,
+                AppPrefs.PLAYER_OSD_BTN_UP,
+                AppPrefs.PLAYER_OSD_BTN_LIKE,
+                AppPrefs.PLAYER_OSD_BTN_COIN,
+                AppPrefs.PLAYER_OSD_BTN_FAV,
+                AppPrefs.PLAYER_OSD_BTN_LIST_PANEL,
+            ),
+            migrated,
+        )
+        assertEquals(migrated, AppPrefs.migratePlayerOsdSocialButtons(migrated))
+    }
+
+    @Test
+    fun migratePlayerOsdSocialButtons_should_preserve_existing_social_order_without_duplicates() {
+        val custom =
+            listOf(
+                AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE,
+                AppPrefs.PLAYER_OSD_BTN_FAV,
+                AppPrefs.PLAYER_OSD_BTN_UP,
+                AppPrefs.PLAYER_OSD_BTN_LIKE,
+            )
+
+        assertEquals(
+            listOf(
+                AppPrefs.PLAYER_OSD_BTN_PLAY_PAUSE,
+                AppPrefs.PLAYER_OSD_BTN_FAV,
+                AppPrefs.PLAYER_OSD_BTN_UP,
+                AppPrefs.PLAYER_OSD_BTN_LIKE,
+                AppPrefs.PLAYER_OSD_BTN_COIN,
+            ),
+            AppPrefs.migratePlayerOsdSocialButtons(custom),
+        )
+    }
 }
