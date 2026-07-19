@@ -115,9 +115,9 @@
         <item name="cardBackgroundColor">@color/blbl_card_surface</item>
         <item name="cardCornerRadius">@dimen/tv_card_corner_radius</item>
         <item name="cardElevation">@dimen/tv_card_elevation</item>
-        <item name="strokeColor">?attr/blblFocusStrokeColor</item>
+        <item name="strokeColor">@color/tv_focus_card_stroke</item>
         <item name="strokeWidth">@dimen/tv_focus_outline_width</item>
-        <item name="android:stateListAnimator">@animator/blbl_focus_scale</item>
+        <item name="android:stateListAnimator">@animator/tv_focus_card</item>
     </style>
 
     <style name="Widget.Blbl.Panel" parent="Widget.MaterialComponents.CardView">
@@ -129,7 +129,8 @@
     <style name="Widget.Blbl.SmallAction" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:minWidth">@dimen/tv_small_action_min_size</item>
         <item name="android:minHeight">@dimen/tv_small_action_min_size</item>
-        <item name="android:stateListAnimator">@animator/blbl_focus_scale_button</item>
+        <item name="android:stateListAnimator">@animator/tv_focus_button</item>
+        <item name="android:background">@drawable/tv_focus_button_surface</item>
         <item name="android:textAppearance">@style/TextAppearance.Blbl.Supporting</item>
     </style>
 
