@@ -454,7 +454,7 @@ class VideoDetailHeaderAdapter(
             binding.btnFav.isVisible = showActions
             binding.btnComments.isVisible = showCommentsAction && onCommentsClick != null
             if (showActions) {
-                val activeColor = ContextCompat.getColorStateList(binding.root.context, blbl.cat3399.R.color.blbl_blue)
+                val activeColor = ContextCompat.getColorStateList(binding.root.context, blbl.cat3399.R.color.blbl_brand_accent)
                 val inactiveColor = ContextCompat.getColorStateList(binding.root.context, blbl.cat3399.R.color.blbl_text_secondary)
                 binding.ivLike.imageTintList = if (actionLiked) activeColor else inactiveColor
                 binding.ivCoin.imageTintList = if (actionCoinCount > 0) activeColor else inactiveColor

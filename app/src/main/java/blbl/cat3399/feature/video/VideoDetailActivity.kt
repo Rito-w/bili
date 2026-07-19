@@ -18,6 +18,8 @@ import blbl.cat3399.core.api.BiliApi
 import blbl.cat3399.core.api.BiliApiException
 import blbl.cat3399.core.api.video.VideoDetail
 import blbl.cat3399.core.log.AppLog
+import blbl.cat3399.core.image.ImageLoader
+import blbl.cat3399.core.image.ImageUrl
 import blbl.cat3399.core.model.VideoTag
 import blbl.cat3399.core.net.BiliClient
 import blbl.cat3399.core.ui.ActivityStackLimiter
@@ -715,6 +717,7 @@ class VideoDetailActivity : BaseActivity() {
 
     private fun applyHeader() {
         if (!this::headerAdapter.isInitialized) return
+        ImageLoader.loadInto(binding.ivDetailBackdrop, ImageUrl.cover(coverUrl))
         headerAdapter.update(
             title = title,
             metaText = metaText,

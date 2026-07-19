@@ -136,6 +136,7 @@
     <!-- Video detail: header -->
     <dimen name="video_detail_header_cover_width">480dp</dimen>
     <dimen name="video_detail_header_cover_width_poster">220dp</dimen>
+    <dimen name="video_detail_social_action_width">104dp</dimen>
 
     <!-- Video detail: horizontal card section -->
     <dimen name="video_detail_section_card_width">260dp</dimen>
