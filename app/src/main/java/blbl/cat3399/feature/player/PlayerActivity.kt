@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.app.Activity
 import android.app.Application
+import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.os.Bundle
 import android.os.Looper
@@ -994,26 +995,8 @@ class PlayerActivity : BaseActivity() {
                 }
 
                 override fun onVideoSizeChanged(width: Int, height: Int) {
-                    if (width <= 0 || height <= 0) return
-                    currentVideoContentWidth = width
-                    currentVideoContentHeight = height
-                    debug.videoInputWidth = width
-                    debug.videoInputHeight = height
-                    binding.videoShotPreview.setContentAspectRatio(width, height)
-                    if (engine.kind != PlayerEngineKind.IjkPlayer) return
-                    binding.ijkAspect.setAspectRatio(width.toFloat() / height.toFloat())
-                    when (val view = ijkRenderView) {
-                        is SurfaceView -> {
-                            runCatching { view.holder.setFixedSize(width, height) }
-                        }
-
-                        is TextureView -> {
-                            val surfaceTexture = view.surfaceTexture
-                            if (surfaceTexture != null) {
-                                runCatching { surfaceTexture.setDefaultBufferSize(width, height) }
-                            }
-                        }
-                    }
+                    val geometry = resolvePlayerRenderGeometry(width, height, rotate = 0) ?: return
+                    applyPlayerRenderGeometry(geometry, seedExoAspectRatio = false)
                 }
 
                 override fun onRenderedFirstFrame() {
@@ -3774,6 +3757,48 @@ class PlayerActivity : BaseActivity() {
                     }
                 if (renderView.isAvailable) {
                     setSurface(renderView.surfaceTexture)
+                }
+            }
+        }
+    }
+
+    internal fun resetPlayerRenderGeometry() {
+        binding.playerView
+            .findViewById<AspectRatioFrameLayout>(androidx.media3.ui.R.id.exo_content_frame)
+            ?.setAspectRatio(0f)
+        binding.ijkAspect.setAspectRatio(0f)
+        when (val view = ijkRenderView) {
+            is SurfaceView -> runCatching { view.holder.setSizeFromLayout() }
+            is TextureView -> view.setTransform(Matrix())
+        }
+    }
+
+    internal fun applyPlayerRenderGeometry(
+        geometry: PlayerRenderGeometry,
+        seedExoAspectRatio: Boolean,
+    ) {
+        currentVideoContentWidth = geometry.width
+        currentVideoContentHeight = geometry.height
+        debug.videoInputWidth = geometry.width
+        debug.videoInputHeight = geometry.height
+        binding.videoShotPreview.setContentAspectRatio(geometry.width, geometry.height)
+        if (seedExoAspectRatio) {
+            binding.playerView
+                .findViewById<AspectRatioFrameLayout>(androidx.media3.ui.R.id.exo_content_frame)
+                ?.setAspectRatio(geometry.aspectRatio)
+        }
+        binding.ijkAspect.setAspectRatio(geometry.aspectRatio)
+
+        if (player?.kind != PlayerEngineKind.IjkPlayer) return
+        when (val view = ijkRenderView) {
+            is SurfaceView -> {
+                runCatching { view.holder.setFixedSize(geometry.width, geometry.height) }
+            }
+
+            is TextureView -> {
+                val surfaceTexture = view.surfaceTexture
+                if (surfaceTexture != null) {
+                    runCatching { surfaceTexture.setDefaultBufferSize(geometry.width, geometry.height) }
                 }
             }
         }

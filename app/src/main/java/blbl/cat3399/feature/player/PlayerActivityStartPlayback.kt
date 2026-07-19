@@ -291,6 +291,7 @@ internal fun PlayerActivity.resetPlaybackStateForNewMedia(
     decodeFallbackAttemptCount = 0
     lastPickedDash = null
     engine.stop()
+    resetPlayerRenderGeometry()
     (engine as? ExoPlayerEngine)?.exoPlayer?.let { applySubtitleEnabled(it) }
     applyPlaybackMode(engine)
     updateSubtitleButton()
@@ -1081,19 +1082,16 @@ internal fun PlayerActivity.handlePlaybackEnded(engine: BlblPlayerEngine) {
 
 internal fun PlayerActivity.applyPerVideoPreferredQn(detail: VideoDetail, cid: Long) {
     val dim = detail.pages.firstOrNull { it.cid == cid }?.dimension ?: detail.dimension
-
-    val width = dim?.width ?: 0
-    val height = dim?.height ?: 0
-    val rotate = dim?.rotate ?: 0
-    val (effectiveW, effectiveH) =
-        if (rotate == 1) {
-            height to width
-        } else {
-            width to height
-        }
-
-    val isPortraitVideo = (effectiveW > 0 && effectiveH > 0 && effectiveH > effectiveW)
-    currentVideoIsPortrait = isPortraitVideo
+    val geometry =
+        resolvePlayerRenderGeometry(
+            width = dim?.width ?: 0,
+            height = dim?.height ?: 0,
+            rotate = dim?.rotate ?: 0,
+        )
+    currentVideoIsPortrait = geometry?.let { it.height > it.width } ?: false
+    if (geometry != null) {
+        applyPlayerRenderGeometry(geometry, seedExoAspectRatio = true)
+    }
     if (session.preferredQn != 0) {
         session = session.copy(preferredQn = 0)
     }
