@@ -186,7 +186,12 @@ class SettingsRenderer(
         return when (sectionName) {
             "通用设置" ->
                 listOf(
-                    SettingEntry(SettingId.ImageQuality, "图片质量", prefs.imageQuality, null),
+                    SettingEntry(
+                        SettingId.ImageQuality,
+                        "图片质量",
+                        SettingsText.imageQualityText(prefs.imageQuality),
+                        null,
+                    ),
                     SettingEntry(SettingId.ThemePreset, "主题", SettingsText.themePresetText(prefs.themePreset), null),
                     SettingEntry(SettingId.ApiSource, "接口类别", SettingsText.apiSourceText(prefs.apiSource), null),
                     SettingEntry(SettingId.UserAgent, "User-Agent", prefs.userAgent.take(60), null),

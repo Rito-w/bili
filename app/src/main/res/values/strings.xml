@@ -37,6 +37,10 @@
     <string name="action_favorite">收藏</string>
     <string name="player_next_shortcut_hint">↓ 下一个视频</string>
     <string name="player_controls_hint">播放器控制</string>
+    <string name="settings_title">设置</string>
+    <string name="search_input_section">屏幕键盘</string>
+    <string name="search_history_section">搜索历史</string>
+    <string name="search_hot_section">大家都在搜</string>
     <string name="my_fav_default_title">默认收藏夹</string>
     <string name="my_fav_item_count_fmt">%1$d个内容</string>
     <string name="my_episode_section">正片剧集</string>

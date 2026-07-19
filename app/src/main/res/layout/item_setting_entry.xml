@@ -27,8 +27,14 @@
         android:id="@+id/tv_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_setting_value"
+        android:minHeight="36dp"
+        android:gravity="center"
+        android:paddingHorizontal="14dp"
+        android:paddingVertical="6dp"
         android:textColor="?android:attr/textColorSecondary"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -43,4 +49,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="@color/blbl_settings_divider"
+        android:importantForAccessibility="no"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_desc" />
 </androidx.constraintlayout.widget.ConstraintLayout>

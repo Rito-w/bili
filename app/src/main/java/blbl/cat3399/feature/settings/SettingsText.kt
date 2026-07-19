@@ -19,6 +19,13 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 object SettingsText {
+    fun imageQualityText(code: String): String =
+        when (code) {
+            "small" -> "省流"
+            "large" -> "高清"
+            else -> "标准"
+        }
+
     fun audioText(id: Int): String =
         when (id) {
             30251 -> "Hi-Res 无损"
@@ -156,8 +163,8 @@ object SettingsText {
 
     fun apiSourceText(prefValue: String): String =
         when (prefValue) {
-            blbl.cat3399.core.prefs.AppPrefs.API_SOURCE_APP -> "App"
-            else -> "Web"
+            blbl.cat3399.core.prefs.AppPrefs.API_SOURCE_APP -> "App 接口"
+            else -> "Web 接口"
         }
 
     fun uiScaleFactorText(factor: Float): String {
@@ -198,14 +205,14 @@ object SettingsText {
 
     fun renderViewText(code: String): String =
         when (code) {
-            blbl.cat3399.core.prefs.AppPrefs.PLAYER_RENDER_VIEW_TEXTURE_VIEW -> "TextureView"
-            else -> "SurfaceView"
+            blbl.cat3399.core.prefs.AppPrefs.PLAYER_RENDER_VIEW_TEXTURE_VIEW -> "纹理视图（TextureView）"
+            else -> "表面视图（SurfaceView）"
         }
 
     fun playerEngineText(code: String): String =
         when (code) {
-            blbl.cat3399.core.prefs.AppPrefs.PLAYER_ENGINE_IJK -> "IjkPlayer"
-            else -> "ExoPlayer"
+            blbl.cat3399.core.prefs.AppPrefs.PLAYER_ENGINE_IJK -> "IJK 播放器"
+            else -> "ExoPlayer 播放器"
         }
 
     fun downKeyOsdFocusTargetText(code: String): String =

@@ -70,6 +70,12 @@ class SettingsEntryAdapter(
                 binding.tvDesc.visibility = android.view.View.VISIBLE
                 binding.tvDesc.text = item.desc
             }
+            binding.root.contentDescription =
+                buildString {
+                    append(item.title)
+                    if (item.value.isNotBlank()) append("，当前值：${item.value}")
+                    item.desc?.takeIf { it.isNotBlank() }?.let { append("，$it") }
+                }
             binding.root.setOnClickListener { onClick(item) }
         }
     }

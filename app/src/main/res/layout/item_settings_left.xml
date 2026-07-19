@@ -19,9 +19,11 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="18dp"
-        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="22dp"
+        android:paddingVertical="18dp"
+        android:textAlignment="viewStart"
         android:textColor="?attr/blblOnPageBackdrop"
-        android:textSize="20sp" />
+        android:textSize="19sp"
+        android:textStyle="bold" />
 </com.google.android.material.card.MaterialCardView>
