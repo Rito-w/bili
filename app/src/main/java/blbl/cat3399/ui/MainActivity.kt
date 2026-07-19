@@ -54,74 +54,6 @@ import org.json.JSONObject
 import java.lang.ref.WeakReference
 import java.util.Locale
 
-internal enum class SidebarPresentation {
-    EXPANDED,
-    COLLAPSED,
-    HIDDEN,
-}
-
-internal enum class SidebarFocusArea {
-    SIDEBAR,
-    MAIN,
-    OUTSIDE,
-}
-
-internal object SidebarPresentationPolicy {
-    fun forSidebarFocus(): SidebarPresentation = SidebarPresentation.COLLAPSED
-
-    fun forMainFocus(autoHideSidebar: Boolean): SidebarPresentation =
-        if (autoHideSidebar) SidebarPresentation.HIDDEN else SidebarPresentation.COLLAPSED
-
-    fun forObservedFocus(
-        focusArea: SidebarFocusArea,
-        autoHideSidebar: Boolean,
-    ): SidebarPresentation? =
-        when (focusArea) {
-            SidebarFocusArea.SIDEBAR -> forSidebarFocus()
-            SidebarFocusArea.MAIN -> forMainFocus(autoHideSidebar)
-            SidebarFocusArea.OUTSIDE -> null
-        }
-}
-
-internal object SidebarLayoutPolicy {
-    fun reservedRailWidthPx(
-        presentation: SidebarPresentation,
-        collapsedWidthPx: Int,
-    ): Int =
-        when (presentation) {
-            SidebarPresentation.EXPANDED,
-            SidebarPresentation.COLLAPSED,
-            SidebarPresentation.HIDDEN,
-            -> collapsedWidthPx.coerceAtLeast(0)
-        }
-}
-
-internal enum class SidebarEntryAction {
-    FOCUS_SELECTED_NAV,
-    DEFER_TO_SYSTEM,
-}
-
-internal object SidebarEntryPolicy {
-    fun actionForDpadLeft(
-        focusedStartPx: Int,
-        mainContainerStartPx: Int,
-        safeContentInsetPx: Int,
-        edgeSlopPx: Int,
-        sidebarPresentation: SidebarPresentation,
-    ): SidebarEntryAction {
-        if (sidebarPresentation == SidebarPresentation.EXPANDED) {
-            return SidebarEntryAction.DEFER_TO_SYSTEM
-        }
-        val relativeStartPx = (focusedStartPx - mainContainerStartPx).coerceAtLeast(0)
-        val entryThresholdPx = safeContentInsetPx.coerceAtLeast(0) + edgeSlopPx.coerceAtLeast(0)
-        return if (relativeStartPx <= entryThresholdPx) {
-            SidebarEntryAction.FOCUS_SELECTED_NAV
-        } else {
-            SidebarEntryAction.DEFER_TO_SYSTEM
-        }
-    }
-}
-
 class MainActivity : BaseActivity(), SidebarFocusHost {
     private enum class UserInfoOverlayMode {
         PROFILE,
@@ -153,6 +85,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
     private var sidebarPresentation: SidebarPresentation? = null
     private var lastBackAtMs: Long = 0L
     private var lastMainFocusAtMs: Long = 0L
+    private val sidebarFocusLabelHideRunnable = Runnable { hideSidebarFocusLabel() }
 
     private data class FocusabilitySnapshot(
         val descendantFocusability: Int,
@@ -203,6 +136,9 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
                 AppLog.d("Nav", "sidebar click id=${item.id} title=${item.title} t=${SystemClock.uptimeMillis()}")
                 handleSidebarNavClick(item.id)
             },
+            onFocusLabel = { item, anchor, hasFocus ->
+                updateSidebarFocusLabel(item.title, anchor, hasFocus)
+            },
         )
         binding.recyclerSidebar.layoutManager = LinearLayoutManager(this)
         binding.recyclerSidebar.adapter = navAdapter
@@ -228,6 +164,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
                 if (focusArea == SidebarFocusArea.MAIN && newFocus != null) {
                     lastMainFocusedView = WeakReference(newFocus)
                     lastMainFocusAtMs = SystemClock.uptimeMillis()
+                    hideSidebarFocusLabel(immediate = true)
                 }
                 SidebarPresentationPolicy.forObservedFocus(
                     focusArea = focusArea,
@@ -268,6 +205,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
         )
 
         refreshSidebarUser()
+        bindSidebarUtilityFocusLabels()
         showFirstLaunchDisclaimerIfNeeded()
         maybeStartAutoUpdateCheck()
     }
@@ -314,6 +252,7 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
     }
 
     override fun onDestroy() {
+        binding.root.removeCallbacks(sidebarFocusLabelHideRunnable)
         focusListener?.let { binding.root.viewTreeObserver.removeOnGlobalFocusChangeListener(it) }
         focusListener = null
         super.onDestroy()
@@ -1350,6 +1289,76 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
         sidebarPresentation = presentation
     }
 
+    private fun bindSidebarUtilityFocusLabels() {
+        bindSidebarFocusLabel(binding.ivSidebarUser, getString(R.string.sidebar_account))
+        bindSidebarFocusLabel(binding.btnSidebarLogin, getString(R.string.sidebar_login))
+        bindSidebarFocusLabel(binding.btnSidebarSettings, getString(R.string.tab_settings))
+    }
+
+    private fun bindSidebarFocusLabel(
+        view: View,
+        label: String,
+    ) {
+        view.setOnFocusChangeListener { focusedView, hasFocus ->
+            updateSidebarFocusLabel(label, focusedView, hasFocus)
+        }
+    }
+
+    private fun updateSidebarFocusLabel(
+        label: String,
+        anchor: View,
+        hasFocus: Boolean,
+    ) {
+        val state = SidebarFocusLabelPolicy.forFocus(label, hasFocus)
+        if (!state.visible) {
+            binding.root.removeCallbacks(sidebarFocusLabelHideRunnable)
+            binding.root.postDelayed(sidebarFocusLabelHideRunnable, SIDEBAR_LABEL_EXIT_DELAY_MS)
+            return
+        }
+
+        val labelView = binding.root.findViewById<View>(R.id.sidebar_focus_label)
+        val labelText = binding.root.findViewById<TextView>(R.id.tv_sidebar_focus_label)
+        binding.root.removeCallbacks(sidebarFocusLabelHideRunnable)
+        labelText.text = state.text
+        labelView.animate().cancel()
+        labelView.visibility = View.VISIBLE
+        labelView.post {
+            val anchorLocation = IntArray(2)
+            val rootLocation = IntArray(2)
+            anchor.getLocationOnScreen(anchorLocation)
+            binding.root.getLocationOnScreen(rootLocation)
+            val desiredY =
+                anchorLocation[1] - rootLocation[1] + (anchor.height - labelView.height) / 2f
+            val maxY = (binding.root.height - labelView.height).coerceAtLeast(0).toFloat()
+            labelView.y = desiredY.coerceIn(0f, maxY)
+            labelView.alpha = 0f
+            labelView.translationX = -resources.getDimension(R.dimen.sidebar_focus_label_enter_offset)
+            labelView.animate()
+                .alpha(1f)
+                .translationX(0f)
+                .setDuration(SIDEBAR_LABEL_MOTION_MS)
+                .start()
+        }
+        binding.root.postDelayed(sidebarFocusLabelHideRunnable, SIDEBAR_LABEL_AUTO_HIDE_MS)
+    }
+
+    private fun hideSidebarFocusLabel(immediate: Boolean = false) {
+        val labelView = binding.root.findViewById<View>(R.id.sidebar_focus_label)
+        binding.root.removeCallbacks(sidebarFocusLabelHideRunnable)
+        labelView.animate().cancel()
+        if (immediate || labelView.visibility != View.VISIBLE) {
+            labelView.alpha = 0f
+            labelView.visibility = View.GONE
+            return
+        }
+        labelView.animate()
+            .alpha(0f)
+            .translationX(-resources.getDimension(R.dimen.sidebar_focus_label_enter_offset))
+            .setDuration(SIDEBAR_LABEL_EXIT_MS)
+            .withEndAction { labelView.visibility = View.GONE }
+            .start()
+    }
+
     private fun focusSelectedTabInCurrentFragment(): Boolean {
         val fragmentView = currentRootFragment()?.view ?: return false
         val tabLayout = fragmentView.findViewById<com.google.android.material.tabs.TabLayout?>(R.id.tab_layout) ?: return false
@@ -1500,6 +1509,10 @@ class MainActivity : BaseActivity(), SidebarFocusHost {
     }
 
     companion object {
+        private const val SIDEBAR_LABEL_MOTION_MS = 160L
+        private const val SIDEBAR_LABEL_EXIT_MS = 120L
+        private const val SIDEBAR_LABEL_EXIT_DELAY_MS = 80L
+        private const val SIDEBAR_LABEL_AUTO_HIDE_MS = 1_800L
         private const val STATE_KEY_ROOT_NAV_ID = "MainActivity.rootNavId"
         private const val BACK_DOUBLE_PRESS_WINDOW_MS = 1_500L
     }

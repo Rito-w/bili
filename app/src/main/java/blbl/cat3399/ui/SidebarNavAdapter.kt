@@ -13,6 +13,7 @@ import blbl.cat3399.databinding.ItemSidebarNavBinding
 
 class SidebarNavAdapter(
     private val onClick: (NavItem) -> Boolean,
+    private val onFocusLabel: (NavItem, View, Boolean) -> Unit,
 ) : RecyclerView.Adapter<SidebarNavAdapter.Vh>() {
     data class NavItem(
         val id: Int,
@@ -71,10 +72,15 @@ class SidebarNavAdapter(
             "Nav",
             "bind pos=$position id=${item.id} selected=$selected t=${SystemClock.uptimeMillis()}",
         )
-        holder.bind(item, selected) {
-            val handled = onClick(item)
-            if (handled) select(item.id, trigger = false)
-        }
+        holder.bind(
+            item = item,
+            selected = selected,
+            onClick = {
+                val handled = onClick(item)
+                if (handled) select(item.id, trigger = false)
+            },
+            onFocusLabel = onFocusLabel,
+        )
     }
 
     override fun getItemCount(): Int = items.size
@@ -84,6 +90,7 @@ class SidebarNavAdapter(
             item: NavItem,
             selected: Boolean,
             onClick: () -> Unit,
+            onFocusLabel: (NavItem, View, Boolean) -> Unit,
         ) {
             binding.ivIcon.setImageResource(item.iconRes)
             binding.selectedIndicator.visibility = if (selected) View.VISIBLE else View.GONE
@@ -105,6 +112,9 @@ class SidebarNavAdapter(
                 }
             binding.ivIcon.imageTintList = ColorStateList.valueOf(iconTint)
             binding.root.setOnClickListener { onClick() }
+            binding.root.setOnFocusChangeListener { focusedView, hasFocus ->
+                onFocusLabel(item, focusedView, hasFocus)
+            }
         }
     }
 

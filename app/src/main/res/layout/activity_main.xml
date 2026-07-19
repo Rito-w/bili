@@ -30,8 +30,8 @@
             android:layout_marginTop="@dimen/sidebar_user_margin_top"
             android:clickable="true"
             android:focusable="true"
-            android:stateListAnimator="@animator/blbl_focus_scale"
-            android:contentDescription="@string/app_name"
+            android:stateListAnimator="@animator/tv_focus_button"
+            android:contentDescription="@string/sidebar_account"
             android:src="@android:drawable/sym_def_app_icon"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Circular"
             app:strokeColor="?attr/blblFocusStrokeFocusOnlyColor"
@@ -48,7 +48,7 @@
             android:focusable="true"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:stateListAnimator="@animator/blbl_focus_scale"
+            android:stateListAnimator="@animator/tv_focus_button"
             android:text="@string/sidebar_login"
             android:textColor="?attr/blblOnPageBackdrop"
             android:textSize="@dimen/sidebar_login_text_size"
@@ -75,7 +75,7 @@
             android:contentDescription="@string/tab_settings"
             android:clickable="true"
             android:focusable="true"
-            android:stateListAnimator="@animator/blbl_focus_scale"
+            android:stateListAnimator="@animator/tv_focus_button"
             android:padding="@dimen/sidebar_main_settings_padding"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardCornerRadius="@dimen/tv_card_corner_radius"
@@ -92,6 +92,14 @@
                 app:tint="?attr/blblOnPageBackdropSecondary" />
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+
+    <include
+        layout="@layout/view_sidebar_focus_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/sidebar_focus_label_margin_start"
+        app:layout_constraintStart_toEndOf="@id/sidebar"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/main_container"

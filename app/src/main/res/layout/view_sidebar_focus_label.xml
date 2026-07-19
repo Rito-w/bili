@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sidebar_focus_label"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:alpha="0"
+    android:elevation="@dimen/tv_panel_elevation"
+    android:importantForAccessibility="no"
+    android:visibility="gone"
+    app:cardBackgroundColor="?attr/blblSurfaceElevated"
+    app:cardCornerRadius="@dimen/sidebar_focus_label_corner_radius"
+    app:cardElevation="@dimen/tv_panel_elevation"
+    app:strokeColor="@color/blbl_scrim_transparent"
+    app:strokeWidth="0dp">
+
+    <TextView
+        android:id="@+id/tv_sidebar_focus_label"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/sidebar_focus_label_height"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:maxLines="1"
+        android:paddingHorizontal="@dimen/sidebar_focus_label_padding_horizontal"
+        android:textAppearance="@style/TextAppearance.Blbl.Supporting"
+        android:textColor="?attr/blblTextPrimary"
+        android:textStyle="bold" />
+
+</com.google.android.material.card.MaterialCardView>
+

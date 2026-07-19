@@ -44,4 +44,28 @@ class SidebarPresentationPolicyTest {
         assertEquals(collapsedWidthPx, SidebarLayoutPolicy.reservedRailWidthPx(SidebarPresentation.COLLAPSED, collapsedWidthPx))
         assertEquals(collapsedWidthPx, SidebarLayoutPolicy.reservedRailWidthPx(SidebarPresentation.HIDDEN, collapsedWidthPx))
     }
+
+    @Test
+    fun focusedNavigation_showsASeparateLabelWithoutChangingRailPresentation() {
+        assertEquals(
+            SidebarFocusLabelState(text = "首页", visible = true),
+            SidebarFocusLabelPolicy.forFocus(label = "首页", hasFocus = true),
+        )
+        assertEquals(
+            SidebarFocusLabelState(text = "", visible = false),
+            SidebarFocusLabelPolicy.forFocus(label = "首页", hasFocus = false),
+        )
+        assertEquals(
+            SidebarPresentation.COLLAPSED,
+            SidebarPresentationPolicy.forSidebarFocus(),
+        )
+    }
+
+    @Test
+    fun blankNavigationLabel_neverShowsAnEmptyFloatingPanel() {
+        assertEquals(
+            SidebarFocusLabelState(text = "", visible = false),
+            SidebarFocusLabelPolicy.forFocus(label = "  ", hasFocus = true),
+        )
+    }
 }
