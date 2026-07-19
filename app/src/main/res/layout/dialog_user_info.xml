@@ -37,7 +37,7 @@
                     android:id="@+id/iv_avatar"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:contentDescription="@string/app_name"
+                    android:contentDescription="@string/user_avatar"
                     android:src="@android:drawable/sym_def_app_icon"
                     app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Circular" />
 

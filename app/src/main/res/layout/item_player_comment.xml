@@ -34,7 +34,7 @@
             android:layout_width="@dimen/player_comment_avatar_size"
             android:layout_height="@dimen/player_comment_avatar_size"
             android:layout_marginTop="@dimen/player_comment_avatar_margin_top"
-            android:contentDescription="@string/app_name"
+            android:contentDescription="@string/user_avatar"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_context_tag"
@@ -164,7 +164,7 @@
                 android:layout_width="@dimen/player_comment_picture_width"
                 android:layout_height="@dimen/player_comment_picture_height"
                 android:layout_marginEnd="@dimen/player_comment_picture_gap"
-                android:contentDescription="@string/app_name"
+                android:contentDescription="@string/comment_image"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Rounded" />
@@ -174,7 +174,7 @@
                 android:layout_width="@dimen/player_comment_picture_width"
                 android:layout_height="@dimen/player_comment_picture_height"
                 android:layout_marginEnd="@dimen/player_comment_picture_gap"
-                android:contentDescription="@string/app_name"
+                android:contentDescription="@string/comment_image"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Rounded" />
@@ -183,7 +183,7 @@
                 android:id="@+id/iv_picture_3"
                 android:layout_width="@dimen/player_comment_picture_width"
                 android:layout_height="@dimen/player_comment_picture_height"
-                android:contentDescription="@string/app_name"
+                android:contentDescription="@string/comment_image"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Rounded" />

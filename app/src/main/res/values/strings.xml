@@ -41,6 +41,12 @@
     <string name="search_input_section">屏幕键盘</string>
     <string name="search_history_section">搜索历史</string>
     <string name="search_hot_section">大家都在搜</string>
+    <string name="action_back">返回</string>
+    <string name="video_up_avatar">UP 主头像</string>
+    <string name="user_avatar">用户头像</string>
+    <string name="comment_image">评论图片</string>
+    <string name="comment_image_previous">上一张评论图片</string>
+    <string name="comment_image_next">下一张评论图片</string>
     <string name="my_fav_default_title">默认收藏夹</string>
     <string name="my_fav_item_count_fmt">%1$d个内容</string>
     <string name="my_episode_section">正片剧集</string>

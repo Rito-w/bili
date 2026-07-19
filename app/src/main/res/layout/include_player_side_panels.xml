@@ -192,7 +192,7 @@
                                 android:id="@+id/iv_player_info_like"
                                 android:layout_width="@dimen/player_info_action_icon_size"
                                 android:layout_height="@dimen/player_info_action_icon_size"
-                                android:contentDescription="@string/app_name"
+                                android:contentDescription="@null"
                                 android:src="@drawable/ic_action_like"
                                 app:tint="@color/player_button_tint" />
 
@@ -221,7 +221,7 @@
                                 android:id="@+id/iv_player_info_coin"
                                 android:layout_width="@dimen/player_info_action_icon_size"
                                 android:layout_height="@dimen/player_info_action_icon_size"
-                                android:contentDescription="@string/app_name"
+                                android:contentDescription="@null"
                                 android:src="@drawable/ic_action_coin"
                                 app:tint="@color/player_button_tint" />
 
@@ -250,7 +250,7 @@
                                 android:id="@+id/iv_player_info_fav"
                                 android:layout_width="@dimen/player_info_action_icon_size"
                                 android:layout_height="@dimen/player_info_action_icon_size"
-                                android:contentDescription="@string/app_name"
+                                android:contentDescription="@null"
                                 android:src="@drawable/ic_action_fav"
                                 app:tint="@color/player_button_tint" />
 

@@ -35,6 +35,7 @@ android {
         applicationId = "blbl.cat3399"
         minSdk = 21
         targetSdk = 36
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         versionCode = project.findProperty("versionCode")?.toString()?.toIntOrNull() ?: semanticVersionCode(configuredVersionName)
         versionName = configuredVersionName
 
@@ -154,6 +155,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.json:json:20240303")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
 }
 
 // Enforce theme-token usage in layouts so adding new theme presets doesn't silently break contrast.

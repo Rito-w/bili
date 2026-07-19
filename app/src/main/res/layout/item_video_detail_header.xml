@@ -132,7 +132,7 @@
                 android:id="@+id/iv_up_avatar"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:contentDescription="@string/app_name"
+                android:contentDescription="@string/video_up_avatar"
                 android:scaleType="centerCrop"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_Blbl_Circular" />
 
