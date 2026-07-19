@@ -34,7 +34,9 @@
             android:paddingStart="@dimen/tv_focus_list_inset_horizontal"
             android:paddingTop="@dimen/tv_focus_list_inset_vertical"
             android:paddingEnd="@dimen/tv_focus_list_inset_horizontal"
-            android:paddingBottom="@dimen/tv_focus_list_inset_vertical" />
+            android:paddingBottom="@dimen/tv_focus_list_inset_vertical"
+            app:tabGravity="start"
+            app:tabMode="scrollable" />
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2

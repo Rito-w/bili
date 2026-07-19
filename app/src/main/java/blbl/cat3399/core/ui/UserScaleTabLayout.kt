@@ -71,6 +71,9 @@ class UserScaleTabLayout @JvmOverloads constructor(
                 a.recycle()
             }
         baseTabMode = tabMode
+        if (baseTabMode == MODE_SCROLLABLE) {
+            tabGravity = GRAVITY_START
+        }
     }
 
     override fun newTab(): Tab {
@@ -221,6 +224,10 @@ class UserScaleTabLayout @JvmOverloads constructor(
         }
         if (tv.maxLines != 1) {
             tv.maxLines = 1
+            changed = true
+        }
+        if (tv.minHeight != context.uiScaler().scaledDimenPx(R.dimen.tv_small_action_min_size)) {
+            tv.minHeight = context.uiScaler().scaledDimenPx(R.dimen.tv_small_action_min_size)
             changed = true
         }
         tv.setHorizontallyScrolling(false)

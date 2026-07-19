@@ -139,6 +139,8 @@
         <item name="tabIndicator">@drawable/blbl_tab_indicator</item>
         <item name="tabIndicatorColor">?attr/blblAccent</item>
         <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabMode">scrollable</item>
+        <item name="tabGravity">start</item>
         <item name="tabBackground">@null</item>
         <item name="tabSelectedTextColor">?attr/blblOnPageBackdrop</item>
         <item name="tabTextColor">?attr/blblOnPageBackdropSecondary</item>

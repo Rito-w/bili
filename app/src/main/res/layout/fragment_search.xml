@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_search">
+        app:layout_constraintTop_toBottomOf="@id/tv_query">
 
         <LinearLayout
             android:id="@+id/panel_keyboard"
@@ -234,20 +234,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_search">
+        app:layout_constraintTop_toBottomOf="@id/tv_query">
 
         <blbl.cat3399.core.ui.UserScaleTabLayout
             android:id="@+id/tab_layout"
             style="@style/Widget.Blbl.TabLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/tv_top_level_header_height"
             android:layout_marginStart="@dimen/tv_safe_margin_horizontal"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             android:focusable="false"
             app:layout_constraintEnd_toStartOf="@id/btn_sort"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="start"
+            app:tabMode="scrollable" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btn_sort"

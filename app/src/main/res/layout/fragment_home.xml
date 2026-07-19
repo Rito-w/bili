@@ -25,7 +25,9 @@
         android:paddingBottom="@dimen/tv_focus_list_inset_vertical"
         app:layout_constraintEnd_toStartOf="@id/tv_clock"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tabGravity="start"
+        app:tabMode="scrollable" />
 
     <TextClock
         android:id="@+id/tv_clock"
