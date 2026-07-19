@@ -36,6 +36,7 @@
     <string name="action_coin">投币</string>
     <string name="action_favorite">收藏</string>
     <string name="player_next_shortcut_hint">↓ 下一个视频</string>
+    <string name="player_controls_hint">播放器控制</string>
     <string name="my_fav_default_title">默认收藏夹</string>
     <string name="my_fav_item_count_fmt">%1$d个内容</string>
     <string name="my_episode_section">正片剧集</string>

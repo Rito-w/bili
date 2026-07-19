@@ -300,7 +300,35 @@ val checkUiTokens =
         }
     }
 
+val checkPlayerLayoutParity =
+    tasks.register("checkPlayerLayoutParity") {
+        group = "verification"
+        description = "Keeps the SurfaceView and TextureView player OSD layouts in sync."
+
+        doLast {
+            val surfaceLayout = file("src/main/res/layout/activity_player.xml")
+            val textureLayout = file("src/main/res/layout/activity_player_texture.xml")
+            val normalizedSurface =
+                surfaceLayout.readText(Charsets.UTF_8).replace(
+                    """app:surface_type="surface_view"""",
+                    """app:surface_type="player_surface"""",
+                )
+            val normalizedTexture =
+                textureLayout.readText(Charsets.UTF_8).replace(
+                    """app:surface_type="texture_view"""",
+                    """app:surface_type="player_surface"""",
+                )
+            if (normalizedSurface != normalizedTexture) {
+                throw GradleException(
+                    "Player layout parity check failed: activity_player.xml and " +
+                        "activity_player_texture.xml may differ only by app:surface_type.",
+                )
+            }
+        }
+    }
+
 tasks.named("preBuild").configure {
     dependsOn(checkThemeTokens)
     dependsOn(checkUiTokens)
+    dependsOn(checkPlayerLayoutParity)
 }

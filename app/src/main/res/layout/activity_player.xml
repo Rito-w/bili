@@ -350,6 +350,21 @@
         app:layout_constraintStart_toStartOf="@id/player_view">
 
         <TextView
+            android:id="@+id/tv_control_focus_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/player_controls_row_margin_start"
+            android:background="@drawable/bg_player_control_label"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:text="@string/player_controls_hint"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/tv_next_shortcut_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -442,15 +457,23 @@
             android:padding="?attr/playerOsdPadNormal"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_player_subtitle"
-            app:tint="@color/player_button_tint"
-            android:contentDescription="@string/player_btn_subtitle" />
+                app:tint="@color/player_button_tint"
+                android:contentDescription="@string/player_btn_subtitle" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/blbl_divider_on_dark"
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/btn_quality"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/playerOsdButtonTargetSize"
                 android:layout_marginEnd="?attr/playerOsdGap"
-                android:background="?attr/blblFocusBgRound"
+                android:background="@drawable/bg_player_quality_chip"
                 android:contentDescription="@string/player_btn_quality"
                 android:focusable="true"
                 android:gravity="center"
@@ -459,7 +482,8 @@
                 android:paddingEnd="12dp"
                 android:text="自动"
                 android:textColor="@color/player_button_tint"
-                android:textSize="12sp" />
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <ImageButton
                 android:id="@+id/btn_danmaku"
@@ -500,6 +524,14 @@
             android:scaleType="fitCenter"
             android:src="@drawable/ic_player_up"
             app:tint="@color/player_button_tint" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/blbl_divider_on_dark"
+                android:importantForAccessibility="no" />
 
             <blbl.cat3399.feature.player.HoldProgressImageButton
                 android:id="@+id/btn_like"
@@ -542,6 +574,14 @@
             android:src="@drawable/ic_action_fav"
                 app:tint="@color/player_button_tint"
                 android:visibility="gone" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="3dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/blbl_divider_on_dark"
+                android:importantForAccessibility="no" />
 
             <ImageButton
                 android:id="@+id/btn_list_panel"

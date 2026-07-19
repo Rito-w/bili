@@ -31,6 +31,7 @@
     <color name="blbl_brand_accent_container">#33FB7299</color>
     <color name="blbl_brand_accent_weak">#66FB7299</color>
     <color name="blbl_brand_accent_pressed">#80FB7299</color>
+    <color name="blbl_divider_on_dark">#33FFFFFF</color>
     <color name="blbl_semantic_info">#38BDF8</color>
     <color name="blbl_semantic_live">#FF4D5E</color>
     <color name="blbl_semantic_danger">#FF4D5E</color>

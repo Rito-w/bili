@@ -2081,6 +2081,7 @@ class PlayerActivity : BaseActivity() {
             setControlsVisible(true)
         }
         setupUpQuickCardActions()
+        installControlFocusLabels()
 
         binding.seekProgress.max = SEEK_MAX
         binding.seekProgress.setOnSeekBarChangeListener(
@@ -2168,6 +2169,43 @@ class PlayerActivity : BaseActivity() {
         // Do not auto-show OSD when opening the player; user interaction will bring it up.
         setControlsVisible(false)
         startProgressLoop()
+    }
+
+    private fun installControlFocusLabels() {
+        val controls =
+            listOf(
+                binding.btnPrev,
+                binding.btnPlayPause,
+                binding.btnNext,
+                binding.btnSubtitle,
+                binding.btnQuality,
+                binding.btnUp,
+                binding.btnLike,
+                binding.btnCoin,
+                binding.btnFav,
+                binding.btnListPanel,
+                binding.btnDetail,
+                binding.btnSponsorSubmit,
+                binding.btnAdvanced,
+            )
+        controls.forEach { control ->
+            val previous = control.onFocusChangeListener
+            control.setOnFocusChangeListener { view, hasFocus ->
+                previous?.onFocusChange(view, hasFocus)
+                if (hasFocus) {
+                    binding.tvControlFocusLabel.text =
+                        view.contentDescription?.toString().orEmpty().ifBlank {
+                            getString(R.string.player_controls_hint)
+                        }
+                } else {
+                    binding.controlsRow.post {
+                        if (!binding.controlsRow.hasFocus()) {
+                            binding.tvControlFocusLabel.setText(R.string.player_controls_hint)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     internal fun applyUpInfo(detail: VideoDetail) {
