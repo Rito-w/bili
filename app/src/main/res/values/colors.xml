@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="blbl_bg">#05070A</color>
-    <color name="blbl_surface">#121720</color>
-    <color name="blbl_surface_secondary">#1B2230</color>
-    <color name="blbl_text">#F7F9FC</color>
-    <color name="blbl_text_secondary">#B5BFCE</color>
-    <color name="blbl_text_weak">#8995A7</color>
+    <color name="blbl_bg">#07080C</color>
+    <color name="blbl_surface">#11141B</color>
+    <color name="blbl_surface_secondary">#181D27</color>
+    <color name="blbl_text">#F7F8FA</color>
+    <color name="blbl_text_secondary">#A8B0C0</color>
+    <color name="blbl_text_weak">#717A8A</color>
 
     <!-- Text/icon tint used on top of media covers with scrims/shadows (theme-independent). -->
     <color name="blbl_text_on_media">#EDEDED</color>

@@ -7,6 +7,11 @@
     <dimen name="tv_safe_margin_vertical">24dp</dimen>
     <dimen name="tv_top_level_header_height">72dp</dimen>
     <dimen name="tv_top_level_header_content_gap">8dp</dimen>
+    <dimen name="tv_space_1">8dp</dimen>
+    <dimen name="tv_space_2">16dp</dimen>
+    <dimen name="tv_space_3">24dp</dimen>
+    <dimen name="tv_space_4">32dp</dimen>
+    <dimen name="tv_space_6">48dp</dimen>
 
     <!-- Type scale: do not reduce supporting content below the 16sp readability floor. -->
     <dimen name="tv_text_size_page_title">30sp</dimen>
@@ -17,7 +22,7 @@
     <dimen name="tv_top_tab_focus_padding_vertical">6dp</dimen>
 
     <!-- Shared card, panel and D-pad focus geometry. -->
-    <dimen name="tv_card_corner_radius">14dp</dimen>
+    <dimen name="tv_card_corner_radius">16dp</dimen>
     <dimen name="tv_card_content_padding">16dp</dimen>
     <dimen name="tv_card_gap">16dp</dimen>
     <dimen name="tv_card_elevation">0dp</dimen>
@@ -34,6 +39,7 @@
     <dimen name="tv_focus_list_inset_vertical">6dp</dimen>
     <dimen name="tv_focus_button_lift">4dp</dimen>
     <dimen name="tv_small_action_min_size">48dp</dimen>
+    <dimen name="tv_action_corner_radius">14dp</dimen>
 
     <dimen name="splash_logo_width">220dp</dimen>
     <dimen name="splash_logo_height">160dp</dimen>

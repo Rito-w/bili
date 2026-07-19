@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="tv_motion_focus_duration">160</integer>
+    <integer name="tv_motion_panel_duration">220</integer>
+</resources>
+

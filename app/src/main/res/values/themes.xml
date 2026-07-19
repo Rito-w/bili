@@ -18,6 +18,11 @@
         <item name="blblDialogSurface">?attr/colorSurface</item>
         <item name="blblOnPageBackdrop">?attr/colorOnSurface</item>
         <item name="blblOnPageBackdropSecondary">?android:attr/textColorSecondary</item>
+        <item name="blblSurfaceBase">?attr/colorSurface</item>
+        <item name="blblSurfaceElevated">?attr/blblDialogSurface</item>
+        <item name="blblTextPrimary">?attr/colorOnSurface</item>
+        <item name="blblTextSecondary">?android:attr/textColorSecondary</item>
+        <item name="blblTextMuted">?android:attr/textColorSecondary</item>
         <item name="blblFocusSurfaceColor">@color/blbl_focus_surface_dark</item>
 
         <item name="colorSecondary">?attr/blblAccent</item>
@@ -54,6 +59,11 @@
         <item name="blblFocusSurfaceColor">@color/blbl_focus_surface_dark</item>
         <item name="blblOnPageBackdrop">@color/blbl_text</item>
         <item name="blblOnPageBackdropSecondary">@color/blbl_text_secondary</item>
+        <item name="blblSurfaceBase">@color/blbl_surface</item>
+        <item name="blblSurfaceElevated">@color/blbl_surface_secondary</item>
+        <item name="blblTextPrimary">@color/blbl_text</item>
+        <item name="blblTextSecondary">@color/blbl_text_secondary</item>
+        <item name="blblTextMuted">@color/blbl_text_weak</item>
 
         <item name="android:statusBarColor">@color/blbl_bg</item>
         <item name="android:navigationBarColor">@color/blbl_bg</item>
@@ -76,6 +86,11 @@
         <item name="blblFocusSurfaceColor">@color/blbl_focus_surface_tv_pink</item>
         <item name="blblOnPageBackdrop">@color/blbl_text_tv_pink</item>
         <item name="blblOnPageBackdropSecondary">@color/blbl_text_secondary_tv_pink</item>
+        <item name="blblSurfaceBase">@color/blbl_surface_tv_pink</item>
+        <item name="blblSurfaceElevated">@color/blbl_surface_tv_pink</item>
+        <item name="blblTextPrimary">@color/blbl_text_tv_pink</item>
+        <item name="blblTextSecondary">@color/blbl_text_secondary_tv_pink</item>
+        <item name="blblTextMuted">@color/blbl_text_secondary_tv_pink</item>
 
         <item name="android:statusBarColor">@color/blbl_bg_tv_pink</item>
         <item name="android:navigationBarColor">@color/blbl_bg_tv_pink</item>

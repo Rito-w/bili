@@ -232,6 +232,75 @@ val checkThemeTokens =
         }
     }
 
+val checkUiTokens =
+    tasks.register("checkUiTokens") {
+        group = "verification"
+        description = "Verifies the shared Cinematic Pink geometry, color, and motion contract."
+
+        doLast {
+            val requiredTokens =
+                mapOf(
+                    "src/main/res/values/colors.xml" to
+                        listOf("#07080C", "#11141B", "#181D27", "#F7F8FA", "#A8B0C0", "#FB7299"),
+                    "src/main/res/values/dimens.xml" to
+                        listOf(
+                            """name="tv_card_corner_radius">16dp""",
+                            """name="tv_panel_corner_radius">20dp""",
+                            """name="tv_focus_outline_width">3dp""",
+                        ),
+                    "src/main/res/values/integers.xml" to
+                        listOf(
+                            """name="tv_motion_focus_duration">160""",
+                            """name="tv_motion_panel_duration">220""",
+                        ),
+                    "src/main/res/animator/tv_focus_card.xml" to
+                        listOf("""android:valueTo="1.04"""", "@integer/tv_motion_focus_duration"),
+                    "src/main/res/animator/tv_focus_button.xml" to
+                        listOf("""android:valueTo="1.02"""", "@integer/tv_motion_focus_duration"),
+                )
+
+            val violations = mutableListOf<String>()
+            for ((path, tokens) in requiredTokens) {
+                val resource = file(path)
+                if (!resource.isFile) {
+                    violations += "$path: missing"
+                    continue
+                }
+                val contents = resource.readText(Charsets.UTF_8)
+                tokens.filterNot(contents::contains).forEach { token ->
+                    violations += "$path: missing $token"
+                }
+            }
+
+            val layoutDirs =
+                file("src/main/res")
+                    .listFiles()
+                    ?.filter { it.isDirectory && it.name.startsWith("layout") }
+                    .orEmpty()
+            val hardcodedDimensions =
+                layoutDirs.sumOf { dir ->
+                    dir.walkTopDown()
+                        .filter { it.isFile && it.extension.equals("xml", ignoreCase = true) }
+                        .sumOf { resource ->
+                            Regex("""android:[^=]+="\d+(?:\.\d+)?(?:dp|sp)"""")
+                                .findAll(resource.readText(Charsets.UTF_8))
+                                .count()
+                        }
+                }
+            logger.lifecycle("UI token audit: $hardcodedDimensions legacy layout dimensions remain for staged migration.")
+
+            if (violations.isNotEmpty()) {
+                throw GradleException(
+                    buildString {
+                        appendLine("UI token check failed:")
+                        violations.forEach { appendLine("  $it") }
+                    },
+                )
+            }
+        }
+    }
+
 tasks.named("preBuild").configure {
     dependsOn(checkThemeTokens)
+    dependsOn(checkUiTokens)
 }
